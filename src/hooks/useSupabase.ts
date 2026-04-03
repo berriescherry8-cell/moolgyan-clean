@@ -1,0 +1,6 @@
+'use client';
+
+import { createClient } from '@/lib/supabase';
+
+export const useSupabaseClient = () => createClient();
+

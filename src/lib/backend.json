@@ -1,0 +1,234 @@
+{
+  "entities": {
+    "NewsArticle": {
+      "title": "NewsArticle",
+      "type": "object",
+      "description": "Represents a news article related to spirituality.",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "publicationDate": { "type": "string", "format": "date-time" },
+        "imageUrl": { "type": "string", "format": "uri" },
+        "storagePath": { "type": "string" },
+        "showInTicker": { "type": "boolean" }
+      },
+      "required": ["id", "title", "content", "publicationDate"]
+    },
+    "SatsangVideo": {
+      "title": "SatsangVideo",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "videoUrl": { "type": "string", "format": "uri" },
+        "uploadDate": { "type": "string", "format": "date-time" },
+        "thumbnailUrl": { "type": "string", "format": "uri" },
+        "videoId": { "type": "string" },
+        "isFeatured": { "type": "boolean" }
+      },
+      "required": ["id", "title", "videoUrl", "uploadDate"]
+    },
+    "SpiritualPhoto": {
+      "title": "SpiritualPhoto",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "imageUrl": { "type": "string", "format": "uri" },
+        "uploadDate": { "type": "string", "format": "date-time" },
+        "folder": { "type": "string" },
+        "storagePath": { "type": "string" }
+      },
+      "required": ["id", "imageUrl", "uploadDate"]
+    },
+    "Book": {
+        "title": "Book",
+        "type": "object",
+        "properties": {
+            "id": { "type": "string" },
+            "title": { "type": "string" },
+            "author": { "type": "string" },
+            "description": { "type": "string" },
+            "price": { "type": "number" },
+            "stockStatus": { "type": "string", "enum": ["in-stock", "out-of-stock"] },
+            "imageUrls": { "type": "array", "items": { "type": "string", "format": "uri" } },
+            "imageUrl": { "type": "string", "format": "uri" },
+            "storagePath": { "type": "string" },
+            "pdfUrl": { "type": "string", "format": "uri" }
+        },
+        "required": ["id", "title", "author", "price", "stockStatus"]
+    },
+    "SaarSangrahPhoto": {
+      "title": "SaarSangrahPhoto",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "imageUrl": { "type": "string", "format": "uri" },
+        "uploadDate": { "type": "string", "format": "date-time" },
+        "storagePath": { "type": "string" }
+      },
+      "required": ["id", "imageUrl", "uploadDate", "storagePath"]
+    },
+    "SatguruBhajan": {
+      "title": "SatguruBhajan",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "videoUrl": { "type": "string", "format": "uri" },
+        "uploadDate": { "type": "string", "format": "date-time" },
+        "thumbnailUrl": { "type": "string", "format": "uri" },
+        "videoId": { "type": "string" },
+        "lyrics": { "type": "string" }
+      },
+      "required": ["id", "title", "videoUrl", "uploadDate", "videoId"]
+    }
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/books/videhi-gyan",
+        "definition": {
+          "schema": {
+            "$ref": "#/entities/Book",
+            "id": "videhi-gyan",
+            "title": "विदेही ज्ञान (Videhi Gyan)",
+            "author": "श्री नितिनदास जी साहिब",
+            "description": "विदेही ज्ञान की खोज",
+            "price": 12,
+            "stockStatus": "in-stock",
+            "imageUrl": "https://raw.githubusercontent.com/berriescherry8-cell/mool-gyan-assets/main/covers/videhi-gyan.jpeg",
+            "imageUrls": [
+              "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202025-12-29%20at%204.33.02%20PM%20(1).jpeg?alt=media&token=55f5578d-af35-4e4f-aa4f-b4ce5691d942",
+              "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202025-12-29%20at%204.33.03%20PM.jpeg?alt=media&token=e67fb50d-fded-41ad-8881-8f59662e17c5",
+              "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202025-12-29%20at%204.33.03%20PM%20(1).jpeg?alt=media&token=41d4385a-4f2a-42c7-ac2d-8b3effe0e90f"
+            ],
+            "pdfUrl": "https://raw.githubusercontent.com/berriescherry8-cell/mool-gyan-assets/main/gyan-videhi.pdf"
+          }
+        }
+      },
+      {
+        "path": "/books/santo-ka-saar-sandesh",
+        "definition": {
+          "schema": {
+            "$ref": "#/entities/Book",
+            "id": "santo-ka-saar-sandesh",
+            "title": "संतों का सार संदेश (Santo Ka Saar Sandesh)",
+            "author": "श्री नितिनदास जी साहिब",
+            "description": "संतों का अनमोल संदेश",
+            "price": 10,
+            "stockStatus": "in-stock",
+            "imageUrl": "https://raw.githubusercontent.com/berriescherry8-cell/mool-gyan-assets/main/covers/snato-ka.jpeg",
+            "imageUrls": [
+              "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202025-12-29%20at%206.00.31%20PM.jpeg?alt=media&token=773aaaf4-66a7-4b34-b07e-c238d13f601d",
+              "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202025-12-29%20at%206.00.31%20PM%20(1).jpeg?alt=media&token=727545de-b028-4865-9100-aaf57edd7780",
+              "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202025-12-29%20at%206.00.31%20PM%20(2).jpeg?alt=media&token=2e8ab847-a90c-44ed-95bd-a67fc27e6fa7"
+            ],
+            "pdfUrl": "https://raw.githubusercontent.com/berriescherry8-cell/mool-gyan-assets/main/pdfs/santo_ka_saar-2_(1).pdf"
+          }
+        }
+      },
+      {
+        "path": "/books/har-har-geeta-fourth-edition",
+        "definition": {
+          "schema": {
+            "$ref": "#/entities/Book",
+            "id": "har-har-geeta-fourth-edition",
+            "title": "हर हर गीता चतुर्थ संस्करण (Har Har Geeta 4th Edition)",
+            "author": "श्री नितिनदास जी साहिब",
+            "description": "हर-हर गीता घर-घर गीता",
+            "price": 6.5,
+            "stockStatus": "in-stock",
+            "imageUrl": "https://raw.githubusercontent.com/berriescherry8-cell/mool-gyan-assets/main/covers/satya-nam.jpg",
+            "imageUrls": [
+              "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202025-12-29%20at%205.45.41%20PM%20(1).jpeg?alt=media&token=dbdb5eb9-66e7-4491-b83f-c10961fcbe06",
+              "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202025-12-29%20at%205.45.42%20PM%20(3).jpeg?alt=media&token=a150b140-8202-4b14-bc91-d8902ae0863d",
+              "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202025-12-29%20at%205.45.42%20PM%20(2).jpeg?alt=media&token=9f28171e-b545-4329-a92e-3ab50c51a10b"
+            ]
+          }
+        }
+      },
+      { "path": "/books/har-har-geeta-tritiya", "definition": { "schema": { "$ref": "#/entities/Book", "id": "har-har-geeta-tritiya", "title": "हर हर गीता तृतीय संस्करण", "author": "श्री नितिनदास जी साहिब", "price": 6.5, "stockStatus": "in-stock", "imageUrl": "https://raw.githubusercontent.com/berriescherry8-cell/mool-gyan-assets/main/covers/har-har-geeta-3rd%20.jpeg", "description": "हर-हर गीता घर-घर गीता" } } },
+      { "path": "/books/har-har-geeta-dvitiya", "definition": { "schema": { "$ref": "#/entities/Book", "id": "har-har-geeta-dvitiya", "title": "हर हर गीता द्वितीय संस्करण", "author": "श्री नितिनदास जी साहिब", "price": 6.5, "stockStatus": "in-stock", "imageUrl": "https://raw.githubusercontent.com/berriescherry8-cell/mool-gyan-assets/main/covers/har-geeta-2ndedi%201.jpeg", "description": "हर-हर गीता घर-घर गीता" } } },
+      { "path": "/books/har-har-geeta-pratham", "definition": { "schema": { "$ref": "#/entities/Book", "id": "har-har-geeta-pratham", "title": "हर हर गीता प्रथम संस्करण", "author": "श्री नितिनदास जी साहिब", "price": 6.5, "stockStatus": "in-stock", "imageUrl": "https://raw.githubusercontent.com/berriescherry8-cell/mool-gyan-assets/main/covers/har-geeta-1nd%201.jpeg", "description": "हर-हर गीता घर-घर गीता" } } },
+      { "path": "/books/satynam-teeka", "definition": { "schema": { "$ref": "#/entities/Book", "id": "satynam-teeka", "title": "सतनाम प्रकाश टीका", "author": "श्री नितिनदास जी साहिब", "price": 0, "stockStatus": "out-of-stock", "imageUrl": "https://raw.githubusercontent.com/berriescherry8-cell/mool-gyan-assets/main/covers/satya-nam.jpg", "description": "केवल पढ़ने के लिए", "pdfUrl": "https://raw.githubusercontent.com/berriescherry8-cell/mool-gyan-assets/main/pdfs/2025_12_08_9_20am_Office_Lens_compressed.pdf" } } },
+      { "path": "/books/mool-gyan-divya", "definition": { "schema": { "$ref": "#/entities/Book", "id": "mool-gyan-divya", "title": "मूल ज्ञान का दिव्य प्रकाश", "author": "श्री नितिनदास जी साहिब", "price": 0, "stockStatus": "out-of-stock", "imageUrl": "https://raw.githubusercontent.com/berriescherry8-cell/mool-gyan-assets/main/covers/moolgyaPrakash.jpg", "description": "केवल पढ़ने के लिए", "pdfUrl": "https://raw.githubusercontent.com/berriescherry8-cell/mool-gyan-assets/main/pdfs/DOC-20250130-WA0004.pdf" } } },
+      { "path": "/saarSangrahPhotos/new_image_1", "definition": { "schema": { "$ref": "#/entities/SaarSangrahPhoto", "id": "new_image_1", "imageUrl": "https://i.ibb.co/bjbVy5XM/Whats-App-Image-2026-01-06-at-7-51-03-AM-Copy.jpg", "uploadDate": "2024-08-02T10:00:00.000Z", "storagePath": "" } } },
+      { "path": "/saarSangrahPhotos/new_image_2", "definition": { "schema": { "$ref": "#/entities/SaarSangrahPhoto", "id": "new_image_2", "imageUrl": "https://i.ibb.co/G44fC6Nc/Whats-App-Image-2026-01-06-at-7-51-02-AM-1.jpg", "uploadDate": "2024-08-02T10:00:01.000Z", "storagePath": "" } } },
+      { "path": "/saarSangrahPhotos/new_image_3", "definition": { "schema": { "$ref": "#/entities/SaarSangrahPhoto", "id": "new_image_3", "imageUrl": "https://i.ibb.co/XkLtSRFh/Whats-App-Image-2026-01-06-at-7-51-02-AM-Copy.jpg", "uploadDate": "2024-08-02T10:00:02.000Z", "storagePath": "" } } },
+      { "path": "/saarSangrahPhotos/new_image_4", "definition": { "schema": { "$ref": "#/entities/SaarSangrahPhoto", "id": "new_image_4", "imageUrl": "https://i.ibb.co/1Jjrc9V5/Whats-App-Image-2026-01-06-at-7-51-01-AM.jpg", "uploadDate": "2024-08-02T10:00:03.000Z", "storagePath": "" } } },
+      { "path": "/saarSangrahPhotos/new_image_5", "definition": { "schema": { "$ref": "#/entities/SaarSangrahPhoto", "id": "new_image_5", "imageUrl": "https://i.ibb.co/KnHd90j/Whats-App-Image-2026-01-01-at-2-06-36-PM.jpg", "uploadDate": "2024-08-02T10:00:04.000Z", "storagePath": "" } } },
+      { "path": "/saarSangrahPhotos/new_image_6", "definition": { "schema": { "$ref": "#/entities/SaarSangrahPhoto", "id": "new_image_6", "imageUrl": "https://i.ibb.co/Xk23G136/Whats-App-Image-2026-01-01-at-2-08-07-PM.jpg", "uploadDate": "2024-08-02T10:00:05.000Z", "storagePath": "" } } },
+      { "path": "/saarSangrahPhotos/new_image_7", "definition": { "schema": { "$ref": "#/entities/SaarSangrahPhoto", "id": "new_image_7", "imageUrl": "https://i.ibb.co/4ZGGZhWf/Whats-App-Image-2026-01-01-at-2-07-40-PM.jpg", "uploadDate": "2024-08-02T10:00:06.000Z", "storagePath": "" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_101", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_101", "imageUrl": "https://i.ibb.co/NzBvdgp/Whats-App-Image-2026-01-24-at-5-59-20-PM-1.jpg", "uploadDate": "2024-07-29T10:00:00.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_102", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_102", "imageUrl": "https://i.ibb.co/11PJ62d/Whats-App-Image-2026-01-24-at-5-59-20-PM.jpg", "uploadDate": "2024-07-29T10:00:01.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_103", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_103", "imageUrl": "https://i.ibb.co/gL6tT27k/Whats-App-Image-2026-01-24-at-5-59-19-PM-1.jpg", "uploadDate": "2024-07-29T10:00:02.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_104", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_104", "imageUrl": "https://i.ibb.co/hFTLDBhY/Whats-App-Image-2026-01-24-at-5-59-19-PM.jpg", "uploadDate": "2024-07-29T10:00:03.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_105", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_105", "imageUrl": "https://i.ibb.co/SkJjVw9/Whats-App-Image-2026-01-24-at-5-59-18-PM-1.jpg", "uploadDate": "2024-07-29T10:00:04.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_106", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_106", "imageUrl": "https://i.ibb.co/3mKxJWSc/Whats-App-Image-2026-01-24-at-5-59-18-PM.jpg", "uploadDate": "2024-07-29T10:00:05.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_107", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_107", "imageUrl": "https://i.ibb.co/Mk2pT0p4/Whats-App-Image-2026-01-24-at-5-59-17-PM-1.jpg", "uploadDate": "2024-07-29T10:00:06.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_108", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_108", "imageUrl": "https://i.ibb.co/QwnwGKZ/Whats-App-Image-2026-01-24-at-5-59-17-PM.jpg", "uploadDate": "2024-07-29T10:00:07.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_109", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_109", "imageUrl": "https://i.ibb.co/zV83dNkW/Whats-App-Image-2026-01-24-at-5-59-16-PM-1.jpg", "uploadDate": "2024-07-29T10:00:08.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_110", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_110", "imageUrl": "https://i.ibb.co/V02hhTCp/Whats-App-Image-2026-01-24-at-5-59-16-PM.jpg", "uploadDate": "2024-07-29T10:00:09.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_111", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_111", "imageUrl": "https://i.ibb.co/xrYfwHy/Whats-App-Image-2026-01-24-at-5-59-15-PM-1.jpg", "uploadDate": "2024-07-29T10:00:10.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_112", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_112", "imageUrl": "https://i.ibb.co/J9Y47Lx/Whats-App-Image-2026-01-24-at-5-59-15-PM.jpg", "uploadDate": "2024-07-29T10:00:11.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_113", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_113", "imageUrl": "https://i.ibb.co/DftQyH1g/Whats-App-Image-2026-01-24-at-5-59-14-PM-1.jpg", "uploadDate": "2024-07-29T10:00:12.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_114", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_114", "imageUrl": "https://i.ibb.co/938r8T6Z/Whats-App-Image-2026-01-24-at-5-59-14-PM.jpg", "uploadDate": "2024-07-29T10:00:13.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_115", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_115", "imageUrl": "https://i.ibb.co/67GTVdNx/Whats-App-Image-2026-01-24-at-5-59-13-PM-1.jpg", "uploadDate": "2024-07-29T10:00:14.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_116", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_116", "imageUrl": "https://i.ibb.co/tT4WfGhS/Whats-App-Image-2026-01-24-at-5-59-12-PM-1.jpg", "uploadDate": "2024-07-29T10:00:15.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_117", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_117", "imageUrl": "https://i.ibb.co/5xB9Q70y/Whats-App-Image-2026-01-24-at-5-59-12-PM.jpg", "uploadDate": "2024-07-29T10:00:16.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_118", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_118", "imageUrl": "https://i.ibb.co/NgrZ0dFs/Whats-App-Image-2026-01-24-at-5-59-11-PM-1.jpg", "uploadDate": "2024-07-29T10:00:17.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_119", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_119", "imageUrl": "https://i.ibb.co/Wps0HyDT/Whats-App-Image-2026-01-24-at-5-59-11-PM.jpg", "uploadDate": "2024-07-29T10:00:18.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_120", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_120", "imageUrl": "https://i.ibb.co/ZzzckS2X/Whats-App-Image-2026-01-24-at-5-59-10-PM-1.jpg", "uploadDate": "2024-07-29T10:00:19.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_121", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_121", "imageUrl": "https://i.ibb.co/67tt4DfM/Whats-App-Image-2026-01-24-at-5-59-10-PM.jpg", "uploadDate": "2024-07-29T10:00:20.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_122", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_122", "imageUrl": "https://i.ibb.co/LzFhtMd4/Whats-App-Image-2026-01-24-at-5-59-09-PM-1.jpg", "uploadDate": "2024-07-29T10:00:21.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_123", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_123", "imageUrl": "https://i.ibb.co/CsB6wqXp/Whats-App-Image-2026-01-24-at-5-59-09-PM.jpg", "uploadDate": "2024-07-29T10:00:22.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_124", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_124", "imageUrl": "https://i.ibb.co/spLDssLG/Whats-App-Image-2026-01-24-at-5-59-08-PM-1.jpg", "uploadDate": "2024-07-29T10:00:23.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_125", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_125", "imageUrl": "https://i.ibb.co/4ZnFq8TK/Whats-App-Image-2026-01-24-at-5-59-08-PM.jpg", "uploadDate": "2024-07-29T10:00:24.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_126", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_126", "imageUrl": "https://i.ibb.co/Wvys0CtJ/Whats-App-Image-2026-01-24-at-5-59-07-PM-1.jpg", "uploadDate": "2024-07-29T10:00:25.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_127", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_127", "imageUrl": "https://i.ibb.co/v6fCZs2c/Whats-App-Image-2026-01-24-at-5-59-07-PM.jpg", "uploadDate": "2024-07-29T10:00:26.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_128", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_128", "imageUrl": "https://i.ibb.co/3yLqPD94/Whats-App-Image-2026-01-24-at-5-59-06-PM-1.jpg", "uploadDate": "2024-07-29T10:00:27.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_129", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_129", "imageUrl": "https://i.ibb.co/dwNh9N7f/Whats-App-Image-2026-01-24-at-5-59-06-PM.jpg", "uploadDate": "2024-07-29T10:00:28.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_130", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_130", "imageUrl": "https://i.ibb.co/VYGf34D8/Whats-App-Image-2026-01-24-at-5-59-05-PM-1.jpg", "uploadDate": "2024-07-29T10:00:29.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_131", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_131", "imageUrl": "https://i.ibb.co/wr6VM7c7/Whats-App-Image-2026-01-24-at-5-59-05-PM.jpg", "uploadDate": "2024-07-29T10:00:30.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_132", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_132", "imageUrl": "https://i.ibb.co/z1fJrgW/Whats-App-Image-2026-01-24-at-5-59-04-PM-1.jpg", "uploadDate": "2024-07-29T10:00:31.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_133", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_133", "imageUrl": "https://i.ibb.co/CpKPJrCP/Whats-App-Image-2026-01-24-at-5-59-04-PM.jpg", "uploadDate": "2024-07-29T10:00:32.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_134", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_134", "imageUrl": "https://i.ibb.co/M5yB1bkW/Whats-App-Image-2026-01-24-at-5-59-03-PM-1.jpg", "uploadDate": "2024-07-29T10:00:33.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_135", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_135", "imageUrl": "https://i.ibb.co/bRRRHX8k/Whats-App-Image-2026-01-24-at-5-59-03-PM.jpg", "uploadDate": "2024-07-29T10:00:34.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_136", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_136", "imageUrl": "https://i.ibb.co/cn9svCW/Whats-App-Image-2026-01-24-at-5-59-02-PM-2.jpg", "uploadDate": "2024-07-29T10:00:35.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_137", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_137", "imageUrl": "https://i.ibb.co/HL1QyHHh/Whats-App-Image-2026-01-24-at-5-59-02-PM-1.jpg", "uploadDate": "2024-07-29T10:00:36.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_138", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_138", "imageUrl": "https://i.ibb.co/MDGyNz9y/Whats-App-Image-2026-01-24-at-5-59-02-PM.jpg", "uploadDate": "2024-07-29T10:00:37.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_139", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_139", "imageUrl": "https://i.ibb.co/qtTNwMP/Whats-App-Image-2026-01-24-at-5-59-01-PM-1.jpg", "uploadDate": "2024-07-29T10:00:38.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_140", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_140", "imageUrl": "https://i.ibb.co/pr2bSnb4/Whats-App-Image-2026-01-24-at-5-59-01-PM.jpg", "uploadDate": "2024-07-29T10:00:39.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_141", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_141", "imageUrl": "https://i.ibb.co/r2KxQvyS/Whats-App-Image-2026-01-24-at-5-59-00-PM-1.jpg", "uploadDate": "2024-07-29T10:00:40.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_142", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_142", "imageUrl": "https://i.ibb.co/0PLz3PB/Whats-App-Image-2026-01-24-at-5-59-00-PM.jpg", "uploadDate": "2024-07-29T10:00:41.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_143", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_143", "imageUrl": "https://i.ibb.co/tw3FsM1D/Whats-App-Image-2026-01-24-at-5-58-59-PM-1.jpg", "uploadDate": "2024-07-29T10:00:42.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_144", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_144", "imageUrl": "https://i.ibb.co/bjQ4D47W/Whats-App-Image-2026-01-24-at-5-58-59-PM.jpg", "uploadDate": "2024-07-29T10:00:43.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_145", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_145", "imageUrl": "https://i.ibb.co/67j2RWRg/Whats-App-Image-2026-01-24-at-5-58-58-PM-1.jpg", "uploadDate": "2024-07-29T10:00:44.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_146", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_146", "imageUrl": "https://i.ibb.co/8SNwc8c/Whats-App-Image-2026-01-24-at-5-58-58-PM.jpg", "uploadDate": "2024-07-29T10:00:45.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_147", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_147", "imageUrl": "https://i.ibb.co/jkDsmjwT/Whats-App-Image-2026-01-24-at-5-58-57-PM-1.jpg", "uploadDate": "2024-07-29T10:00:46.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_148", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_148", "imageUrl": "https://i.ibb.co/0jWBb5fR/Whats-App-Image-2026-01-24-at-5-58-57-PM.jpg", "uploadDate": "2024-07-29T10:00:47.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_149", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_149", "imageUrl": "https://i.ibb.co/nMtSkZy4/Whats-App-Image-2026-01-24-at-5-58-56-PM-1.jpg", "uploadDate": "2024-07-29T10:00:48.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_150", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_150", "imageUrl": "https://i.ibb.co/xtNpR2Nn/Whats-App-Image-2026-01-24-at-5-58-56-PM.jpg", "uploadDate": "2024-07-29T10:00:49.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_151", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_151", "imageUrl": "https://i.ibb.co/SDwtHfmZ/Whats-App-Image-2026-01-24-at-5-58-55-PM-1.jpg", "uploadDate": "2024-07-29T10:00:50.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_152", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_152", "imageUrl": "https://i.ibb.co/wF8ktMT8/Whats-App-Image-2026-01-24-at-5-58-55-PM.jpg", "uploadDate": "2024-07-29T10:00:51.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_153", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_153", "imageUrl": "https://i.ibb.co/ycnx5Xxr/Whats-App-Image-2026-01-24-at-5-58-54-PM-1.jpg", "uploadDate": "2024-07-29T10:00:52.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_154", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_154", "imageUrl": "https://i.ibb.co/sJwWgqq3/Whats-App-Image-2026-01-24-at-5-58-53-PM-3.jpg", "uploadDate": "2024-07-29T10:00:53.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_155", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_155", "imageUrl": "https://i.ibb.co/DDn5skwk/Whats-App-Image-2026-01-24-at-5-58-53-PM-2.jpg", "uploadDate": "2024-07-29T10:00:54.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_156", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_156", "imageUrl": "https://i.ibb.co/nskSYs8d/Whats-App-Image-2026-01-24-at-5-58-53-PM-1.jpg", "uploadDate": "2024-07-29T10:00:55.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_157", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_157", "imageUrl": "https://i.ibb.co/sJgMCSST/Whats-App-Image-2026-01-24-at-5-58-53-PM.jpg", "uploadDate": "2024-07-29T10:00:56.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_158", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_158", "imageUrl": "https://i.ibb.co/V0CvmhXm/Whats-App-Image-2026-01-24-at-5-58-52-PM-1.jpg", "uploadDate": "2024-07-29T10:00:57.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_159", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_159", "imageUrl": "https://i.ibb.co/vxD6276d/Whats-App-Image-2026-01-24-at-5-58-52-PM.jpg", "uploadDate": "2024-07-29T10:00:58.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_160", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_160", "imageUrl": "https://i.ibb.co/xKpBMLkL/Whats-App-Image-2026-01-24-at-5-58-51-PM-1.jpg", "uploadDate": "2024-07-29T10:00:59.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_161", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_161", "imageUrl": "https://i.ibb.co/7NZVNHTJ/Whats-App-Image-2026-01-24-at-5-58-51-PM.jpg", "uploadDate": "2024-07-29T10:01:00.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_162", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_162", "imageUrl": "https://i.ibb.co/5xwbXnsV/Whats-App-Image-2026-01-24-at-5-58-50-PM-1.jpg", "uploadDate": "2024-07-29T10:01:01.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_163", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_163", "imageUrl": "https://i.ibb.co/k2gQWBQz/Whats-App-Image-2026-01-24-at-5-58-50-PM.jpg", "uploadDate": "2024-07-29T10:01:02.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_164", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_164", "imageUrl": "https://raw.githubusercontent.com/berriescherry8-cell/mool-gyan-assets/main/prachar-aur-prasar/WhatsApp_Image_2026-01-24_at_5.59.01_PM.jpeg", "uploadDate": "2024-07-29T10:01:03.000Z", "folder": "Pravas aur Prachar-Prasar" } } },
+      { "path": "/spiritualPhotos/pravas_user_add_165", "definition": { "schema": { "$ref": "#/entities/SpiritualPhoto", "id": "pravas_user_add_165", "imageUrl": "https://raw.githubusercontent.com/berriescherry8-cell/mool-gyan-assets/main/general-gallery/WhatsApp_Image_2025-12-30_at_1.48.44_PM.jpeg", "uploadDate": "2024-07-29T10:01:04.000Z", "folder": "Pravas aur Prachar-Prasar" } } }
+    ]
+  }
+}
