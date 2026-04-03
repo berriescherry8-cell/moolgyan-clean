@@ -17,7 +17,8 @@
     "cap:build:android": "npm run build && npx cap sync android && npx cap open android",
     "cap:prepare:android": "npm run build && npx cap copy android",
     "cap:run:android": "npm run cap:prepare:android && npx cap run android",
-    "cap:build:apk": "npm run cap:prepare:android && cd android && gradlew assembleRelease"
+    "cap:build:apk": "npm run cap:prepare:android && cd android && gradlew assembleRelease",
+    "preview": "npx serve dist"
   },
   "dependencies": {
     "@capacitor/android": "^6.2.1",
@@ -85,6 +86,7 @@
     "@types/wav": "1.0.3",
     "postcss-selector-parser": "^7.1.1",
     "rimraf": "^5.0.10",
+    "serve": "^14.2.6",
     "typescript": "5.4.5"
   },
   "overrides": {
