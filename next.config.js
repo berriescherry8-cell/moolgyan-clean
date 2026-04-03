@@ -1,5 +1,4 @@
 /** @type {import('next').NextConfig} */
-
 const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
@@ -7,7 +6,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: true,
   },
-  unstable_allowDynamicExport: true,
 
   images: {
     remotePatterns: [
@@ -35,14 +33,13 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
-    unoptimized: true, // Disable image optimization for static export
+    unoptimized: true, // Required for static export
   },
-  // Capacitor configuration
-  // output: 'export', // disabled for dev
-  trailingSlash: true,
+
+  // Static export configuration for Cloudflare Pages
+  output: 'export',
   distDir: 'dist',
-assetPrefix: process.env.NODE_ENV === 'production' ? '/' : '',
-  output: process.env.NODE_ENV === 'production' ? 'export' : undefined,
+  trailingSlash: true,
 };
 
 module.exports = nextConfig;
