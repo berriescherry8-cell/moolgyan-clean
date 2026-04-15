@@ -30,8 +30,8 @@ function ClientOnlyLayout({ children }: { children: React.ReactNode }) {
   );
 
   return (
-    <SidebarProvider>
-      <div className="relative flex min-h-screen w-full bg-black">
+      <SidebarProvider defaultOpen={true}>
+        <div className="relative flex min-h-screen w-full bg-black">  
         <Sidebar>
           <SidebarRail />
           <SidebarContent>

@@ -10,16 +10,17 @@ import { getNavItems } from '@/lib/nav-items';
 import type { NavItem } from '@/lib/nav-items';
 import { useLocale } from '@/lib/i18n';
 import { Separator } from './ui/separator';
-import { useAdminAuth } from '@/lib/adminAuth';
+import { useAdminAuthStore } from '@/lib/adminAuthStore';
 
 export default function SidebarNav() {
   const pathname = usePathname();
   const { t } = useLocale();
   const navItems = getNavItems(t);
-  const { isAuthenticated } = useAdminAuth();
+  const { isAuthenticated } = useAdminAuthStore();
 
+  // Don't show admin items in the main app sidebar - they have their own admin sidebar
   const regularItems = navItems.filter(item => !item.isAdmin && !item.isHidden);
-  const adminItems = navItems.filter(item => item.isAdmin);
+  const adminItems = []; // Empty - admin pages use AdminSidebar instead
 
   return (
     <nav className="flex h-full flex-col">
@@ -32,7 +33,7 @@ export default function SidebarNav() {
             height={40}
             className="rounded-full"
           />
-          <span className="font-headline group-data-[collapsible=icon]:hidden">{t('app_name')}</span>
+          <span className="font-headline hidden sm:inline">{t('app_name')}</span>
         </Link>
       </div>
 
@@ -48,7 +49,7 @@ export default function SidebarNav() {
               )}
             >
               <item.icon className="h-4 w-4" />
-              <span className="group-data-[collapsible=icon]:hidden">{item.label}</span>
+              <span>{item.label}</span>
             </Link>
           ))}
         </div>
@@ -58,7 +59,7 @@ export default function SidebarNav() {
           <>
             <Separator className="my-4" />
             <div className="px-4 lg:px-6 space-y-2">
-              <p className="px-2 text-xs font-semibold text-muted-foreground group-data-[collapsible=icon]:hidden">
+              <p className="px-2 text-xs font-semibold text-muted-foreground hidden sm:block">
                 ADMIN SECTION
               </p>
               <div className="flex flex-col gap-1 text-sm font-medium">
@@ -72,7 +73,7 @@ export default function SidebarNav() {
                     )}
                   >
                     <item.icon className="h-4 w-4" />
-                    <span className="group-data-[collapsible=icon]:hidden">{item.label}</span>
+                    <span>{item.label}</span>
                   </Link>
                 ))}
               </div>

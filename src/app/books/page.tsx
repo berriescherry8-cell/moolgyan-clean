@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Card } from '@/components/ui/card';
@@ -9,18 +11,16 @@ import { Dialog, DialogContent, DialogTrigger } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
-import { createClient } from '@supabase/supabase-js';
+import { createClient } from '@/lib/supabase';
+import BookOrderDialog from '@/components/BookOrderDialog';
 
-const supabase = createClient(
-  'https://lqymwrhfirszrakuevqm.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxxeW13cmhmaXJzenJha3VldnFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzMjQ4MzEsImV4cCI6MjA4OTkwMDgzMX0.Qlkjm13UTPm6NCwwTTJqAC_cLSoJHPscKYEse6gRYYA'
-);
+const supabase = createClient();
 
 interface Book {
   id: string;
   title: string;
   author: string;
-  price: number;
+  price: number | string;
   description: string;
   cover_url: string;
   pdf_url?: string;
@@ -33,10 +33,14 @@ export default function BooksPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const { toast } = useToast();
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
+  const [isOrderDialogOpen, setIsOrderDialogOpen] = useState(false);
 
-  const handleOrderClick = () => {
-    const googleFormUrl = `https://docs.google.com/forms/d/e/1FAIpQLSegbq8uEHe7g3-QZB1qZme4h5uOH-DcwlHbmTx5qJeO-F_8tw/viewform`;
-    window.open(googleFormUrl, '_blank');
+  const handleOrderClick = (e: React.MouseEvent, book: Book) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setSelectedBook(book);
+    setIsOrderDialogOpen(true);
   };
 
   useEffect(() => {
@@ -141,7 +145,7 @@ export default function BooksPage() {
                     </Button>
                   )}
                   {!isReadOnly && (
-                    <Button onClick={handleOrderClick} className="flex-1 bg-amber-500 hover:bg-amber-600 text-black">
+                    <Button onClick={(e) => handleOrderClick(e, book)} className="flex-1 bg-amber-500 hover:bg-amber-600 text-black">
                       <ShoppingCart className="mr-2 h-4 w-4" /> ऑर्डर करें
                     </Button>
                   )}
@@ -191,6 +195,16 @@ export default function BooksPage() {
           ))}
         </div>
       </div>
+
+      {/* Order Dialog */}
+      <BookOrderDialog 
+        book={selectedBook}
+        isOpen={isOrderDialogOpen}
+        onClose={() => {
+          setIsOrderDialogOpen(false);
+          setSelectedBook(null);
+        }}
+      />
     </div>
   );
 }

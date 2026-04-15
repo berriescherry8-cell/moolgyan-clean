@@ -26,11 +26,11 @@ export default function YouTubePlaylist({ playlistId }: YouTubePlaylistProps) {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold">{t.satsang_videos}</h2>
+           <h2 className="text-2xl font-bold">{t('satsang_videos')}</h2>
           <div className="flex items-center space-x-2">
             <Search className="h-5 w-5 text-muted-foreground" />
             <Input
-              placeholder={t.search_videos}
+               placeholder={t('search_videos')}
               className="w-64"
               disabled
             />
@@ -94,11 +94,11 @@ export default function YouTubePlaylist({ playlistId }: YouTubePlaylistProps) {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold">{t.satsang_videos}</h2>
+           <h2 className="text-2xl font-bold">{t('satsang_videos')}</h2>
           <div className="flex items-center space-x-2">
             <Search className="h-5 w-5 text-muted-foreground" />
             <Input
-              placeholder={t.search_videos}
+               placeholder={t('search_videos')}
               className="w-64"
               disabled
             />
@@ -125,11 +125,11 @@ export default function YouTubePlaylist({ playlistId }: YouTubePlaylistProps) {
     return (
       <div className="space-y-6">
         <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold">{t.satsang_videos}</h2>
+           <h2 className="text-2xl font-bold">{t('satsang_videos')}</h2>
           <div className="flex items-center space-x-2">
             <Search className="h-5 w-5 text-muted-foreground" />
             <Input
-              placeholder={t.search_videos}
+             placeholder={t('search_videos')}
               className="w-64"
               disabled
             />
@@ -148,11 +148,11 @@ export default function YouTubePlaylist({ playlistId }: YouTubePlaylistProps) {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold">{t.satsang_videos}</h2>
+        <h2 className="text-2xl font-bold">{t('satsang_videos')}</h2>
         <div className="flex items-center space-x-2">
           <Search className="h-5 w-5 text-muted-foreground" />
           <Input
-            placeholder={t.search_videos}
+            placeholder={t('search_videos')}
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             className="w-64"
@@ -186,19 +186,29 @@ export default function YouTubePlaylist({ playlistId }: YouTubePlaylistProps) {
             className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer"
             onClick={() => handleVideoSelect(video.videoId)}
           >
-            <div className="relative aspect-video">
-              <img
-                src={video.thumbnailUrl}
-                alt={video.title}
-                className="w-full h-full object-cover"
-                loading="lazy"
-              />
-              <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all flex items-center justify-center">
-                <div className="opacity-0 hover:opacity-100 transition-opacity">
-                  <Play className="h-12 w-12 text-white" />
-                </div>
-              </div>
-            </div>
+             <div className="relative aspect-video bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900">
+               <img
+                 src={video.thumbnailUrl}
+                 alt={video.title}
+                 className="w-full h-full object-cover"
+                 loading="lazy"
+                 onError={(e) => {
+                   const target = e.target as HTMLImageElement;
+                   target.style.display = 'none';
+                   // Ensure the container shows the fallback background
+                   const container = target.parentElement;
+                   if (container) {
+                     container.style.background = 'linear-gradient(135deg, #111827 0%, #1f2937 50%, #111827 100%)';
+                     container.style.backgroundSize = 'cover';
+                   }
+                 }}
+               />
+               <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all flex items-center justify-center">
+                 <div className="opacity-0 hover:opacity-100 transition-opacity">
+                   <Play className="h-12 w-12 text-white" />
+                 </div>
+               </div>
+             </div>
             <CardHeader className="p-4">
               <CardTitle className="text-sm line-clamp-2">{video.title}</CardTitle>
               <p className="text-xs text-muted-foreground mt-1">
@@ -211,7 +221,7 @@ export default function YouTubePlaylist({ playlistId }: YouTubePlaylistProps) {
 
       {filteredVideos.length === 0 && searchTerm && (
         <div className="text-center py-8 text-muted-foreground">
-          {t.no_videos_found}
+           {t('no_videos_found')}
         </div>
       )}
     </div>

@@ -36,7 +36,7 @@ const NewsTicker = () => {
 
       <div className="flex-1 whitespace-nowrap overflow-hidden">
         <div
-          className="inline-block animate-marquee"
+          className="inline-block animate-marquee-reverse"
           style={{ animationPlayState: isPaused ? 'paused' : 'running' }}
         >
           <span className="font-semibold mx-4 text-sm tracking-wider" style={{ textShadow: '0 0 5px hsl(var(--primary) / 0.5)' }}>{repeatedContent}</span>

@@ -3,7 +3,6 @@ import './globals.css';
 import { Inter } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
-import { LocaleProvider } from '@/lib/i18n';
 import AppLayout from '@/components/AppLayout';
 import { UploadProvider } from '@/context/UploadProvider';
 
@@ -42,8 +41,8 @@ export const viewport: Viewport = {
   themeColor: '#000000',
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
+  maximumScale: 3,
+  userScalable: true,
 };
 
 export default function RootLayout({
@@ -63,13 +62,11 @@ export default function RootLayout({
           inter.variable
         )}
       >
-        <LocaleProvider>
-          <UploadProvider>
-            <AppLayout>
-              {children}
-            </AppLayout>
-          </UploadProvider>
-        </LocaleProvider>
+        <UploadProvider>
+          <AppLayout>
+            {children}
+          </AppLayout>
+        </UploadProvider>
         <Toaster />
       </body>
     </html>

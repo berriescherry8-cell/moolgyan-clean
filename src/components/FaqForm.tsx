@@ -57,7 +57,7 @@ export default function FaqForm() {
         status: 'pending'
       };
       
-      dataManager.setDoc('faqQuestions', faqData);
+      dataManager.setDoc('faq_questions', faqData);
 
       toast({
         title: 'Success!',

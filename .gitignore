@@ -10,6 +10,7 @@ coverage
 .next/
 out/
 dist/
+dist/cache/
 
 # Production
 build/

@@ -1,37 +1,41 @@
 import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import { useCallback } from 'react';
 import { translations } from './locales';
-import { persist } from 'zustand/middleware';
 
-interface LocaleState {
-  locale: 'en' | 'hi';
-  t: (key: string) => string;
-  setLocale: (locale: 'en' | 'hi') => void;
+type Locale = 'en' | 'hi';
+
+interface LocaleStore {
+  locale: Locale;
+  setLocale: (locale: Locale) => void;
 }
 
-export const useLocaleStore = create(
-  persist<LocaleState>(
-    (set, get) => ({
-      locale: (typeof window !== 'undefined' ? localStorage.getItem('locale') as 'en' | 'hi' || 'hi' : 'hi'),
-      t: (key: string) => {
-        const state = get();
-        return state.locale === 'hi' ? (translations.hi[key as keyof typeof translations.hi] || key) : (translations.en[key as keyof typeof translations.en] || key);
-      },
+export const useLocaleStore = create<LocaleStore>()(
+  persist(
+    (set) => ({
+      locale: 'hi',
       setLocale: (locale) => {
         set({ locale });
-        if (typeof window !== 'undefined') {
-          localStorage.setItem('locale', locale);
+        if (typeof document !== 'undefined') {
           document.documentElement.lang = locale;
         }
       },
     }),
     {
       name: 'locale-storage',
+      storage: createJSONStorage(() => localStorage),
     }
   )
 );
 
 export function useLocale() {
-  const { t, setLocale, locale } = useLocaleStore();
+  const { locale, setLocale } = useLocaleStore();
+  const t = useCallback((key: string) => {
+    return locale === 'hi' 
+      ? (translations.hi[key as keyof typeof translations.hi] || key)
+      : (translations.en[key as keyof typeof translations.en] || key);
+  }, [locale]);
+
   return { t, setLocale, locale };
 }
 
