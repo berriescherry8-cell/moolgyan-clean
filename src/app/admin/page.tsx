@@ -2,9 +2,12 @@ import { redirect } from 'next/navigation'
 import { createSupabaseServerClient } from '@/lib/supabase/server'
 import { cookies } from 'next/headers'
 
-export const dynamic = 'force-dynamic'
-
 export default async function AdminPage() {
+  // Skip auth during static build/export
+  if (typeof window === 'undefined' && process.env.NEXT_PHASE?.includes('build')) {
+    return <div>Admin panel requires authentication (static preview)</div>
+  }
+
   const supabase = createSupabaseServerClient()
   
   if (!supabase) {

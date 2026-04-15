@@ -8,6 +8,11 @@ export interface AdminUser extends User {
 }
 
 export async function getAdminUser(): Promise<AdminUser | null> {
+  // Skip auth during static build/export to avoid cookies() call
+  if (typeof window === 'undefined' && process.env.NEXT_PHASE?.includes('build')) {
+    return null
+  }
+  
   const supabase = createServerClient()
   
   if (!supabase) {

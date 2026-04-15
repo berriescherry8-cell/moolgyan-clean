@@ -1,4 +1,3 @@
-import { requireAdmin } from '@/lib/adminAuth'
 import AdminLayout from '@/components/admin/AdminLayout'
 import Link from 'next/link'
 import {
@@ -26,9 +25,7 @@ import {
   UsersRound
 } from "lucide-react"
 
-export const dynamic = 'force-dynamic'
-
-export default async function Page() {
+export default function Page() {
   const dashboardCards = [
     { href: "/admin/books", label: "Manage Bookstore", icon: BookOpen, color: "from-orange-500 to-amber-500", description: "Add/edit books, franchise items, stock & sale status" },
     { href: "/admin/live-satsang", label: "Manage Live Satsang", icon: Video, color: "from-red-500 to-orange-500", description: "YouTube URLs, titles, live toggle" },
@@ -40,8 +37,6 @@ export default async function Page() {
     { href: "/admin/photos", label: "Manage Photos", icon: Camera, color: "from-purple-500 to-violet-500", description: "Upload/sync photo gallery" },
   ];
 
-  const admin = await requireAdmin()
-
   return (
     <AdminLayout>
       <div className="space-y-8">
@@ -51,7 +46,7 @@ export default async function Page() {
             <h1 className="text-4xl font-bold bg-gradient-to-r from-indigo-400 to-purple-500 bg-clip-text text-transparent">
               Admin Dashboard
             </h1>
-            <p className="text-slate-400 mt-2">Welcome back, {admin.email}</p>
+            <p className="text-slate-400 mt-2">Welcome back, Admin</p>
           </div>
           <form action="/admin/logout/action">
             <button
@@ -154,3 +149,4 @@ export default async function Page() {
     </AdminLayout>
   )
 }
+

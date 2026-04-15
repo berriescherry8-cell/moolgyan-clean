@@ -15,6 +15,9 @@ const nextConfig = {
   },
   productionBrowserSourceMaps: false,
 
+  // YouTube iframe CSP - use middleware for static export
+  // async headers() { ... },
+
   images: {
     remotePatterns: [
       {
@@ -48,5 +51,5 @@ const nextConfig = {
   turbopack: {},
 };
 
-export default withPWA(nextConfig);
+module.exports = withPWA(nextConfig);
 

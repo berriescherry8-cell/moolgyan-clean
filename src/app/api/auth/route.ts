@@ -3,6 +3,8 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
+export const dynamic = 'force-static';
+
 const ADMIN_EMAILS = [
   'sharmadevendra715@gmail.com',
   'kpdeora1986@gmail.com',
@@ -115,3 +117,4 @@ export async function DELETE(request: NextRequest) {
 
   return NextResponse.json({ success: true });
 }
+
