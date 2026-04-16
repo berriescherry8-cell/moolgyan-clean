@@ -10,5 +10,9 @@ watch_dir = "src"
 [env.production]
 vars = { NODE_ENV = "production" }
 
+# Static assets configuration
+[assets]
+directory = "./dist"
+
 # Prevent OpenNext auto-installation
 pages_build_output_dir = "dist"
