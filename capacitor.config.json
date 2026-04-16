@@ -1,7 +1,7 @@
 {
   "appId": "com.moolgyan.app",
   "appName": "Mool Gyan",
-  "webDir": "public",
+  "webDir": "dist",
   "bundledWebRuntime": false,
   "plugins": {
     "SplashScreen": {

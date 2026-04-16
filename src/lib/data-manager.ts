@@ -173,6 +173,7 @@ export function useCollection<T>(collection: string, filters?: Record<string, an
     try {
       const supabase = getSupabase();
       if (!supabase) {
+        console.warn(`[useCollection] Supabase client not available for ${collection}`);
         setData([]);
         setLoading(false);
         return;
@@ -182,12 +183,19 @@ export function useCollection<T>(collection: string, filters?: Record<string, an
       
       if (filters) {
         Object.entries(filters).forEach(([key, value]) => {
-          query = query.eq(key, value);
+          if (value !== undefined && value !== null) {
+            query = query.eq(key, value);
+          }
         });
       }
       
       const { data: fetchedData, error } = await query;
-      if (error) throw error;
+      if (error) {
+        console.error(`[useCollection] Supabase error for ${collection}:`, error);
+        setData([]);
+        return;
+      }
+      
       setData(fetchedData || []);
     } catch (error) {
       console.error(`[useCollection] Error fetching ${collection}:`, error);

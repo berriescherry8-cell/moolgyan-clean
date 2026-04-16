@@ -1,12 +1,17 @@
-# Build Fix TODO
+## Next.js Update & Cloudflare Fix TODO
 
-## Plan Breakdown:
-1. [x] Edit `src/app/admin/(protected)/layout.tsx`: Remove `export const dynamic = 'force-dynamic'` (not needed - already client component)
-2. [x] Edit `src/lib/adminAuth.ts`: Add static export safety - skip cookies/DB during build/prerender
-3. [x] Verify `src/lib/supabase/server.ts` safeguards are sufficient
-4. [x] Run `npm run build` and check for success ✓ (Compiled successfully, no prerender errors, pages generating)
-5. [x] Test: Build succeeds, static export works, changes committed/pushed to GitHub (blackboxai/build-fix branch prep)
-6. [x] [DONE] Clean up TODO.md
+✅ **Plan Approved** - Update to Next.js 15.0.1, fix configs for static export/PWA/Capacitor/Supabase.
 
-**Final Status:** npm run build ✅ Changes pushed ✅
+### Steps:
+- [x] 1. Create TODO.md (done)
+- [x] 2. Edit package.json (Next.js 15, React 18.3.1)
+- [x] 3. Edit next.config.js (modern next-pwa, remove turbopack)
+- [x] 4. Edit capacitor.config.json (webDir: "dist")
+- [ ] 5. Run `npm install`
+- [ ] 6. Test `npm run build && npm run preview`
+- [ ] 7. `npx cap copy android` (post-build)
+- [ ] 8. Update Cloudflare Git deployment
+- [ ] 9. Mark complete & test live
+
+**Commands provided after edits.**
 
