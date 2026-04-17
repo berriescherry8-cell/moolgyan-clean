@@ -138,10 +138,19 @@ export default function BooksPage() {
 
                 <div className="mt-5 flex gap-3">
                   {book.pdf_url && (
-                    <Button asChild variant="outline" className="flex-1">
-                      <a href={book.pdf_url} target="_blank" rel="noopener noreferrer" className="flex items-center">
-                        <BookOpen className="mr-2 h-4 w-4" /> पढ़ें
-                      </a>
+                    <Button 
+                      onClick={() => {
+                        const link = document.createElement('a');
+                        link.href = book.pdf_url;
+                        link.download = book.title.replace(/[^a-zA-Z0-9\s]/g, '') + '.pdf';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      }}
+                      variant="outline" 
+                      className="flex-1"
+                    >
+                      <BookOpen className="mr-2 h-4 w-4" /> पढ़ें
                     </Button>
                   )}
                   {!isReadOnly && (
