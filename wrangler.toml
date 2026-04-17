@@ -1,23 +1,10 @@
-name = "moolgyan-clean"
-compatibility_date = "2026-04-16"
-compatibility_flags = ["nodejs_compat"]
+# This file is for Cloudflare Pages, not Workers
+# Pages will automatically deploy from GitHub without this config
 
+# Build configuration for Pages
 [build]
 command = "npm run build"
 cwd = "."
 
 [env.production]
 vars = { NODE_ENV = "production" }
-
-# Static assets configuration for Pages
-[assets]
-directory = "./dist"
-
-# Exclude cache files and large directories
-exclude = [
-  "cache/**",
-  ".next/cache/**",
-  "node_modules/**",
-  "*.log",
-  "*.map"
-]
