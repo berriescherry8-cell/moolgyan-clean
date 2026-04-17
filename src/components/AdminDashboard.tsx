@@ -71,6 +71,8 @@ const { logout } = useSupabaseAdminAuth();
     setIsLoggingOut(true);
     try {
       logout();
+      // Clear admin email from localStorage
+      localStorage.removeItem('moolgyan_admin');
       router.push('/admin/login');
     } catch (error) {
       console.error('Logout error:', error);

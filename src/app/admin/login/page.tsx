@@ -33,6 +33,9 @@ const handleLogin = async (e: React.FormEvent) => {
         throw new Error(data.error || 'Login failed');
       }
 
+      // Set admin email in localStorage for AdminGuard
+      localStorage.setItem('moolgyan_admin', data.user.email);
+      
       router.push('/admin/dashboard');
     } catch (error: any) {
       alert('Login failed: ' + error.message);
