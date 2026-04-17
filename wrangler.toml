@@ -8,3 +8,10 @@ enabled = true
 # Pages deployment configuration
 [assets]
 directory = "./dist"
+
+# Exclude cache files from deployment
+exclude = [
+  "cache/**",
+  ".next/cache/**",
+  "node_modules/.cache/**"
+]

@@ -157,7 +157,7 @@ export default function BookOrderForm() {
     if (!validateForm()) {
       toast({
         title: "Please fix errors",
-        description: "Please check the form for errors and try again.",
+        description: "Please check form for errors and try again.",
         variant: "destructive"
       });
       return;
@@ -168,37 +168,41 @@ export default function BookOrderForm() {
     setSubmitting(true);
 
     try {
-      const { data, error } = await supabase
-        .from('orders')
-        .insert({
-          book_id: book.id,
-          book_title: book.title,
-          book_price: book.price,
-          quantity: formData.quantity,
-          full_name: formData.fullName,
-          mobile_number: formData.mobileNumber,
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          bookId: book.id,
+          bookTitle: book.title,
+          customerName: formData.fullName,
+          mobile: formData.mobileNumber,
           address: formData.address,
-          pin_code: formData.pinCode,
-          total_amount: calculateTotal()
-        })
-        .select()
-        .single();
+          pinCode: formData.pinCode,
+          quantity: formData.quantity
+        }),
+      });
 
-      if (error) throw error;
+      const result = await response.json();
+
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to place order');
+      }
 
       toast({
         title: "Order Placed Successfully!",
-        description: `Order #${data.id} has been created. Please complete payment and upload screenshot.`,
-            variant: "default"
+        description: `Order #${result.orderId} has been created. Please complete payment and upload screenshot.`,
+        variant: "default"
       });
 
       // Redirect to order confirmation or payment page
-      router.push(`/order/${book.id}/confirmation?orderId=${data.id}`);
+      router.push(`/order/${book.id}/confirmation?orderId=${result.orderId}`);
     } catch (error: any) {
       console.error('Error placing order:', error);
       toast({
         title: "Order Failed",
-        description: "Failed to place order. Please try again.",
+        description: error.message || "Failed to place order. Please try again.",
         variant: "destructive"
       });
     } finally {
