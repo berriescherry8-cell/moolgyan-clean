@@ -1,0 +1,12 @@
+name = "moolgyan-clean"
+compatibility_date = "2026-04-17"
+compatibility_flags = ["nodejs_compat"]
+
+[observability]
+enabled = true
+
+# Pages deployment configuration
+pages_build_output_dir = "dist"
+
+[build]
+command = "npm run build"
