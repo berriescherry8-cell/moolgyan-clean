@@ -16,26 +16,47 @@ export default function AdminLogin() {
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
 
-const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
     try {
-      const response = await fetch('/api/auth', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+      // Use client-side Supabase auth instead of API route
+      const supabase = createClient();
+      
+      if (!supabase) {
+        throw new Error('Supabase client not available');
+      }
+
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       });
 
-      const data = await response.json();
+      if (error) {
+        throw new Error(error.message);
+      }
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Login failed');
+      if (!data.user) {
+        throw new Error('Login failed - no user data returned');
+      }
+
+      // Check if user is admin
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', data.user.id)
+        .single();
+
+      if (!profile || profile.role !== 'admin') {
+        await supabase.auth.signOut();
+        throw new Error('Access denied. Admin privileges required.');
       }
 
       // Set admin email in localStorage for AdminGuard
       localStorage.setItem('moolgyan_admin', data.user.email);
       
+      // Redirect to dashboard
       router.push('/admin/dashboard');
     } catch (error: any) {
       alert('Login failed: ' + error.message);

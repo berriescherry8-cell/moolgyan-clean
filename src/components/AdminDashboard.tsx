@@ -70,12 +70,22 @@ const { logout } = useSupabaseAdminAuth();
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
-      logout();
+      // Clear Supabase session
+      const { createClient } = require('@/lib/supabase');
+      const supabase = createClient();
+      if (supabase) {
+        await supabase.auth.signOut();
+      }
+      
       // Clear admin email from localStorage
       localStorage.removeItem('moolgyan_admin');
+      
       router.push('/admin/login');
     } catch (error) {
       console.error('Logout error:', error);
+      // Still redirect even if logout fails
+      localStorage.removeItem('moolgyan_admin');
+      router.push('/admin/login');
     } finally {
       setIsLoggingOut(false);
     }
