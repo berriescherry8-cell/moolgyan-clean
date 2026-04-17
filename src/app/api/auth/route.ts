@@ -3,7 +3,6 @@ import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
-export const dynamic = 'force-dynamic';
 
 const ADMIN_EMAILS = [
   'sharmadevendra715@gmail.com',

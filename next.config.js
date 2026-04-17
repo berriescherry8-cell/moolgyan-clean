@@ -47,7 +47,6 @@ const nextConfig = {
 
   distDir: 'dist',
   trailingSlash: true,
-  output: 'export',
 };
 
 module.exports = withPWA(nextConfig);
