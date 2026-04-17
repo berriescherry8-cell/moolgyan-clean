@@ -85,9 +85,9 @@ export default function FaqForm() {
           name="name"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t.full_name}</FormLabel>
+<FormLabel>{t('full_name')}</FormLabel>
               <FormControl>
-                <Input placeholder={t.your_name} {...field} />
+<Input placeholder={t('your_name')} {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -98,9 +98,9 @@ export default function FaqForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>{t.email}</FormLabel>
+<FormLabel>{t('email')}</FormLabel>
               <FormControl>
-                <Input type="email" placeholder={t.your_email} {...field} />
+
               </FormControl>
               <FormMessage />
             </FormItem>

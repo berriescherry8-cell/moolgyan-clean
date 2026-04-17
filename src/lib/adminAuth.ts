@@ -25,13 +25,19 @@ export async function getAdminUser(): Promise<AdminUser | null> {
   if (!user) return null
 
   // Get profile role from DB
-  const { data: profile } = await supabase
+  const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('role')
     .eq('id', user.id)
     .single()
 
+  if (profileError) {
+    console.error('Admin auth profile error:', profileError);
+    return null;
+  }
+
   if (!profile?.role || profile.role !== 'admin') {
+    console.error('Admin auth failed: user', user.id, 'role:', profile?.role);
     return null
   }
 

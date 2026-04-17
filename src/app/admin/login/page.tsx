@@ -16,22 +16,28 @@ export default function AdminLogin() {
   const searchParams = useSearchParams();
   const error = searchParams.get('error');
 
-  const handleLogin = async (e: React.FormEvent) => {
+const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
 
-    const supabase = createClient();
-    const { error: authError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
+    try {
+      const response = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
 
-    setLoading(false);
+      const data = await response.json();
 
-    if (authError) {
-      alert('Login failed: ' + authError.message);
-    } else {
+      if (!response.ok) {
+        throw new Error(data.error || 'Login failed');
+      }
+
       router.push('/admin/dashboard');
+    } catch (error: any) {
+      alert('Login failed: ' + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -44,9 +50,9 @@ export default function AdminLogin() {
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {error && (
-            <div className="bg-red-500/20 border border-red-500 text-red-200 p-3 rounded-lg mb-4">
-              Unauthorized. Please use admin credentials.
+{error && (
+            <div className="bg-red-500/20 border border-red-500 text-red-200 p-3 rounded-lg mb-4 mb-6">
+              {error === 'unauthorized' ? 'Access denied. Please use admin credentials.' : 'Login failed. Please check your credentials.'}
             </div>
           )}
           <form onSubmit={handleLogin} className="space-y-4">
