@@ -1,18 +1,23 @@
-name = "mool-gyan-app"
+name = "moolgyan-clean"
 compatibility_date = "2026-04-16"
 compatibility_flags = ["nodejs_compat"]
 
 [build]
 command = "npm run build"
 cwd = "."
-watch_dir = "src"
 
 [env.production]
 vars = { NODE_ENV = "production" }
 
-# Static assets configuration
+# Static assets configuration for Pages
 [assets]
 directory = "./dist"
 
-# Prevent OpenNext auto-installation
-pages_build_output_dir = "dist"
+# Exclude cache files and large directories
+exclude = [
+  "cache/**",
+  ".next/cache/**",
+  "node_modules/**",
+  "*.log",
+  "*.map"
+]
