@@ -14,6 +14,8 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   productionBrowserSourceMaps: false,
+  output: 'export',
+  swcMinify: true,
 
   // YouTube iframe CSP - use middleware for static export
   // async headers() { ... },
@@ -50,3 +52,4 @@ const nextConfig = {
 };
 
 module.exports = withPWA(nextConfig);
+

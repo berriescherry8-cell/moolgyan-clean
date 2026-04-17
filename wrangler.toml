@@ -11,6 +11,12 @@ directory = "./dist"
 
 # Exclude cache files from deployment
 exclude = [
+  "**/cache/**",
+  "**/*.pack",
+  "**/webpack/**",
+  "**/server*",
+  "**/.next/**",
+  "**/node_modules/**",
   "cache/**",
   ".next/cache/**",
   "node_modules/.cache/**"

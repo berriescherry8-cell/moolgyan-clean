@@ -1,14 +1,23 @@
-# Fix Login API Error - Progress Tracker
+# Cloudflare Build Fix - TODO Steps
 
-## Plan Summary
-Fix /src/app/api/auth/route.ts to use robust Supabase client, add try-catch, proper JSON errors.
+## Completed:
+1. Update wrangler.toml with comprehensive assets.exclude patterns (cache/server files)
+2. Add postbuild cleanup script to package.json and update deploy:static
 
-## Steps:
-- [x] Step 1: Create TODO.md (done)
-- [x] Step 2: Import createSupabaseServerClient and refactor all handlers to use it with null-checks (done)
-- [ ] Step 3: Add comprehensive try-catch around POST (primary), extend to GET/DELETE
-- [ ] Step 4: Test the fix (manual)
-- [ ] Step 5: Complete
+## Pending:
 
-Current: Executing Step 2.
+3. Optimize next.config.js (swcMinify, explicit output: 'export') ✓
+4. 🔄 Test `npm run build` - confirm dist/cache/webpack/server-production/0.pack exists and size >25MiB
+5. Test `npm run postbuild` - verify cache removed
+6. Test full `npm run deploy:static` locally - should succeed
+7. git add/commit/push changes
+8. Monitor Cloudflare Pages build success
+3. ✅ Optimize next.config.js (swcMinify, explicit output: 'export')
+4. 🔄 Test `npm run build` - confirm dist/cache/webpack/server-production/0.pack exists and size >25MiB
+5. Test `npm run postbuild` - verify cache removed
+6. Test full `npm run deploy:static` locally - should succeed
+7. git add/commit/push changes
+8. Monitor Cloudflare Pages build success
+
+**Next step:** Starting with wrangler.toml update.
 
