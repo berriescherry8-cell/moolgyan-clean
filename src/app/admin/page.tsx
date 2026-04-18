@@ -8,7 +8,7 @@ export default async function AdminPage() {
     return <div>Admin panel requires authentication (static preview)</div>
   }
 
-  const supabase = createSupabaseServerClient()
+  const supabase = await createSupabaseServerClient()
   
   if (!supabase) {
     redirect('/admin/login')

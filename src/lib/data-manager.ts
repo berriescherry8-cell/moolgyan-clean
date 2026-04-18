@@ -4,8 +4,9 @@ import { createBrowserClient } from '@supabase/ssr';
 import { useEffect, useState, useCallback } from 'react';
 
 // Get Supabase client
-const getSupabase = () => {
+export const getSupabase = () => {
   if (typeof window === 'undefined') {
+    console.warn('Supabase client called server-side');
     return null;
   }
   
@@ -33,7 +34,12 @@ export const dataManager = {
       if (id) {
         // Update existing document - only add updated_at if it exists in the table
         const updateData = { ...data };
-        // Try to add updated_at, but don't fail if column doesn't exist
+        
+        // Always include for_sale field if present in data
+        if ('for_sale' in data) {
+          updateData.for_sale = data.for_sale;
+        }
+        
         try {
           const { error } = await supabase
             .from(collection)
@@ -41,7 +47,7 @@ export const dataManager = {
             .eq('id', id);
           
           if (error && error.code === 'PGRST204') {
-            // Column doesn't exist, try without updated_at
+            // Column doesn't exist, try without it
             const { error: error2 } = await supabase
               .from(collection)
               .update(updateData)
@@ -61,8 +67,14 @@ export const dataManager = {
         
         return id;
       } else {
-        // Create new document - only add timestamps if they exist in the table
+        // Create new document - always include all required fields
         const insertData = { ...data };
+        
+        // Ensure for_sale field is always included for new documents
+        if (!('for_sale' in insertData)) {
+          insertData.for_sale = false;
+        }
+        
         // Try to add timestamps, but don't fail if columns don't exist
         try {
           const { data: newDoc, error } = await supabase

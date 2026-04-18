@@ -14,8 +14,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   productionBrowserSourceMaps: false,
-  output: 'export',
-  swcMinify: true,
+  // output: 'export',  // Comment out for dev server + API routes
 
   // YouTube iframe CSP - use middleware for static export
   // async headers() { ... },

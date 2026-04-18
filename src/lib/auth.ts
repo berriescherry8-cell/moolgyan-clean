@@ -2,7 +2,7 @@ import { createSupabaseServerClient } from './supabase/server'
 import type { User } from '@supabase/supabase-js'
 
 export async function getCurrentUser(): Promise<User | null> {
-  const supabase = createSupabaseServerClient()
+  const supabase = await createSupabaseServerClient()
   
   if (!supabase) {
     return null
@@ -13,7 +13,7 @@ export async function getCurrentUser(): Promise<User | null> {
 }
 
 export async function getCurrentAdmin() {
-  const supabase = createSupabaseServerClient()
+  const supabase = await createSupabaseServerClient()
   
   if (!supabase) {
     return null

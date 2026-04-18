@@ -8,7 +8,7 @@ import { NewsArticle } from '@/lib/types';
 
 const NewsTicker = () => {
   const [isPaused, setIsPaused] = useState(false);
-  const articles = useCollection<NewsArticle>('news');
+const articles = useCollection<NewsArticle>('news_items');
 
   if (!articles || articles.length === 0) {
     return null;

@@ -176,6 +176,7 @@ export default function BookOrderForm() {
         body: JSON.stringify({
           bookId: book.id,
           bookTitle: book.title,
+          bookPrice: typeof book.price === 'string' ? parseFloat(book.price) : book.price,
           customerName: formData.fullName,
           mobile: formData.mobileNumber,
           address: formData.address,

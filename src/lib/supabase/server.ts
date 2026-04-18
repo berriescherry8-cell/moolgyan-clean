@@ -5,14 +5,14 @@ import type { CookieOptions } from '@supabase/ssr'
 const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
 const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 
-export function createSupabaseServerClient() {
+export async function createSupabaseServerClient() {
   // Return null if environment variables are not configured
   if (!supabaseUrl || !supabaseKey) {
     console.warn('Supabase is not configured. Please set NEXT_PUBLIC_SUPABASE_URL and NEXT_PUBLIC_SUPABASE_ANON_KEY')
     return null
   }
 
-  const cookieStore = cookies()
+  const cookieStore = await cookies()
 
   return createServerClient(supabaseUrl, supabaseKey, {
     cookies: {

@@ -4,15 +4,10 @@ import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select-react19';
 import { Trash2, Upload, Loader2, RefreshCw, AlertCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { createClient } from '@supabase/supabase-js';
-
-const supabase = createClient(
-  'https://lqymwrhfirszrakuevqm.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxxeW13cmhmaXJzenJha3VldnFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQzMjQ4MzEsImV4cCI6MjA4OTkwMDgzMX0.Qlkjm13UTPm6NCwwTTJqAC_cLSoJHPscKYEse6gRYYA'
-);
+import { getSupabase } from '@/lib/data-manager';
 
 const folders = [
   { value: 'general-gallery', label: 'General Gallery' },
@@ -38,6 +33,13 @@ export default function AdminPhotosPage() {
 
   const fetchPhotos = async () => {
     setLoading(true);
+    const supabase = getSupabase();
+    if (!supabase) {
+      toast({ variant: 'destructive', description: 'Supabase client not available' });
+      setLoading(false);
+      return;
+    }
+
     const { data, error } = await supabase
       .from('photos')
       .select('*')
@@ -57,6 +59,12 @@ export default function AdminPhotosPage() {
   const handleUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (!files || files.length === 0) return;
+
+    const supabase = getSupabase();
+    if (!supabase) {
+      toast({ variant: 'destructive', description: 'Supabase client not available' });
+      return;
+    }
 
     setUploading(true);
 
@@ -96,6 +104,12 @@ export default function AdminPhotosPage() {
   const syncAllFiles = async () => {
     if (!confirm('Saari files Storage se Table mein sync karni hain?')) return;
 
+    const supabase = getSupabase();
+    if (!supabase) {
+      toast({ variant: 'destructive', description: 'Supabase client not available' });
+      return;
+    }
+
     setSyncing(true);
     try {
       const { data: files, error } = await supabase.storage
@@ -120,7 +134,7 @@ export default function AdminPhotosPage() {
 
       if (insertError && !insertError.message.includes('duplicate')) throw insertError;
 
-      toast({ title: '✅ Sync Done!', description: `${files.length} files synced!` });
+      toast({ title: 'Sync Done!', description: `${files.length} files synced!` });
       fetchPhotos();
     } catch (err: any) {
       toast({ variant: 'destructive', title: 'Sync Failed', description: err.message });
@@ -131,6 +145,11 @@ export default function AdminPhotosPage() {
 
   const handleDelete = async (id: string) => {
     if (!confirm('Photo permanently delete karni hai?')) return;
+    const supabase = getSupabase();
+    if (!supabase) {
+      toast({ variant: 'destructive', description: 'Supabase client not available' });
+      return;
+    }
     await supabase.from('photos').delete().eq('id', id);
     toast({ title: 'Deleted' });
     fetchPhotos();

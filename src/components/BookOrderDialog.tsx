@@ -132,7 +132,7 @@ export default function BookOrderDialog({ book, isOpen, onClose }: BookOrderDial
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+      const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!validateForm()) {
@@ -149,27 +149,37 @@ export default function BookOrderDialog({ book, isOpen, onClose }: BookOrderDial
     setSubmitting(true);
 
     try {
-      const { data, error } = await supabase
-        .from('orders')
-        .insert({
-          book_id: book.id,
-          book_title: book.title,
-          book_price: book.price,
-          quantity: formData.quantity,
-          full_name: formData.fullName,
-          mobile_number: formData.mobileNumber,
-          address: formData.address,
-          pin_code: formData.pinCode,
-          total_amount: calculateTotal()
-        })
-        .select()
-        .single();
+      const orderData = {
+        bookId: book.id,
+        bookTitle: book.title,
+        bookPrice: typeof book.price === 'string' ? parseFloat(book.price) : book.price,
+        customerName: formData.fullName,
+        mobile: formData.mobileNumber,
+        address: formData.address,
+        pinCode: formData.pinCode,
+        quantity: formData.quantity
+      };
+      console.log('Sending order data:', orderData);
+      
+      const response = await fetch('/api/orders', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(orderData),
+      });
 
-      if (error) throw error;
+      const result = await response.json();
+
+      if (!response.ok) {
+        console.error('API Error Response:', result);
+        console.error('Response Status:', response.status);
+        throw new Error(result.error || 'Failed to place order');
+      }
 
       toast({
         title: "Order Placed Successfully!",
-        description: `Order #${data.id} has been created. Please complete payment and upload screenshot.`,
+        description: `Order #${result.orderId} created. Complete payment via QR & WhatsApp.`,
         variant: "default"
       });
 
@@ -178,7 +188,7 @@ export default function BookOrderDialog({ book, isOpen, onClose }: BookOrderDial
       console.error('Error placing order:', error);
       toast({
         title: "Order Failed",
-        description: "Failed to place order. Please try again.",
+        description: error.message || "Failed to place order. Please try again.",
         variant: "destructive"
       });
     } finally {

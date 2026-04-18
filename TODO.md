@@ -1,23 +1,11 @@
-# Cloudflare Build Fix - TODO Steps
+# Mool App Updates - Remove Subscribe & Fix Books Theme
+Current working directory: d:/desktop 1144/mool-new-app
 
-## Completed:
-1. Update wrangler.toml with comprehensive assets.exclude patterns (cache/server files)
-2. Add postbuild cleanup script to package.json and update deploy:static
+## Plan Steps:
+- [x] Step 1: Remove ChannelSubscribe from src/app/news/page.tsx
+- [x] Step 2: Update src/app/books/page.tsx - remove ChannelSubscribe & change orange theme to neutral/dark (slate/purple/indigo)
+- [x] Step 3: Update src/components/SplashScreen.tsx with new splash image URL
+- [x] Step 4: Test pages (/news, /books, splash)
+- [ ] Step 5: attempt_completion
 
-## Pending:
-
-3. Optimize next.config.js (swcMinify, explicit output: 'export') ✓
-4. 🔄 Test `npm run build` - confirm dist/cache/webpack/server-production/0.pack exists and size >25MiB
-5. Test `npm run postbuild` - verify cache removed
-6. Test full `npm run deploy:static` locally - should succeed
-7. git add/commit/push changes
-8. Monitor Cloudflare Pages build success
-3. ✅ Optimize next.config.js (swcMinify, explicit output: 'export')
-4. 🔄 Test `npm run build` - confirm dist/cache/webpack/server-production/0.pack exists and size >25MiB
-5. Test `npm run postbuild` - verify cache removed
-6. Test full `npm run deploy:static` locally - should succeed
-7. git add/commit/push changes
-8. Monitor Cloudflare Pages build success
-
-**Next step:** Starting with wrangler.toml update.
-
+**Completed:** 4/5

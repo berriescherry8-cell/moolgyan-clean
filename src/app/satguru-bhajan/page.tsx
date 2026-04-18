@@ -135,7 +135,7 @@ export default function SatguruBhajanPage() {
             <div className="p-3 bg-gradient-to-br from-purple-500 to-pink-600 rounded-2xl shadow-lg shadow-purple-500/30">
               <Music className="h-8 w-8 text-white" />
             </div>
-            <h1 className="text-4xl md:text-5xl font-bold text-white">Satguru Bhajan</h1>
+<h1 className="text-7xl md:text-8xl lg:text-9xl font-black bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-600 bg-clip-text text-transparent drop-shadow-4xl">SATGURU BHAJAN</h1>
           </div>
           <p className="text-slate-400 max-w-2xl mx-auto">
             Devotional songs and bhajans to uplift your spirit and connect with the divine
