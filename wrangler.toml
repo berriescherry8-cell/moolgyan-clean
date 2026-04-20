@@ -5,24 +5,6 @@ compatibility_flags = ["nodejs_compat"]
 [observability]
 enabled = true
 
-# Pages deployment configuration
-[build]
-command = "npm run build"
-cwd = "."
-pages_build_output_dir = "dist"
 
-[assets]
-directory = "./dist"
-bucket = "./dist"
 
-# Exclude cache files from deployment
-exclude = [
-  "**/cache/**",
-  "**/*.pack",
-  "**/webpack/**",
-  "**/.next/**",
-  "**/node_modules/**",
-  "cache/**",
-  ".next/cache/**",
-  "node_modules/.cache/**"
-]
+

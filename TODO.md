@@ -1,19 +1,13 @@
-# Cloudflare Static Deploy Fix - TODO
+# Cloudflare Deployment Fix Progress
 
-## Status: [ ] 0/5 Complete
+## Plan Steps:
+- [x] 1. Create this TODO.md
+- [x] 2. Update public/_redirects (fix infinite loop)
+- [x] 3. Clean wrangler.toml (remove deprecated fields)
+- [x] 4. Delete package-lock.json (fix damaged lockfile)
+- [ ] 5. Run `npm run reset` (user to execute)
+- [ ] 6. Run `npm run build` and verify (user)
+- [ ] 7. Deploy: `npx wrangler pages deploy dist --project-name=moolgyan-clean` (user)
+- [ ] 8. Push to git, verify CI deploy
 
-**Step 1: ✅ Edit API routes to add static export config**
-- src/app/api/orders/route.ts
-- src/app/api/sync-youtube/route.ts  
-- src/app/api/check-video-exists/route.ts
-
-**Step 2: [ ] Fix wrangler.toml config**
-
-**Step 3: ✅ Test local build: `npm run build` (no errors)**
-
-**Step 4: [ ] Test local preview: `npx serve dist`**
-
-**Step 5: [ ] Push to GitHub → Cloudflare redeploy → Test live site**
-
-**Next APIs:** Migrate dynamic APIs (orders/auth/youtube) to Supabase Edge Functions (post-fix).
-
+**Core fixes complete. Run step 5+ to test deployment.**
