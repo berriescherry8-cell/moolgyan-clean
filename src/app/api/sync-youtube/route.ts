@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { runYouTubeAutomation } from '@/lib/youtube-automation';
 import { getSupabase } from '@/lib/data-manager';
 
+export const dynamic = 'force-static';
+export const revalidate = 0;
+
 export async function POST(request: NextRequest) {
   try {
     console.log('Starting YouTube sync API call...');

@@ -6,15 +6,20 @@ compatibility_flags = ["nodejs_compat"]
 enabled = true
 
 # Pages deployment configuration
+[build]
+command = "npm run build"
+cwd = "."
+pages_build_output_dir = "dist"
+
 [assets]
 directory = "./dist"
+bucket = "./dist"
 
 # Exclude cache files from deployment
 exclude = [
   "**/cache/**",
   "**/*.pack",
   "**/webpack/**",
-  "**/server*",
   "**/.next/**",
   "**/node_modules/**",
   "cache/**",

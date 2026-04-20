@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createServerSupabaseClient } from '@/lib/supabaseServer';
 
-// export const dynamic = 'force-dynamic';  // Not needed without output: export
+export const dynamic = 'force-static';
+export const revalidate = 0;
 
 export async function POST(request: NextRequest) {
   try {

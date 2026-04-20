@@ -1,11 +1,19 @@
-# Mool App Updates - Remove Subscribe & Fix Books Theme
-Current working directory: d:/desktop 1144/mool-new-app
+# Cloudflare Static Deploy Fix - TODO
 
-## Plan Steps:
-- [x] Step 1: Remove ChannelSubscribe from src/app/news/page.tsx
-- [x] Step 2: Update src/app/books/page.tsx - remove ChannelSubscribe & change orange theme to neutral/dark (slate/purple/indigo)
-- [x] Step 3: Update src/components/SplashScreen.tsx with new splash image URL
-- [x] Step 4: Test pages (/news, /books, splash)
-- [ ] Step 5: attempt_completion
+## Status: [ ] 0/5 Complete
 
-**Completed:** 4/5
+**Step 1: ✅ Edit API routes to add static export config**
+- src/app/api/orders/route.ts
+- src/app/api/sync-youtube/route.ts  
+- src/app/api/check-video-exists/route.ts
+
+**Step 2: [ ] Fix wrangler.toml config**
+
+**Step 3: ✅ Test local build: `npm run build` (no errors)**
+
+**Step 4: [ ] Test local preview: `npx serve dist`**
+
+**Step 5: [ ] Push to GitHub → Cloudflare redeploy → Test live site**
+
+**Next APIs:** Migrate dynamic APIs (orders/auth/youtube) to Supabase Edge Functions (post-fix).
+

@@ -4,9 +4,7 @@ import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
 
 export const dynamic = 'force-static';
-
-
-
+export const revalidate = 0;
 
 const ADMIN_EMAILS = [
   'sharmadevendra715@gmail.com',
@@ -124,4 +122,3 @@ export async function DELETE(request: NextRequest) {
 
   return NextResponse.json({ success: true });
 }
-
