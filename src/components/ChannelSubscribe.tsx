@@ -10,53 +10,19 @@ export default function ChannelSubscribe() {
       id: 'nitin-dass-satsang',
       name: 'Nitin Dass Satsang',
       url: 'https://youtube.com/@nitin.dasssatsang?si=OefoKqiXe5UwZaHj',
-<<<<<<< HEAD
-      description: 'Spiritual discourses and satsang sessions',
-      logo: 'https://yt3.ggpht.com/ytc/AL5GRJXc2044Q0407v0Q6Q5Q5Q5Q5Q5Q5Q5Q5Q5Q5Q5Q5Q=s88-c-k-c0x00ffffff-no-rj',
-=======
       description: 'Spiritual discourses and satsang sessions by Nitin Dass',
       logo: 'https://yt3.googleusercontent.com/ytc/AIdroID4m8yqDqZfR8R5QfW3zKzO0f9gH4j5k6l7m8n9oPqRsTuV=s88-c-k-c0x00ffffff-no-rj-mo',
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
     },
     {
       id: 'nitin-kabir-krishna-nanak-ram',
       name: 'Nitin Kabir Krishna Nanak Ram',
       url: 'https://youtube.com/@nitin-kabir-krishna-nanak-ram-?si=hTj3qhVoDKYaw4fS',
       description: 'Devotional songs and spiritual teachings',
-<<<<<<< HEAD
-      logo: 'https://yt3.ggpht.com/ytc/AL5GRJXc2044Q0407v0Q6Q5Q5Q5Q5Q5Q5Q5Q5Q5Q5Q5Q5Q=s88-c-k-c0x00ffffff-no-rj',
-=======
       logo: 'https://yt3.googleusercontent.com/ytc/AIdroID5n6m7pQ8rStUvWxYcZ1aBcDeFgHiJkLmNopQr=s88-c-k-c0x00ffffff-no-rj-mo',
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
     },
   ];
 
   return (
-<<<<<<< HEAD
-      <div className="mb-8 p-6 border rounded-lg bg-card text-card-foreground">
-          <h2 className="text-xl font-bold mb-6 text-center">Subscribe to Our Channels</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {channels.map(channel => (
-                  <div key={channel.id} className="text-center">
-                      <Avatar className="h-20 w-20 mx-auto mb-4">
-                        <AvatarImage src={channel.logo} alt={channel.name} />
-                        <AvatarFallback>{channel.name.split(' ').map(n => n.charAt(0)).join('')}</AvatarFallback>
-                      </Avatar>
-                      <h3 className="font-semibold text-lg">{channel.name}</h3>
-                      <p className="text-sm text-muted-foreground mb-4">{channel.description}</p>
-                      <Button asChild className="bg-red-600 hover:bg-red-700 text-white">
-                           <a href={channel.url} target="_blank" rel="noopener noreferrer">
-                                <Youtube className="mr-2 h-4 w-4" />
-                                Subscribe
-                           </a>
-                      </Button>
-                  </div>
-              ))}
-          </div>
-      </div>
-  )
-}
-=======
     <div className="mb-12 bg-gradient-to-br from-white/5 to-white/2 backdrop-blur-lg border border-white/10 rounded-2xl p-8">
       <div className="text-center mb-10">
         <div className="inline-flex items-center gap-3 bg-gradient-to-r from-red-500 to-pink-600 p-4 rounded-2xl mb-6 shadow-2xl shadow-red-500/25">
@@ -131,5 +97,3 @@ export default function ChannelSubscribe() {
     </div>
   )
 }
-
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470

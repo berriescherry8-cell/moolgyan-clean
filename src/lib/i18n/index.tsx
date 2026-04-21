@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from 'react';
@@ -41,7 +40,3 @@ export function useLocale() {
   const context = useContext(LocaleContext);
   return context;
 }
-=======
-// Fixed i18n recursion: split state/actions, client init, memoized t
-export { useLocale } from './index.ts';
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470

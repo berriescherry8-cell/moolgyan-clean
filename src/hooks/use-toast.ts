@@ -1,4 +1,6 @@
-<<<<<<< HEAD
+"use client"
+
+// Inspired by react-hot-toast library
 import * as React from "react"
 
 const TOAST_LIMIT = 1
@@ -12,26 +14,6 @@ type ToasterToast = {
   variant?: "default" | "destructive"
   open?: boolean
   onOpenChange?: (open: boolean) => void
-=======
-"use client"
-
-// Inspired by react-hot-toast library
-import * as React from "react"
-
-import type {
-  ToastActionElement,
-  ToastProps,
-} from "@/components/ui/toast"
-
-const TOAST_LIMIT = 1
-const TOAST_REMOVE_DELAY = 1000000
-
-type ToasterToast = ToastProps & {
-  id: string
-  title?: React.ReactNode
-  description?: React.ReactNode
-  action?: ToastActionElement
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
 }
 
 const actionTypes = {
@@ -207,8 +189,4 @@ function useToast() {
   }
 }
 
-<<<<<<< HEAD
 export { useToast, toast }
-=======
-export { useToast, toast }
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
