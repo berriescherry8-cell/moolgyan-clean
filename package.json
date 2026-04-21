@@ -6,10 +6,7 @@
     "dev": "next dev -p 9002",
     "build": "next build",
     "start": "next start",
-<<<<<<< HEAD
-=======
     "postbuild": "rimraf \"dist/cache\" \"dist/.next\" \"dist/server\"",
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "clean": "rimraf node_modules .next package-lock.json",
@@ -22,12 +19,8 @@
     "cap:prepare:android": "npm run build && npx cap copy android",
     "cap:run:android": "npm run cap:prepare:android && npx cap run android",
     "cap:build:apk": "npm run cap:prepare:android && cd android && gradlew assembleRelease",
-<<<<<<< HEAD
-    "preview": "npx serve dist"
-=======
     "preview": "npx serve dist",
     "deploy:static": "npm run build && npm run postbuild && npx wrangler pages deploy dist --project-name=moolgyan-clean"
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
   },
   "dependencies": {
     "@capacitor/android": "^6.2.1",
@@ -54,11 +47,7 @@
     "@radix-ui/react-slot": "1.0.2",
     "@radix-ui/react-switch": "1.0.3",
     "@radix-ui/react-tabs": "1.0.4",
-<<<<<<< HEAD
-    "@radix-ui/react-toast": "1.1.5",
-=======
     "@radix-ui/react-toast": "^1.1.5",
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
     "@radix-ui/react-tooltip": "1.0.7",
     "@supabase/ssr": "^0.9.0",
     "@supabase/supabase-js": "^2.100.0",
@@ -67,20 +56,6 @@
     "class-variance-authority": "0.7.0",
     "clsx": "2.1.1",
     "date-fns": "3.6.0",
-<<<<<<< HEAD
-    "dotenv": "16.4.5",
-    "embla-carousel-autoplay": "8.1.5",
-    "embla-carousel-react": "8.1.5",
-    "lucide-react": "^0.395.0",
-    "next": "14.2.35",
-    "next-pwa": "^5.6.0",
-    "postcss": "8.4.38",
-    "react": "18.2.0",
-    "react-day-picker": "8.10.1",
-    "react-dom": "18.2.0",
-    "react-hook-form": "7.51.5",
-    "recharts": "2.12.7",
-=======
     "dotenv": "^16.4.5",
     "embla-carousel-autoplay": "8.1.5",
     "embla-carousel-react": "8.1.5",
@@ -94,7 +69,6 @@
     "react-hook-form": "7.51.5",
     "recharts": "2.12.7",
     "serwist": "^9.5.7",
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
     "tailwind-merge": "2.3.0",
     "tailwindcss": "3.4.3",
     "tailwindcss-animate": "1.0.7",
@@ -106,15 +80,6 @@
     "zustand": "^4.5.7"
   },
   "devDependencies": {
-<<<<<<< HEAD
-    "@types/canvas-confetti": "1.6.4",
-    "@types/next-pwa": "5.6.9",
-    "@types/node": "20.14.2",
-    "@types/react": "18.2.66",
-    "@types/react-dom": "18.2.22",
-    "@types/uuid": "^9.0.8",
-    "@types/wav": "1.0.3",
-=======
     "@serwist/next": "^9.5.7",
     "@types/canvas-confetti": "1.6.4",
     "@types/next-pwa": "5.6.9",
@@ -124,16 +89,9 @@
     "@types/uuid": "^9.0.8",
     "@types/wav": "1.0.3",
     "eslint-config-next": "^15.5.15",
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
     "postcss-selector-parser": "^7.1.1",
     "rimraf": "^5.0.10",
     "serve": "^14.2.6",
     "typescript": "5.4.5"
-<<<<<<< HEAD
-  },
-  "overrides": {
-    "caniuse-lite": "1.0.30001735"
-=======
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
   }
 }
