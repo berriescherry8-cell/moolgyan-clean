@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-
 import { NextRequest, NextResponse } from 'next/server';
 import webpush from 'web-push';
 import fs from 'fs/promises';
@@ -60,13 +58,3 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Failed to save subscription' }, { status: 500 });
   }
 }
-=======
-import { NextRequest, NextResponse } from 'next/server';
-
-export const dynamic = 'force-static';
-
-export async function POST(req: NextRequest) {
-  return NextResponse.json({ message: 'Push subscription endpoint' });
-}
-
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
