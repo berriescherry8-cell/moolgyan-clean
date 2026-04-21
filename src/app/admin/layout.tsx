@@ -1,11 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 import SidebarNav from '@/components/SidebarNav';
-import { useAdminAuth } from '@/lib/adminAuth';
+import { useAdminAuth } from '@/lib/adminAuthStore';
 import { Button } from '@/components/ui/button';
-import { User, LogOut, Zap, Loader2 } from 'lucide-react';
+import { User, LogOut, Zap, Loader2, RotateCcw } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
 

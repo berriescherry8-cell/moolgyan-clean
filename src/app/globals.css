@@ -38,13 +38,13 @@
     --card-foreground: 210 40% 98%;
     --popover: 240 10% 3.9%;
     --popover-foreground: 210 40% 98%;
-    --primary: 48 95% 55%; /* Gold */
+    --primary: 48 95% 55%;
     --primary-foreground: 240 5% 95%;
-    --secondary: 280 40% 20%; /* Deep Purple */
+    --secondary: 280 40% 20%;
     --secondary-foreground: 210 40% 98%;
     --muted: 280 40% 20%;
     --muted-foreground: 240 5% 65%;
-    --accent: 10 80% 55%; /* Fiery Orange/Red */
+    --accent: 10 80% 55%;
     --accent-foreground: 210 40% 98%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
@@ -66,6 +66,40 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+* {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+input, textarea, [contenteditable="true"] {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  user-select: text;
+}
+
+* {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.goog-te-banner-frame, .goog-te-gadget, .goog-te-balloon-frame {
+  display: none !important;
+}
+
+body {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 
 @layer utilities {
@@ -130,45 +164,4 @@
   .glass-card {
     @apply bg-zinc-950/40 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)];
   }
-<<<<<<< HEAD
-=======
-
-  /* Prevent text selection and translation popup */
-  * {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    -webkit-touch-callout: none;
-    -webkit-tap-highlight-color: transparent;
-  }
-
-  /* Allow text selection for input fields and text areas */
-  input, textarea, [contenteditable="true"] {
-    -webkit-user-select: text;
-    -moz-user-select: text;
-    -ms-user-select: text;
-    user-select: text;
-  }
-
-  /* Prevent context menu on long press */
-  * {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
-  }
-
-  /* Hide Google translate popup */
-  .goog-te-banner-frame, .goog-te-gadget, .goog-te-balloon-frame {
-    display: none !important;
-  }
-
-  body {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    -webkit-touch-callout: none;
-  }
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
 }

@@ -2,181 +2,96 @@
 
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
-<<<<<<< HEAD
 import { ArrowRight, BookOpen, Camera, Video, Wifi, Quote } from 'lucide-react';
-import { useLocale } from '@/lib/i18n';
-import NewsTicker from '@/components/NewsTicker';
-=======
-import { ArrowRight, BookOpen, Camera, Video, Wifi } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useLocale } from '@/lib/i18n';
 import NewsTicker from '@/components/NewsTicker';
 import WisdomQuotes from '@/components/WisdomQuotes';
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
 
 export default function Home() {
   const { t } = useLocale();
 
   const sections = [
     {
-<<<<<<< HEAD
-      title: t.nav_live_satsang,
-=======
-      title: "Live Satsang",
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
+      title: t('nav_live_satsang') || "Live Satsang",
       description: 'Watch the latest featured spiritual talks and discourses.',
       icon: Wifi,
       href: '/live-satsang',
       cta: 'Watch Now',
     },
     {
-<<<<<<< HEAD
-      title: t.nav_satsang,
-=======
-      title: "Satsang",
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
+      title: t('nav_satsang') || "Satsang",
       description: 'Explore the complete archive of all satsang videos.',
       icon: Video,
       href: '/satsang',
       cta: 'View Archive',
     },
     {
-<<<<<<< HEAD
-      title: t.nav_photos,
-=======
-      title: "Photos",
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
+      title: t('nav_photos') || "Photos",
       description: 'View a curated gallery of spiritual and inspirational images.',
       icon: Camera,
       href: '/photos',
       cta: 'Explore Gallery',
     },
     {
-<<<<<<< HEAD
-      title: t.nav_bookstore,
-=======
-      title: "Bookstore",
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
+      title: t('nav_bookstore') || "Bookstore",
       description: 'Order spiritual books and materials to aid your journey.',
       icon: BookOpen,
       href: '/books',
-      cta: 'Visit Store',
+      cta: 'Shop Now',
     },
   ];
 
   return (
-    <div className="w-full space-y-6">
-      {/* Hero Section */}
-      <div className="relative isolate overflow-hidden rounded-[2rem] p-8 md:p-12 text-center h-[40vh] md:h-[50vh] flex flex-col justify-center items-center -mx-4 md:-mx-6 lg:-mx-8 border border-white/5 shadow-2xl bg-black">
-        <div 
-          className="absolute inset-0 -z-10 h-full w-full bg-fixed animate-pan-background"
-          style={{ 
-            backgroundImage: "url('https://images.unsplash.com/photo-1534796636912-3b95b3ab5986?q=100&w=3840&auto=format&fit=crop')",
-            backgroundSize: '200% 100%',
-            backgroundRepeat: 'repeat-x'
-          }}
-        >
-          <div className="absolute inset-0 bg-black/40"></div>
-        </div>
-        
-        <div className="relative z-10 space-y-4 max-w-4xl">
-          <h1 className="text-5xl md:text-8xl font-bold font-headline leading-[1.1] tracking-tighter text-gold-foil">
-<<<<<<< HEAD
-            {t.app_name}
-=======
-            Mool Gyan
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
-          </h1>
-          
-          <div className="mt-4 max-w-2xl mx-auto text-base md:text-xl text-white/90 font-medium">
-            <div className="bg-black/20 backdrop-blur-md px-6 py-3 rounded-2xl border border-white/5 inline-block">
-              "सोई गुरु पूरा कहावे दो अक्षर का भेद बताये<br/>
-              एक छुडाये एक लखाए तब प्राणी निज घर को पाए ......"<br/>
-              <div className="my-1 opacity-50">......</div>
-              <span className="text-primary not-italic block font-bold tracking-widest uppercase text-[10px] md:text-xs">साहिब बंदगी सतनाम</span>
-            </div>
-          </div>
-        </div>
+    <div className="relative min-h-screen overflow-hidden">
+      {/* Animated Background */}
+      <div className="absolute inset-0">
+        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/50 via-blue-900/30 to-indigo-900/50"></div>
+        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '0s'}}></div>
+        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
       </div>
 
       {/* News Ticker */}
-<<<<<<< HEAD
-      <div className="px-2">
-        <NewsTicker />
-      </div>
+      <NewsTicker />
 
-      {/* Daily Wisdom (Static - No Firebase) */}
-      <section className="flex justify-center px-4">
-        <div className="relative p-3 rounded-2xl glass-card overflow-hidden text-center group max-w-sm w-full border-primary/20 shadow-[0_0_20px_rgba(234,179,8,0.1)]">
-          <div className="absolute top-1 right-2 p-1 opacity-10 group-hover:opacity-20 transition-opacity">
-            <Quote size={16} className="text-primary" />
-          </div>
-          <h2 className="text-primary font-bold tracking-[0.2em] uppercase text-[8px] mb-1">Daily Wisdom</h2>
-          
-          <div className="px-2">
-            <p className="text-sm md:text-base font-headline text-white/90 leading-snug italic">
-              "सतगुरु की कृपा से ही जीवात्मा को मुक्ति मिलती है।"
-            </p>
-            <p className="mt-1 text-[9px] font-bold tracking-widest text-primary/80 uppercase">— श्री नितिनदास जी साहिब</p>
-          </div>
-          
-          <div className="mt-2 h-0.5 w-6 bg-primary/30 mx-auto rounded-full" />
+      <div className="relative z-10 container mx-auto px-4 py-24 max-w-7xl">
+        {/* Hero Section */}
+        <div className="relative z-10 space-y-4 max-w-4xl">
+          <h1 className="text-5xl md:text-8xl lg:text-9xl font-bold font-headline leading-[1.1] tracking-tighter text-gold-foil">
+            Mool Gyan
+          </h1>
+          <p className="text-2xl md:text-3xl lg:text-4xl text-slate-300 max-w-3xl leading-relaxed">
+            Experience the divine path of self-realization with Sadguru Nitin Sahib&apos;s profound spiritual teachings and satsangs.
+          </p>
         </div>
-      </section>
-=======
-      <div className="w-full p-4 bg-gradient-to-r from-zinc-900/50 to-black/30 backdrop-blur-xl border border-white/5 rounded-2xl shadow-2xl">
-        <NewsTicker />
-      </div>
 
-      {/* Daily Wisdom */}
-      <WisdomQuotes />
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
+        {/* Feature Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mt-32">
+          {sections.map((section, index) => (
+            <Link href={section.href} key={index} className="group">
+              <Card className="h-full bg-white/5 backdrop-blur-xl border-white/20 hover:border-gold-500/50 hover:bg-white/10 transition-all duration-300 group-hover:scale-[1.02] group-hover:shadow-2xl group-hover:shadow-gold-500/20">
+                <CardHeader className="pb-4">
+                  <div className="w-16 h-16 bg-gradient-to-br from-gold-500 to-amber-500 rounded-2xl flex items-center justify-center mb-6 shadow-xl shadow-gold-500/30 group-hover:shadow-gold-500/50 transition-all">
+                    <section.icon className="h-8 w-8 text-black drop-shadow-lg" />
+                  </div>
+                  <CardTitle className="text-2xl font-black text-white mb-2 leading-tight">{section.title}</CardTitle>
+                  <CardDescription className="text-slate-300 leading-relaxed">{section.description}</CardDescription>
+                </CardHeader>
+                <CardFooter className="pt-0 pb-6">
+                  <Button size="lg" variant="ghost" className="w-full bg-gradient-to-r from-gold-500/20 to-amber-500/20 border-white/20 hover:bg-gold-500/30 text-white font-semibold group-hover:scale-105 transition-all backdrop-blur-sm">
+                    {section.cta}
+                    <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                  </Button>
+                </CardFooter>
+              </Card>
+            </Link>
+          ))}
+        </div>
 
-      {/* Feature Grid */}
-      <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-2">
-        {sections.map((section, index) => (
-          <Link 
-            href={section.href} 
-<<<<<<< HEAD
-            key={section.title} 
-=======
-            key={index} 
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
-            className="group block animate-fade-in-up relative overflow-hidden rounded-[1.5rem] h-full"
-          >
-            <Card className="h-full bg-zinc-950/60 border-white/10 backdrop-blur-2xl text-white transition-all duration-500 hover:bg-zinc-900/80 hover:border-primary/40 hover:shadow-[0_0_30px_rgba(234,179,8,0.1)] hover:-translate-y-1">
-              <CardHeader className="relative z-10 pb-2">
-                <div className="flex items-center gap-4">
-                  <div className="p-4 bg-zinc-900 rounded-xl border border-white/5 transition-all duration-500 group-hover:scale-110 group-hover:bg-primary/10 group-hover:border-primary/20">
-                    <section.icon className="h-6 w-6 text-primary" />
-                  </div>
-                  <div>
-<<<<<<< HEAD
-                    <CardTitle className="text-xl font-headline tracking-tight group-hover:text-primary transition-colors duration-300">{section.title}</CardTitle>
-=======
-                    <CardTitle className="text-xl font-headline tracking-tight group-hover:text-primary transition-colors duration-300">
-                      {section.title}
-                    </CardTitle>
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="pt-2 relative z-10">
-<<<<<<< HEAD
-                <CardDescription className="text-white/60 text-base leading-relaxed">{section.description}</CardDescription>
-=======
-                <CardDescription className="text-white/60 text-base leading-relaxed">
-                  {section.description}
-                </CardDescription>
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
-              </CardContent>
-              <CardFooter className="pt-2 relative z-10 border-t border-white/5 mt-auto">
-                <div className="text-[10px] font-bold text-primary flex items-center gap-2 tracking-[0.2em] uppercase transition-all duration-300 group-hover:gap-3">
-                  {section.cta} <ArrowRight className="h-4 w-4" />
-                </div>
-              </CardFooter>
-            </Card>
-          </Link>
-        ))}
+        {/* Wisdom Quotes */}
+        <div className="mt-32">
+          <WisdomQuotes />
+        </div>
       </div>
     </div>
   );

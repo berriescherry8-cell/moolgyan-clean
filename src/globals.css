@@ -70,7 +70,7 @@
 }
 
 
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
+
 @layer base {
   * {
     @apply border-border;
@@ -109,7 +109,7 @@
 <<<<<<< HEAD
 
 =======
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
+
   .animate-pan-background {
     animation: pan-background 60s linear infinite;
   }
@@ -207,4 +207,4 @@
     }
   }
 }
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
+

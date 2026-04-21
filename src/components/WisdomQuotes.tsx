@@ -1,60 +1,77 @@
-<<<<<<< HEAD
-import React from 'react';
-
-export function WisdomQuotes() {
-  return (
-    <div className="min-h-screen bg-black text-white p-8">
-      <h1 className="text-3xl font-bold mb-8">Wisdom Quotes</h1>
-      <p className="text-zinc-400">This feature is under development.</p>
-    </div>
-=======
 'use client';
 
+import React from 'react';
 import { useCollection } from '@/lib/data-manager';
-import { Quote } from 'lucide-react';
+import { Quote as QuoteIcon } from 'lucide-react';
 
 interface WisdomQuote {
   id: string;
-  quote: string;
-  author?: string;
-  is_daily?: boolean;
-  created_at: string;
+  text: string;
+  author: string;
+  category?: string;
 }
 
-export default function WisdomQuotes() {
+export function WisdomQuotes() {
   const quotes = useCollection<WisdomQuote>('wisdom_quotes');
-  
-  // Get a random quote or the latest daily quote
-  const currentQuote = quotes.length > 0 
-    ? quotes.find(q => q.is_daily) || quotes[Math.floor(Math.random() * quotes.length)]
-    : null;
 
-  if (!currentQuote) {
-    return null;
+  if (!quotes || quotes.length === 0) {
+    return (
+      <div className="py-20 text-center">
+        <QuoteIcon className="h-24 w-24 text-amber-500 mx-auto mb-6 opacity-50" />
+        <p className="text-xl text-zinc-500">Wisdom quotes loading...</p>
+      </div>
+    );
   }
 
   return (
-    <section className="flex justify-center px-4">
-      <div className="relative p-3 rounded-2xl glass-card overflow-hidden text-center group max-w-sm w-full border-primary/20 shadow-[0_0_20px_rgba(234,179,8,0.1)]">
-        <div className="absolute top-1 right-2 p-1 opacity-10 group-hover:opacity-20 transition-opacity">
-          <Quote size={16} className="text-primary" />
-        </div>
-        <h2 className="text-primary font-bold tracking-[0.2em] uppercase text-[8px] mb-1">Daily Wisdom</h2>
-        
-        <div className="px-2">
-          <p className="text-sm md:text-base font-headline text-white/90 leading-snug italic">
-            "{currentQuote.quote}"
+    <div className="py-24 bg-gradient-to-r from-amber-50/20 to-orange-50/20 backdrop-blur-sm rounded-3xl">
+      <div className="container mx-auto px-6 max-w-6xl">
+        <div className="text-center mb-16">
+          <QuoteIcon className="h-20 w-20 mx-auto mb-6 text-amber-500 drop-shadow-lg" />
+          <h2 className="text-4xl md:text-5xl font-bold text-zinc-900 mb-6 leading-tight">
+            Wisdom Quotes
+          </h2>
+          <p className="text-xl text-zinc-600 max-w-2xl mx-auto">
+            Timeless wisdom to guide your spiritual journey and daily life
           </p>
-          {currentQuote.author && (
-            <p className="mt-1 text-[9px] font-bold tracking-widest text-primary/80 uppercase">
-              — {currentQuote.author}
-            </p>
-          )}
         </div>
-        
-        <div className="mt-2 h-0.5 w-6 bg-primary/30 mx-auto rounded-full" />
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {quotes.slice(0, 9).map((quote, index) => (
+            <div
+              key={quote.id}
+              className="group bg-white/70 backdrop-blur-xl rounded-2xl p-8 border border-white/50 hover:border-amber-200 hover:shadow-2xl hover:shadow-amber-500/10 transition-all duration-500 hover:-translate-y-2"
+            >
+              <div className="flex items-start gap-4 mb-6">
+                <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-orange-500 rounded-2xl flex items-center justify-center flex-shrink-0 mt-1">
+                  <QuoteIcon className="h-6 w-6 text-white drop-shadow-sm" />
+                </div>
+                <div>
+                  <p className="text-2xl leading-relaxed font-medium text-zinc-800 mb-4 italic group-hover:text-amber-800 transition-colors line-clamp-4">
+                    "{quote.text}"
+                  </p>
+                  <p className="text-lg font-semibold text-zinc-700 group-hover:text-amber-700 transition-colors">
+                    — {quote.author}
+                  </p>
+                </div>
+              </div>
+              {quote.category && (
+                <div className="inline-flex items-center px-4 py-2 rounded-full text-xs font-medium bg-gradient-to-r from-amber-100 to-orange-100 text-amber-800 border border-amber-200">
+                  {quote.category}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div className="text-center mt-20">
+          <button className="px-12 py-6 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-bold text-xl rounded-2xl hover:from-amber-600 hover:to-orange-600 transform hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-amber-500/25">
+            View All Quotes
+          </button>
+        </div>
       </div>
-    </section>
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
+    </div>
   );
 }
+
+export default WisdomQuotes;

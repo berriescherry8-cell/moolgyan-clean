@@ -9,6 +9,8 @@ import { Separator } from './ui/separator';
 import { useAdminAuthStore } from '@/lib/adminAuthStore';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from './ui/collapsible';
 import { ChevronDown, ChevronRight } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { getNavItems } from '@/lib/nav-items';
 
 export default function SidebarNav() {
   const pathname = usePathname();

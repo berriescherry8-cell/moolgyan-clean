@@ -1,5 +1,4 @@
-import { createSupabaseServerClient as createServerClient } from './supabase/server'
-import { cookies } from 'next/headers'
+import { supabaseStatic } from './supabase/static-server'
 import { redirect } from 'next/navigation'
 import { type User } from '@supabase/supabase-js'
 
@@ -13,7 +12,7 @@ export async function getAdminUser(): Promise<AdminUser | null> {
     return null
   }
   
-  const supabase = await createServerClient()
+  const supabase = supabaseStatic
   
   if (!supabase) {
     return null

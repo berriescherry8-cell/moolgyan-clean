@@ -2,13 +2,6 @@ import { createServerClient } from '@supabase/ssr';
 import { cookies } from 'next/headers';
 
 export const createServerSupabaseClient = async () => {
-<<<<<<< HEAD
-  const cookieStore = await cookies();
-
-  return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-=======
   // Check if running in static export/build without env vars
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
     console.warn('Supabase env vars missing - returning null client for static export');
@@ -20,7 +13,6 @@ export const createServerSupabaseClient = async () => {
   return createServerClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
     {
       cookies: {
         getAll() {

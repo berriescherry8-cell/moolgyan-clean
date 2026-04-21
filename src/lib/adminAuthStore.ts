@@ -142,3 +142,14 @@ if (typeof window !== 'undefined') {
   // Initial check
   useAdminAuthStore.getState().checkAuth();
 }
+
+// Export a hook for easier usage
+export const useAdminAuth = () => {
+  const store = useAdminAuthStore();
+  
+  return {
+    ...store,
+    checkSession: store.checkAuth,
+    logout: store.signOut,
+  };
+};
