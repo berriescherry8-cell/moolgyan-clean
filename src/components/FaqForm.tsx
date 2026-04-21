@@ -57,7 +57,11 @@ export default function FaqForm() {
         status: 'pending'
       };
       
+<<<<<<< HEAD
       dataManager.setDoc('faqQuestions', faqData);
+=======
+      dataManager.setDoc('faq_questions', faqData);
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
 
       toast({
         title: 'Success!',
@@ -85,9 +89,15 @@ export default function FaqForm() {
           name="name"
           render={({ field }) => (
             <FormItem>
+<<<<<<< HEAD
               <FormLabel>{t.full_name}</FormLabel>
               <FormControl>
                 <Input placeholder={t.your_name} {...field} />
+=======
+<FormLabel>{t('full_name')}</FormLabel>
+              <FormControl>
+<Input placeholder={t('your_name')} {...field} />
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -98,9 +108,15 @@ export default function FaqForm() {
           name="email"
           render={({ field }) => (
             <FormItem>
+<<<<<<< HEAD
               <FormLabel>{t.email}</FormLabel>
               <FormControl>
                 <Input type="email" placeholder={t.your_email} {...field} />
+=======
+<FormLabel>{t('email')}</FormLabel>
+              <FormControl>
+
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
               </FormControl>
               <FormMessage />
             </FormItem>

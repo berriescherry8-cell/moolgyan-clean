@@ -8,7 +8,11 @@ import { NewsArticle } from '@/lib/types';
 
 const NewsTicker = () => {
   const [isPaused, setIsPaused] = useState(false);
+<<<<<<< HEAD
   const articles = useCollection<NewsArticle>('news');
+=======
+const articles = useCollection<NewsArticle>('news_items');
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
 
   if (!articles || articles.length === 0) {
     return null;
@@ -36,7 +40,11 @@ const NewsTicker = () => {
 
       <div className="flex-1 whitespace-nowrap overflow-hidden">
         <div
+<<<<<<< HEAD
           className="inline-block animate-marquee"
+=======
+          className="inline-block animate-marquee-reverse"
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
           style={{ animationPlayState: isPaused ? 'paused' : 'running' }}
         >
           <span className="font-semibold mx-4 text-sm tracking-wider" style={{ textShadow: '0 0 5px hsl(var(--primary) / 0.5)' }}>{repeatedContent}</span>

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 'use client';
 
@@ -106,6 +107,131 @@ export default function ReferencePage() {
           </p>
         </div>
       )}
+=======
+'use client';
+
+import { useCollection } from '@/lib/data-manager';
+import { ReferenceItem } from '@/lib/types';
+import Link from 'next/link';
+import { FileText, Download, Image, Clock, AlertCircle } from 'lucide-react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric'
+  });
+};
+
+export default function ReferencePage() {
+  const referenceItems = useCollection<ReferenceItem>('reference_items');
+
+  const sortedItems = referenceItems?.sort((a, b) => 
+    new Date(b.uploadDate || b.created_at || '1970-01-01').getTime() - 
+    new Date(a.uploadDate || a.created_at || '1970-01-01').getTime()
+  ) || [];
+
+  if (!referenceItems) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 flex items-center justify-center p-4">
+        <Card className="max-w-md w-full bg-black/30 backdrop-blur-lg border-white/20 text-center">
+          <CardContent className="p-12 space-y-6">
+            <AlertCircle className="mx-auto h-12 w-12 text-yellow-400" />
+            <h1 className="text-3xl font-bold text-white">Loading...</h1>
+            <p className="text-slate-300">Fetching reference materials...</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-slate-900/50 to-slate-900 p-6 md:p-12">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-12">
+          <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-purple-400 via-pink-400 to-indigo-400 bg-clip-text text-transparent mb-6">
+            Reference Materials
+          </h1>
+          <p className="text-xl text-slate-300 max-w-2xl mx-auto">
+            Sacred texts, photos, and documents shared by Sadguru Nitin Sahib for spiritual guidance.
+          </p>
+        </div>
+
+        {sortedItems.length === 0 ? (
+          <div className="text-center py-24">
+            <FileText className="mx-auto h-24 w-24 text-slate-600 mb-6" />
+            <h2 className="text-3xl font-bold text-slate-200 mb-4">No Reference Items Yet</h2>
+            <p className="text-xl text-slate-500 max-w-md mx-auto mb-8">
+              Reference materials will be available here soon. Check back later!
+            </p>
+            <Badge className="text-lg px-6 py-3 bg-purple-500/20 border-purple-500/30">Coming Soon</Badge>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {sortedItems.map((item) => (
+              <Card key={item.id} className="group hover:shadow-2xl hover:shadow-purple-500/10 border-white/10 bg-slate-900/50 backdrop-blur-sm overflow-hidden transition-all duration-300 hover:-translate-y-2">
+                <CardHeader className="p-0 relative">
+                  {item.imageUrl ? (
+                    <div className="relative h-48">
+                      <img
+                        src={item.imageUrl}
+                        alt={item.title}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                    </div>
+                  ) : (
+                    <div className="h-48 bg-gradient-to-br from-purple-500/20 to-indigo-500/20 flex items-center justify-center">
+                      <Image className="h-16 w-16 text-white/50" />
+                    </div>
+                  )}
+                  <div className="absolute top-4 right-4">
+                    <Badge variant="secondary" className="text-xs">
+                      {formatDate(item.uploadDate || item.created_at || '')}
+                    </Badge>
+                  </div>
+                </CardHeader>
+                <CardContent className="p-6 pt-0">
+                  <CardTitle className="text-xl font-bold mb-3 line-clamp-2 group-hover:text-purple-400 transition-colors">
+                    {item.title}
+                  </CardTitle>
+{item.description && (
+                    <CardDescription className="line-clamp-3 mb-6">
+                      {item.description}
+                    </CardDescription>
+                  )}
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    {item.pdfUrl ? (
+                      <a href={item.pdfUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
+                        <Button className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700">
+                          <Download className="mr-2 h-4 w-4" />
+                          Download PDF
+                        </Button>
+                      </a>
+                    ) : (
+                      <div className="flex-1 bg-slate-800/50 rounded-md p-6 text-center">
+                        <FileText className="mx-auto h-12 w-12 text-slate-500 mb-2" />
+                        <p className="text-slate-500 text-sm">No PDF</p>
+                      </div>
+                    )}
+                    <Button variant="outline" size="sm" className="flex-0">
+                      View Details
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
+
+        <p className="text-center text-slate-500 mt-12 text-sm">
+          Last updated: {formatDate(new Date().toISOString())}
+        </p>
+      </div>
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
     </div>
   );
 }

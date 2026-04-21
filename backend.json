@@ -1,0 +1,33 @@
+{
+  "baseUrl": "https://raw.githubusercontent.com/berriescherry8-cell/mool-gyan-assets/main",
+  "data": {
+    "books": {
+      "list": "/data/books.json",
+      "covers": "/covers/",
+      "pdfs": "/pdfs/"
+    },
+    "photos": {
+      "general": "/photos/general/",
+      "pravas": "/photos/pravas/",
+      "saarSangrah": "/photos/saarSangrah/",
+      "reference": "/photos/reference/"
+    },
+    "news": {
+      "articles": "/data/news.json"
+    },
+    "videos": {
+      "satsang": "/data/videos.json",
+      "bhajans": "/data/bhajans.json"
+    },
+    "assets": {
+      "logos": "/logos/",
+      "icons": "/icons/",
+      "payment": "/assets/payment-qr-code.jpeg"
+    }
+  },
+  "fallback": {
+    "bookCover": "https://raw.githubusercontent.com/berriescherry8-cell/mool-gyan-assets/main/assets/book-placeholder.svg",
+    "photo": "https://raw.githubusercontent.com/berriescherry8-cell/mool-gyan-assets/main/assets/photo-placeholder.svg",
+    "videoThumbnail": "https://raw.githubusercontent.com/berriescherry8-cell/mool-gyan-assets/main/assets/video-placeholder.svg"
+  }
+}

@@ -1,0 +1,145 @@
+
+{
+  "entities": {
+    "NewsArticle": {
+      "title": "NewsArticle",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "publicationDate": { "type": "string", "format": "date-time" },
+        "imageUrl": { "type": "string", "format": "uri" },
+        "storagePath": { "type": "string" },
+        "showInTicker": { "type": "boolean" }
+      },
+      "required": ["id", "title", "content", "publicationDate"]
+    },
+    "SatsangVideo": {
+      "title": "SatsangVideo",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "videoUrl": { "type": "string", "format": "uri" },
+        "uploadDate": { "type": "string", "format": "date-time" },
+        "thumbnailUrl": { "type": "string", "format": "uri" },
+        "isFeatured": { "type": "boolean" }
+      },
+      "required": ["id", "title", "videoUrl", "uploadDate"]
+    },
+    "SpiritualPhoto": {
+      "title": "SpiritualPhoto",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "imageUrl": { "type": "string", "format": "uri" },
+        "uploadDate": { "type": "string", "format": "date-time" },
+        "folder": { "type": "string" },
+        "storagePath": { "type": "string" }
+      },
+      "required": ["id", "imageUrl", "uploadDate"]
+    },
+    "Book": {
+        "title": "Book",
+        "type": "object",
+        "properties": {
+            "id": { "type": "string" },
+            "title": { "type": "string" },
+            "author": { "type": "string" },
+            "description": { "type": "string" },
+            "price": { "type": "number" },
+            "stockStatus": { "type": "string", "enum": ["in-stock", "out-of-stock"] },
+            "imageUrls": { "type": "array", "items": { "type": "string", "format": "uri" } },
+            "imageUrl": { "type": "string", "format": "uri" },
+            "pdfUrl": { "type": "string", "format": "uri" }
+        },
+        "required": ["id", "title", "author", "price", "stockStatus"]
+    },
+    "SaarSangrahPhoto": {
+      "title": "SaarSangrahPhoto",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "imageUrl": { "type": "string", "format": "uri" },
+        "uploadDate": { "type": "string", "format": "date-time" },
+        "storagePath": { "type": "string" }
+      },
+      "required": ["id", "imageUrl", "uploadDate", "storagePath"]
+    }
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/books/videhi-gyan",
+        "definition": {
+          "schema": {
+            "$ref": "#/entities/Book",
+            "id": "videhi-gyan",
+            "title": "विदेही ज्ञान (Videhi Gyan)",
+            "author": "श्री नितिनदास जी साहिब",
+            "description": "विदेही ज्ञान की खोज",
+            "price": 12,
+            "stockStatus": "in-stock",
+            "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202025-12-29%20at%204.33.02%20PM%20(1).jpeg?alt=media&token=55f5578d-af35-4e4f-aa4f-b4ce5691d942",
+            "imageUrls": [
+              "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202025-12-29%20at%204.33.02%20PM%20(1).jpeg?alt=media&token=55f5578d-af35-4e4f-aa4f-b4ce5691d942",
+              "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202025-12-29%20at%204.33.03%20PM.jpeg?alt=media&token=e67fb50d-fded-41ad-8881-8f59662e17c5",
+              "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202025-12-29%20at%204.33.03%20PM%20(1).jpeg?alt=media&token=41d4385a-4f2a-42c7-ac2d-8b3effe0e90f"
+            ],
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2Fgyan%20vaidehi%20final%20edit%20draft_compressed.pdf?alt=media&token=f2710cac-3a44-4633-afa8-bd3290b12fba"
+          }
+        }
+      },
+      {
+        "path": "/books/santo-ka-saar-sandesh",
+        "definition": {
+          "schema": {
+            "$ref": "#/entities/Book",
+            "id": "santo-ka-saar-sandesh",
+            "title": "संतों का सार संदेश (Santo Ka Saar Sandesh)",
+            "author": "श्री नितिनदास जी साहिब",
+            "description": "संतों का अनमोल संदेश",
+            "price": 10,
+            "stockStatus": "in-stock",
+            "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202025-12-29%20at%206.00.31%20PM.jpeg?alt=media&token=773aaaf4-66a7-4b34-b07e-c238d13f601d",
+            "imageUrls": [
+              "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202025-12-29%20at%206.00.31%20PM.jpeg?alt=media&token=773aaaf4-66a7-4b34-b07e-c238d13f601d",
+              "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202025-12-29%20at%206.00.31%20PM%20(1).jpeg?alt=media&token=727545de-b028-4865-9100-aaf57edd7780",
+              "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202025-12-29%20at%206.00.31%20PM%20(2).jpeg?alt=media&token=2e8ab847-a90c-44ed-95bd-a67fc27e6fa7"
+            ],
+            "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2Fsanto%20ka%20saar-2%20(1).pdf?alt=media&token=e2dedeef-0b97-4b0b-b76b-b810e632e9b5"
+          }
+        }
+      },
+      {
+        "path": "/books/har-har-geeta-fourth-edition",
+        "definition": {
+          "schema": {
+            "$ref": "#/entities/Book",
+            "id": "har-har-geeta-fourth-edition",
+            "title": "हर हर गीता चतुर्थ संस्करण (Har Har Geeta 4th Edition)",
+            "author": "श्री नितिनदास जी साहिब",
+            "description": "हर-हर गीता घर-घर गीता",
+            "price": 6.5,
+            "stockStatus": "in-stock",
+            "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202025-12-29%20at%205.45.41%20PM%20(1).jpeg?alt=media&token=dbdb5eb9-66e7-4491-b83f-c10961fcbe06",
+            "imageUrls": [
+              "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202025-12-29%20at%205.45.41%20PM%20(1).jpeg?alt=media&token=dbdb5eb9-66e7-4491-b83f-c10961fcbe06",
+              "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202025-12-29%20at%205.45.42%20PM%20(3).jpeg?alt=media&token=a150b140-8202-4b14-bc91-d8902ae0863d",
+              "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202025-12-29%20at%205.45.42%20PM%20(2).jpeg?alt=media&token=9f28171e-b545-4329-a92e-3ab50c51a10b"
+            ]
+          }
+        }
+      },
+      { "path": "/books/har-har-geeta-tritiya", "definition": { "schema": { "$ref": "#/entities/Book", "id": "har-har-geeta-tritiya", "title": "हर हर गीता तृतीय संस्करण", "author": "श्री नितिनदास जी साहिब", "price": 6.5, "stockStatus": "in-stock", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202026-01-05%20at%2010.07.44%20PM%20(1).jpeg?alt=media&token=c42fad10-251a-4c18-8c0f-c783f5d3c0f2", "description": "हर-हर गीता घर-घर गीता" } } },
+      { "path": "/books/har-har-geeta-dvitiya", "definition": { "schema": { "$ref": "#/entities/Book", "id": "har-har-geeta-dvitiya", "title": "हर हर गीता द्वितीय संस्करण", "author": "श्री नितिनदास जी साहिब", "price": 6.5, "stockStatus": "in-stock", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202026-01-05%20at%2010.07.44%20PM%20-%20Copy.jpeg?alt=media&token=8804ee27-78cc-4a92-a624-69beb2e71b9e", "description": "हर-हर गीता घर-घर गीता" } } },
+      { "path": "/books/har-har-geeta-pratham", "definition": { "schema": { "$ref": "#/entities/Book", "id": "har-har-geeta-pratham", "title": "हर हर गीता प्रथम संस्करण", "author": "श्री नितिनदास जी साहिब", "price": 6.5, "stockStatus": "in-stock", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/book%20store%20books%20preview%2FWhatsApp%20Image%202026-01-05%20at%2010.07.43%20PM.jpeg?alt=media&token=12818b0f-98b5-4589-a7b5-c2761eb47f1d", "description": "हर-हर गीता घर-घर गीता" } } },
+      { "path": "/books/satynam-teeka", "definition": { "schema": { "$ref": "#/entities/Book", "id": "satynam-teeka", "title": "सतनाम प्रकाश टीका", "author": "श्री नितिनदास जी साहिब", "price": 0, "stockStatus": "out-of-stock", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/photo%20gallery%20and%20videos%2FWhatsApp%20Image%202026-01-26%20at%205.53.53%20PM%20(1).jpeg?alt=media&token=af88b6c7-6ea6-4df4-8c28-9eb332d6187a", "description": "केवल पढ़ने के लिए", "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/photo%20gallery%20and%20videos%2F2025_12_08%209_20%E2%80%AFam%20Office%20Lens_compressed.pdf?alt=media&token=2d6c4363-698c-4dbf-a7fb-dce7fe64a85e" } } },
+      { "path": "/books/mool-gyan-divya", "definition": { "schema": { "$ref": "#/entities/Book", "id": "mool-gyan-divya", "title": "मूल ज्ञान का दिव्य प्रकाश", "author": "श्री नितिनदास जी साहिब", "price": 0, "stockStatus": "out-of-stock", "imageUrl": "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/photo%20gallery%20and%20videos%2FWhatsApp%20Image%202026-01-26%20at%205.53.53%20PM.jpeg?alt=media&token=7569d094-83f1-4b1d-a4cb-a49b7d1f24f0", "description": "केवल पढ़ने के लिए", "pdfUrl": "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/photo%20gallery%20and%20videos%2FDOC-20250130-WA0004.pdf?alt=media&token=50d64946-3257-450d-a91b-ac82d7dd536d" } } }
+    ]
+  }
+}

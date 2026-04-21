@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import OrderForm from './OrderForm';
 
 const booksData = {
@@ -30,4 +31,27 @@ export default function OrderPage({ params }: { params: { bookId: string } }) {
   }
 
   return <OrderForm book={book} />;
+=======
+import BookOrderForm from '@/components/BookOrderForm';
+
+export async function generateStaticParams() {
+  return [
+    { bookId: '1' },
+    { bookId: '3' },
+    { bookId: '4' },
+    { bookId: '5' },
+    { bookId: '6' },
+    { bookId: '7' },
+    { bookId: '8' },
+    { bookId: '9' }
+  ];
+}
+
+export default function OrderPage() {
+  return (
+    <div className="min-h-screen bg-zinc-950">
+      <BookOrderForm />
+    </div>
+  );
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
 }

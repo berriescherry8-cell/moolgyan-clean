@@ -31,10 +31,20 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ video }) => {
 
   const isYouTube = embedUrl.includes('youtube');
 
+<<<<<<< HEAD
   if (isPlaying) {
     return (
       <div className="aspect-video w-full bg-black rounded-t-2xl overflow-hidden shadow-2xl ring-1 ring-white/10">
         {isYouTube ? (
+=======
+  return (
+    <div
+      className="aspect-video w-full bg-black rounded-t-2xl relative group cursor-pointer overflow-hidden border-b border-white/5"
+      onClick={() => setIsPlaying(true)}
+    >
+      {isPlaying ? (
+        isYouTube ? (
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
           <iframe
             src={embedUrl}
             title={video.title}
@@ -50,6 +60,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ video }) => {
             poster={video.thumbnailUrl}
             className="w-full h-full"
           >
+<<<<<<< HEAD
             Your browser does not support the video tag.
           </video>
         )}
@@ -63,14 +74,23 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ video }) => {
       onClick={() => setIsPlaying(true)}
     >
       {video.thumbnailUrl ? (
+=======
+            Your browser does not support video tag.
+          </video>
+        )
+      ) : (
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
         <Image
           src={video.thumbnailUrl}
           alt={video.title}
           fill
           className="object-cover transition-transform duration-[2000ms] group-hover:scale-110 opacity-70"
         />
+<<<<<<< HEAD
       ) : (
         <div className="w-full h-full bg-black"></div>
+=======
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
       )}
       
       {/* Golden Pulse Overlay */}

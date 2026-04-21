@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 export interface NewsArticle {
   id: string;
   title: string;
@@ -134,10 +135,16 @@ export interface ReferenceDocument {
 export interface ReferenceItem {
   id: string;
   title?: string;
+=======
+export interface ReferenceItem {
+  id: string;
+  title: string;
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
   description?: string;
   imageUrl?: string;
   pdfUrl?: string;
   uploadDate: string;
+<<<<<<< HEAD
   storagePath?: string;
 }
 
@@ -224,4 +231,29 @@ export interface SupabaseDailyWisdom {
   author_en?: string;
   author_hi?: string;
   updated_at: string;
+=======
+  created_at?: string;
+  updated_at?: string;
+}
+
+export interface FaqQuestion {
+  id: string;
+  name: string;
+  email: string;
+  question: string;
+  answer?: string;
+  status: 'pending' | 'answered' | 'deleted';
+  submittedAt: string;
+  answered_at?: string;
+}
+
+export interface NewsArticle {
+  id: string;
+  title: string;
+  content: string;
+  imageUrl?: string;
+  showInTicker: boolean;
+  createdAt: string;
+  updatedAt?: string;
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
 }

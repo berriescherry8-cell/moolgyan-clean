@@ -1,0 +1,3 @@
+# SPA fallback for Next.js static export
+# Redirect all requests to index.html unless file exists
+/*    /index.html   200

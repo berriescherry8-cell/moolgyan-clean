@@ -23,7 +23,11 @@ export default function SplashScreen() {
       {/* Main splash image – larger and more prominent */}
       <div className="relative w-72 h-72 sm:w-80 sm:h-80 md:w-96 md:h-96 mb-4">
         <img
+<<<<<<< HEAD
           src="https://lqymwrhfirszrakuevqm.supabase.co/storage/v1/object/public/moolgyan-media/App_logo_QR/splash.png"
+=======
+          src="https://lqymwrhfirszrakuevqm.supabase.co/storage/v1/object/public/moolgyan-media/general-gallery/1775567829626-splash.png"
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
           alt="Mool Gyan Splash"
           className="w-full h-full object-contain drop-shadow-2xl animate-pulse-slow"
         />

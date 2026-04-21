@@ -6,6 +6,10 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+<<<<<<< HEAD
+=======
+  "display_override": ["standalone", "minimal-ui", "browser"],
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
   "background_color": "#000000",
   "theme_color": "#0a0a0a",
   "theme_color_dark": "#0a0a0a",

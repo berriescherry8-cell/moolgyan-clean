@@ -64,6 +64,10 @@ export default function OrderDialog({ book, isOpen, onClose }: OrderDialogProps)
         body: JSON.stringify({
           bookId: book.id,
           bookTitle: book.title,
+<<<<<<< HEAD
+=======
+          bookPrice: book.price,
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
           customerName: form.fullName,
           mobile: form.mobile,
           address: form.fullAddress,

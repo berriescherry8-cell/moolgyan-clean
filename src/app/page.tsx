@@ -2,37 +2,60 @@
 
 import Link from 'next/link';
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
+<<<<<<< HEAD
 import { ArrowRight, BookOpen, Camera, Video, Wifi, Quote } from 'lucide-react';
 import { useLocale } from '@/lib/i18n';
 import NewsTicker from '@/components/NewsTicker';
+=======
+import { ArrowRight, BookOpen, Camera, Video, Wifi } from 'lucide-react';
+import { useLocale } from '@/lib/i18n';
+import NewsTicker from '@/components/NewsTicker';
+import WisdomQuotes from '@/components/WisdomQuotes';
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
 
 export default function Home() {
   const { t } = useLocale();
 
   const sections = [
     {
+<<<<<<< HEAD
       title: t.nav_live_satsang,
+=======
+      title: "Live Satsang",
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
       description: 'Watch the latest featured spiritual talks and discourses.',
       icon: Wifi,
       href: '/live-satsang',
       cta: 'Watch Now',
     },
     {
+<<<<<<< HEAD
       title: t.nav_satsang,
+=======
+      title: "Satsang",
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
       description: 'Explore the complete archive of all satsang videos.',
       icon: Video,
       href: '/satsang',
       cta: 'View Archive',
     },
     {
+<<<<<<< HEAD
       title: t.nav_photos,
+=======
+      title: "Photos",
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
       description: 'View a curated gallery of spiritual and inspirational images.',
       icon: Camera,
       href: '/photos',
       cta: 'Explore Gallery',
     },
     {
+<<<<<<< HEAD
       title: t.nav_bookstore,
+=======
+      title: "Bookstore",
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
       description: 'Order spiritual books and materials to aid your journey.',
       icon: BookOpen,
       href: '/books',
@@ -57,7 +80,11 @@ export default function Home() {
         
         <div className="relative z-10 space-y-4 max-w-4xl">
           <h1 className="text-5xl md:text-8xl font-bold font-headline leading-[1.1] tracking-tighter text-gold-foil">
+<<<<<<< HEAD
             {t.app_name}
+=======
+            Mool Gyan
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
           </h1>
           
           <div className="mt-4 max-w-2xl mx-auto text-base md:text-xl text-white/90 font-medium">
@@ -72,6 +99,7 @@ export default function Home() {
       </div>
 
       {/* News Ticker */}
+<<<<<<< HEAD
       <div className="px-2">
         <NewsTicker />
       </div>
@@ -94,13 +122,25 @@ export default function Home() {
           <div className="mt-2 h-0.5 w-6 bg-primary/30 mx-auto rounded-full" />
         </div>
       </section>
+=======
+      <div className="w-full p-4 bg-gradient-to-r from-zinc-900/50 to-black/30 backdrop-blur-xl border border-white/5 rounded-2xl shadow-2xl">
+        <NewsTicker />
+      </div>
+
+      {/* Daily Wisdom */}
+      <WisdomQuotes />
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
 
       {/* Feature Grid */}
       <div className="mt-8 grid gap-6 md:grid-cols-2 lg:grid-cols-2">
         {sections.map((section, index) => (
           <Link 
             href={section.href} 
+<<<<<<< HEAD
             key={section.title} 
+=======
+            key={index} 
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
             className="group block animate-fade-in-up relative overflow-hidden rounded-[1.5rem] h-full"
           >
             <Card className="h-full bg-zinc-950/60 border-white/10 backdrop-blur-2xl text-white transition-all duration-500 hover:bg-zinc-900/80 hover:border-primary/40 hover:shadow-[0_0_30px_rgba(234,179,8,0.1)] hover:-translate-y-1">
@@ -110,12 +150,24 @@ export default function Home() {
                     <section.icon className="h-6 w-6 text-primary" />
                   </div>
                   <div>
+<<<<<<< HEAD
                     <CardTitle className="text-xl font-headline tracking-tight group-hover:text-primary transition-colors duration-300">{section.title}</CardTitle>
+=======
+                    <CardTitle className="text-xl font-headline tracking-tight group-hover:text-primary transition-colors duration-300">
+                      {section.title}
+                    </CardTitle>
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
                   </div>
                 </div>
               </CardHeader>
               <CardContent className="pt-2 relative z-10">
+<<<<<<< HEAD
                 <CardDescription className="text-white/60 text-base leading-relaxed">{section.description}</CardDescription>
+=======
+                <CardDescription className="text-white/60 text-base leading-relaxed">
+                  {section.description}
+                </CardDescription>
+>>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
               </CardContent>
               <CardFooter className="pt-2 relative z-10 border-t border-white/5 mt-auto">
                 <div className="text-[10px] font-bold text-primary flex items-center gap-2 tracking-[0.2em] uppercase transition-all duration-300 group-hover:gap-3">
