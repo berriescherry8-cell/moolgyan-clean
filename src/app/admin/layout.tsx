@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 'use client';
 
 import { useEffect } from 'react';
@@ -87,10 +86,4 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </div>
     </div>
   );
-=======
-// Minimal layout - middleware handles auth, sidebar in protected layout
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  return <>{children}</>;
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
 }
-

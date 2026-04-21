@@ -1,10 +1,9 @@
 import { type ClassValue, clsx } from "clsx"
+import { twMerge } from "tailwind-merge"
 
 export function cn(...inputs: ClassValue[]) {
-  return clsx(inputs)
+  return twMerge(clsx(inputs))
 }
-<<<<<<< HEAD
-=======
 
 export function formatDate(date: Date | string | number): string {
   return new Intl.DateTimeFormat('en-IN', {
@@ -15,4 +14,3 @@ export function formatDate(date: Date | string | number): string {
     minute: '2-digit'
   }).format(new Date(date))
 }
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
