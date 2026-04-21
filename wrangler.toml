@@ -5,6 +5,8 @@ compatibility_flags = ["nodejs_compat"]
 [observability]
 enabled = true
 
-
-
+[build]
+command = "npm run build"
+cwd = "."
+pages_build_output_dir = "dist"
 
