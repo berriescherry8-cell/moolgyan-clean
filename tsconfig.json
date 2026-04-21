@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-{"compilerOptions":{"target":"ES2020","lib":["dom","dom.iterable","esnext"],"allowJs":true,"skipLibCheck":true,"strict":false,"noImplicitAny":false,"noEmit":true,"esModuleInterop":true,"module":"esnext","moduleResolution":"bundler","resolveJsonModule":true,"isolatedModules":true,"jsx":"preserve","incremental":true,"plugins":[{"name":"next"}],"baseUrl":".","paths":{"@/*":["./src/*"]}},"include":["next-env.d.ts","**/*.ts","**/*.tsx",".next/types/**/*.ts","dist/types/**/*.ts"],"exclude":["node_modules"]}
-=======
 {
   "compilerOptions": {
     "target": "ES2020",
@@ -27,6 +24,7 @@
       }
     ],
     "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
     "paths": {
       "@/*": [
         "./src/*"
@@ -45,4 +43,3 @@
     "node_modules"
   ]
 }
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
