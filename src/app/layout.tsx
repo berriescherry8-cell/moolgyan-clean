@@ -3,10 +3,7 @@ import './globals.css';
 import { Inter } from 'next/font/google';
 import { cn } from '@/lib/utils';
 import { Toaster } from '@/components/ui/toaster';
-<<<<<<< HEAD
 import { LocaleProvider } from '@/lib/i18n';
-=======
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
 import AppLayout from '@/components/AppLayout';
 import { UploadProvider } from '@/context/UploadProvider';
 
@@ -45,13 +42,8 @@ export const viewport: Viewport = {
   themeColor: '#000000',
   width: 'device-width',
   initialScale: 1,
-<<<<<<< HEAD
-  maximumScale: 1,
-  userScalable: false,
-=======
   maximumScale: 3,
   userScalable: true,
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
 };
 
 export default function RootLayout({
@@ -71,7 +63,6 @@ export default function RootLayout({
           inter.variable
         )}
       >
-<<<<<<< HEAD
         <LocaleProvider>
           <UploadProvider>
             <AppLayout>
@@ -79,19 +70,8 @@ export default function RootLayout({
             </AppLayout>
           </UploadProvider>
         </LocaleProvider>
-=======
-        <UploadProvider>
-          <AppLayout>
-            {children}
-          </AppLayout>
-        </UploadProvider>
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
         <Toaster />
       </body>
     </html>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
