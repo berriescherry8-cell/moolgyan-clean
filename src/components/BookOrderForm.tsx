@@ -12,6 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Loader2, Plus, Minus, IndianRupee, AlertCircle, CheckCircle } from 'lucide-react';
 import { format } from 'date-fns';
+import { placeOrder } from '@/lib/orderClient';
 
 interface Book {
   id: string;
@@ -168,28 +169,16 @@ export default function BookOrderForm() {
     setSubmitting(true);
 
     try {
-      const response = await fetch('/api/orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          bookId: book.id,
-          bookTitle: book.title,
-          bookPrice: typeof book.price === 'string' ? parseFloat(book.price) : book.price,
-          customerName: formData.fullName,
-          mobile: formData.mobileNumber,
-          address: formData.address,
-          pinCode: formData.pinCode,
-          quantity: formData.quantity
-        }),
+      const result = await placeOrder({
+        bookId: parseInt(book.id),
+        bookTitle: book.title,
+        bookPrice: typeof book.price === 'string' ? book.price : book.price.toString(),
+        customerName: formData.fullName,
+        mobile: formData.mobileNumber,
+        address: formData.address,
+        pinCode: formData.pinCode,
+        quantity: formData.quantity
       });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        throw new Error(result.error || 'Failed to place order');
-      }
 
       toast({
         title: "Order Placed Successfully!",
