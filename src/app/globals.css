@@ -164,4 +164,13 @@ body {
   .glass-card {
     @apply bg-zinc-950/40 backdrop-blur-2xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)];
   }
+
+  @keyframes moveLeftToRight {
+    from {
+      transform: translateX(0);
+    }
+    to {
+      transform: translateX(calc(100vw + 20px));
+    }
+  }
 }

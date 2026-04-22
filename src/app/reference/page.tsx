@@ -1,108 +1,70 @@
 'use client';
 
-import { useCollection } from '@/lib/data-manager';
-import type { ReferenceItem } from '@/lib/types';
-import { Loader2, AlertCircle, FileText, Download } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription, CardFooter } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { useLocale } from '@/lib/i18n';
-import Image from 'next/image';
+import { Clock, Calendar } from 'lucide-react';
+import { Card, CardContent } from '@/components/ui/card';
 
 export default function ReferencePage() {
-  const { t } = useLocale();
-  const referenceItems = useCollection<ReferenceItem>('referenceItems');
-
-  const sortedItems = referenceItems?.sort((a, b) => new Date(b.uploadDate).getTime() - new Date(a.uploadDate).getTime());
-  const guruParichayImage = "https://lqymwrhfirszrakuevqm.supabase.co/storage/v1/object/public/moolgyan-media/general-gallery/1774365251330-WhatsApp%20Image%202025-12-30%20at%208.39.57%20AM%20(1)%20-%20Copy.jpeg";
-
   return (
-    <div>
-      <h1 className="text-4xl font-bold mb-8 font-headline">{t.nav_reference}</h1>
-
-      {/* Guru Parichay Section */}
-      <Card className="relative mb-12 overflow-hidden group">
-        <div className="absolute inset-0">
-          <Image
-            src={guruParichayImage}
-            alt="Satguru Nitin Das Ji"
-            fill
-            className="object-cover object-top transition-transform duration-500 group-hover:scale-105"
-          />
+    <div className="min-h-screen bg-black flex items-center justify-center p-6">
+      <div className="text-center max-w-2xl">
+        {/* Animated Background Elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse"></div>
         </div>
-        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent"></div>
-        <div className="relative p-6 md:p-8 text-white flex flex-col justify-end min-h-[500px]">
-          <CardHeader className="p-0 mb-4">
-            <CardTitle className="font-headline text-4xl text-white drop-shadow-lg">{t.nav_guru_parichay}</CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
-            <p className="text-white/80 whitespace-pre-line leading-relaxed text-base max-h-60 overflow-y-auto pr-4">
-              {t.guru_parichay_content}
+
+        {/* Coming Soon Card */}
+        <Card className="relative bg-zinc-900/90 backdrop-blur-xl border border-zinc-800 p-12">
+          <div className="relative z-10">
+            {/* Icon */}
+            <div className="mx-auto w-24 h-24 bg-gradient-to-br from-amber-500 to-orange-500 rounded-full flex items-center justify-center mb-8 shadow-2xl shadow-amber-500/30">
+              <Clock className="h-12 w-12 text-white animate-pulse" />
+            </div>
+
+            {/* Title */}
+            <h1 className="text-5xl md:text-6xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-400 to-amber-400 mb-6">
+              Coming Soon
+            </h1>
+
+            {/* Description */}
+            <p className="text-xl text-zinc-300 mb-8 leading-relaxed">
+              We're working on something amazing! The reference section will be available soon with comprehensive spiritual resources and teachings.
             </p>
-          </CardContent>
-        </div>
-      </Card>
 
-      {/* Reference Items Section */}
-      {sortedItems && sortedItems.length > 0 ? (
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {sortedItems.map((item) => (
-            <Card key={item.id} className="flex flex-col hover:shadow-lg transition-shadow">
-              {item.imageUrl && (
-                <div className="relative h-48">
-                  <Image
-                    src={item.imageUrl}
-                    alt={item.title || 'Reference Image'}
-                    fill
-                    className="object-cover"
-                  />
+            {/* Features Preview */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Calendar className="h-8 w-8 text-amber-400" />
                 </div>
-              )}
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <FileText className="h-6 w-6 text-primary" />
-                  {item.title || 'Untitled'}
-                </CardTitle>
-                {item.description && (
-                  <CardDescription>{item.description}</CardDescription>
-                )}
-              </CardHeader>
-              <CardContent className="flex-grow">
-                {item.pdfUrl ? (
-                  <p className="text-sm text-muted-foreground">Click the button below to view or download the PDF document.</p>
-                ) : (
-                  <p className="text-sm text-muted-foreground">No PDF document available for this item.</p>
-                )}
-              </CardContent>
-              <CardFooter className="flex gap-2">
-                {item.pdfUrl && (
-                  <Button asChild className="flex-1">
-                    <a href={item.pdfUrl} target="_blank" rel="noopener noreferrer" className="flex items-center">
-                      <Download className="mr-2 h-4 w-4" />
-                      Download PDF
-                    </a>
-                  </Button>
-                )}
-                {item.imageUrl && (
-                  <Button asChild variant="outline" className={item.pdfUrl ? "flex-1" : "w-full"}>
-                    <a href={item.imageUrl} target="_blank" rel="noopener noreferrer" className="flex items-center">
-                      <FileText className="mr-2 h-4 w-4" />
-                      View Image
-                    </a>
-                  </Button>
-                )}
-              </CardFooter>
-            </Card>
-          ))}
-        </div>
-      ) : (
-        <div className="text-center py-16">
-          <FileText className="mx-auto h-12 w-12 text-muted-foreground" />
-          <h3 className="mt-4 text-2xl font-semibold">No Reference Items Found</h3>
-          <p className="mt-2 text-muted-foreground">
-            Reference materials will be available here soon.
-          </p>
-        </div>
-      )}
+                <h3 className="text-white font-semibold mb-2">Spiritual Calendar</h3>
+                <p className="text-zinc-400 text-sm">Important dates and events</p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Clock className="h-8 w-8 text-amber-400" />
+                </div>
+                <h3 className="text-white font-semibold mb-2">Daily Wisdom</h3>
+                <p className="text-zinc-400 text-sm">Inspirational quotes and teachings</p>
+              </div>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Calendar className="h-8 w-8 text-amber-400" />
+                </div>
+                <h3 className="text-white font-semibold mb-2">Study Materials</h3>
+                <p className="text-zinc-400 text-sm">Comprehensive learning resources</p>
+              </div>
+            </div>
+
+            {/* Notification */}
+            <div className="bg-amber-500/10 border border-amber-500/30 rounded-lg p-4">
+              <p className="text-amber-300 text-sm">
+                Stay tuned! This section will be updated with valuable spiritual reference materials.
+              </p>
+            </div>
+          </div>
+        </Card>
+      </div>
     </div>
   );
 }

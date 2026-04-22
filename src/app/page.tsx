@@ -43,12 +43,38 @@ export default function Home() {
   ];
 
   return (
-    <div className="relative min-h-screen overflow-hidden">
-      {/* Animated Background */}
+    <div className="relative min-h-screen overflow-hidden bg-black">
+      {/* Animated Stars Background */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-purple-900/50 via-blue-900/30 to-indigo-900/50"></div>
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-purple-500/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '0s'}}></div>
-        <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-blue-500/20 rounded-full blur-3xl animate-pulse" style={{animationDelay: '2s'}}></div>
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-gray-900 to-black"></div>
+        {/* Moving stars animation */}
+        <div className="absolute inset-0">
+          {[...Array(50)].map((_, i) => (
+            <div
+              key={i}
+              className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`,
+                animationDelay: `${Math.random() * 5}s`,
+                animationDuration: `${2 + Math.random() * 3}s`,
+              }}
+            />
+          ))}
+          {/* Moving stars left to right */}
+          {[...Array(30)].map((_, i) => (
+            <div
+              key={`moving-${i}`}
+              className="absolute w-0.5 h-0.5 bg-yellow-200 rounded-full"
+              style={{
+                left: '-10px',
+                top: `${Math.random() * 100}%`,
+                animation: `moveLeftToRight ${10 + Math.random() * 10}s linear infinite`,
+                animationDelay: `${Math.random() * 10}s`,
+              }}
+            />
+          ))}
+        </div>
       </div>
 
       {/* News Ticker */}

@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Loader2, Plus, Minus, IndianRupee, AlertCircle, CheckCircle } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { placeOrder } from '@/lib/orderClient';
 
 interface Book {
   id: string;
@@ -149,33 +150,16 @@ export default function BookOrderDialog({ book, isOpen, onClose }: BookOrderDial
     setSubmitting(true);
 
     try {
-      const orderData = {
-        bookId: book.id,
+      const result = await placeOrder({
+        bookId: parseInt(book.id),
         bookTitle: book.title,
-        bookPrice: typeof book.price === 'string' ? parseFloat(book.price) : book.price,
+        bookPrice: typeof book.price === 'string' ? book.price : book.price.toString(),
         customerName: formData.fullName,
         mobile: formData.mobileNumber,
         address: formData.address,
         pinCode: formData.pinCode,
         quantity: formData.quantity
-      };
-      console.log('Sending order data:', orderData);
-      
-      const response = await fetch('/api/orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(orderData),
       });
-
-      const result = await response.json();
-
-      if (!response.ok) {
-        console.error('API Error Response:', result);
-        console.error('Response Status:', response.status);
-        throw new Error(result.error || 'Failed to place order');
-      }
 
       toast({
         title: "Order Placed Successfully!",

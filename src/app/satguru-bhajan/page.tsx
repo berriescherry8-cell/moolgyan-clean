@@ -4,14 +4,13 @@ import { useState, useMemo } from 'react';
 import Image from 'next/image';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Youtube, Loader2, AlertCircle, Search, Music } from 'lucide-react';
+import { Youtube, Loader2, AlertCircle, Search } from 'lucide-react';
 import type { SatguruBhajan } from '@/lib/types';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
 import { VideoPlayer } from '@/components/VideoPlayer';
 import { useLocale } from '@/lib/i18n';
 import { useCollection } from '@/lib/data-manager';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 function BhajanVideoCard({ video }: { video: SatguruBhajan }) {
     return (
@@ -21,27 +20,6 @@ function BhajanVideoCard({ video }: { video: SatguruBhajan }) {
           <h3 className="font-bold text-base line-clamp-2">{video.title}</h3>
           {video.description && <p className="text-xs text-muted-foreground mt-1 line-clamp-2">{video.description}</p>}
         </CardContent>
-        {video.lyrics && (
-            <CardFooter className="p-4 pt-0">
-                <Collapsible className="w-full">
-                  <CollapsibleTrigger asChild>
-                    <Button variant="outline" size="sm" className="w-full">
-                        <span className="flex items-center">
-                            <Music size={16} className="mr-2" />
-                            View Lyrics
-                        </span>
-                    </Button>
-                  </CollapsibleTrigger>
-                  <CollapsibleContent>
-                    <div className="mt-4 p-4 bg-background/50 rounded-lg border max-h-48 overflow-y-auto">
-                        <p className="whitespace-pre-line leading-relaxed text-sm text-muted-foreground">
-                            {video.lyrics}
-                        </p>
-                    </div>
-                  </CollapsibleContent>
-                </Collapsible>
-            </CardFooter>
-        )}
       </Card>
     );
 }
@@ -60,7 +38,7 @@ export default function SatguruBhajanPage() {
 
   return (
     <div>
-      <h1 className="text-4xl font-bold mb-8 font-headline">{t.nav_satguru_bhajan}</h1>
+      <h1 className="text-4xl font-bold mb-8 font-headline">{t('nav_satguru_bhajan') || "Satguru Bhajan"}</h1>
       
       <div className="space-y-8">
           <div className="mb-8 flex justify-center">
@@ -95,7 +73,7 @@ export default function SatguruBhajanPage() {
               </div>
             ): (
               <div className="text-center py-16">
-                  <Music className="mx-auto h-12 w-12 text-muted-foreground" />
+                  <Youtube className="mx-auto h-12 w-12 text-muted-foreground" />
                   <h3 className="text-2xl font-semibold">No Bhajans Found</h3>
                   <p className="text-muted-foreground mt-2">
                       {searchQuery ? "Your search did not match any bhajans." : "No bhajans have been added yet."}

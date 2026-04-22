@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
 import { ShoppingCart, AlertCircle } from 'lucide-react';
+import { placeOrder } from '@/lib/orderClient';
 
 interface OrderDialogProps {
   book: {
@@ -56,29 +57,18 @@ export default function OrderDialog({ book, isOpen, onClose }: OrderDialogProps)
     setIsSubmitting(true);
 
     try {
-      const response = await fetch('/api/orders', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          bookId: book.id,
-          bookTitle: book.title,
-<<<<<<< HEAD
-=======
-          bookPrice: book.price,
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
-          customerName: form.fullName,
-          mobile: form.mobile,
-          address: form.fullAddress,
-          pinCode: form.pinCode,
-          quantity: Number(form.quantity),
-        }),
+      const result = await placeOrder({
+        bookId: parseInt(book.id),
+        bookTitle: book.title,
+        bookPrice: book.price.toString(),
+        customerName: form.fullName,
+        mobile: form.mobile,
+        address: form.fullAddress,
+        pinCode: form.pinCode,
+        quantity: Number(form.quantity),
       });
 
-      const result = await response.json();
-
-      if (response.ok) {
+      if (result.success) {
         toast({
           title: "Order Placed Successfully",
           description: `Your order for ${form.quantity} copies of "${book.title}" has been placed.`,
