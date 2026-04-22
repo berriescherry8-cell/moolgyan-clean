@@ -21,6 +21,14 @@ interface Photo {
   uploaded_at?: string;
 }
 
+export async function generateStaticParams() {
+  return [
+    { folder: 'prachar-aur-prasar' },
+    { folder: 'general-gallery' },
+    { folder: 'videsh-bhraman' }
+  ];
+}
+
 export default function PhotoFolderPage() {
   const params = useParams();
   const router = useRouter();
