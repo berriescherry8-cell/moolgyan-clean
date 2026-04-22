@@ -21,7 +21,7 @@ interface Photo {
   uploaded_at?: string;
 }
 
-export default function VideshBhramanPage() {
+export default function GeneralGalleryPage() {
   const router = useRouter();
   
   const [photos, setPhotos] = useState<Photo[]>([]);
@@ -36,7 +36,7 @@ export default function VideshBhramanPage() {
     const { data } = await supabase
       .from('photos')
       .select('folder, public_url, file_name, uploaded_at')
-      .eq('folder', 'videsh-bhraman')
+      .eq('folder', 'general-gallery')
       .order('uploaded_at', { ascending: false });
 
     setPhotos(data || []);
@@ -55,7 +55,7 @@ export default function VideshBhramanPage() {
     <div className="min-h-screen bg-black">
       {/* Header */}
       <div className="relative">
-        <div className="absolute inset-0 bg-gradient-to-r from-green-500 to-teal-600 opacity-20"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-600 opacity-20"></div>
         <div className="relative p-6">
           <Button
             onClick={() => router.push('/photos')}
@@ -67,8 +67,8 @@ export default function VideshBhramanPage() {
           </Button>
           
           <div className="text-center text-white">
-            <h1 className="text-5xl font-bold mb-4">Videsh Bhraman</h1>
-            <p className="text-xl text-white/80 max-w-2xl mx-auto">Spiritual journeys and international discourses</p>
+            <h1 className="text-5xl font-bold mb-4">General Gallery</h1>
+            <p className="text-xl text-white/80 max-w-2xl mx-auto">Beautiful collection of spiritual moments and divine experiences</p>
             <Badge className="mt-4 bg-white/20 text-white border-white/30">
               {photos.length} Photos
             </Badge>
