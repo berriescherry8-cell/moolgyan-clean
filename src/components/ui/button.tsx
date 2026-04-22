@@ -48,7 +48,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         ref={ref}
         {...props}
       >
-        {asChild ? React.Children.only(children) : children}
+        {asChild ? React.Children.toArray(children)[0] : children}
       </Comp>
     )
   }
