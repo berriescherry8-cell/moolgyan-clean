@@ -22,6 +22,23 @@ export const getSupabase = () => {
   );
 };
 
+// Map camelCase collection names to snake_case table names
+const getTableName = (collection: string): string => {
+  const tableMap: { [key: string]: string } = {
+    'googleForms': 'google_forms',
+    'referenceItems': 'reference_items',
+    'satguruBhajans': 'satguru_bhajan',
+    'wisdomQuotes': 'wisdom_quotes',
+    'liveSatsangs': 'live_satsangs',
+    'bookOrders': 'book_orders',
+    'newsItems': 'news_items',
+    'photoItems': 'photo_items',
+    'videoItems': 'video_items',
+    'memberData': 'member_data'
+  };
+  return tableMap[collection] || collection;
+};
+
 // Supabase-based data manager for real persistence
 export const dataManager = {
   // Create or update a document
@@ -31,6 +48,7 @@ export const dataManager = {
       if (!supabase) throw new Error('Supabase client not available');
       
       const timestamp = new Date().toISOString();
+      const tableName = getTableName(collection);
       
       if (id) {
         // Update existing document - only add updated_at if it exists in the table
@@ -43,14 +61,14 @@ export const dataManager = {
         
         try {
           const { error } = await supabase
-            .from(collection)
+            .from(tableName)
             .update({ ...updateData, updated_at: timestamp })
             .eq('id', id);
           
           if (error && error.code === 'PGRST204') {
             // Column doesn't exist, try without it
             const { error: error2 } = await supabase
-              .from(collection)
+              .from(tableName)
               .update(updateData)
               .eq('id', id);
             if (error2) throw error2;
@@ -60,7 +78,7 @@ export const dataManager = {
         } catch (updateError) {
           // If update with updated_at fails, try without it
           const { error } = await supabase
-            .from(collection)
+            .from(tableName)
             .update(updateData)
             .eq('id', id);
           if (error) throw error;
@@ -79,7 +97,7 @@ export const dataManager = {
         // Try to add timestamps, but don't fail if columns don't exist
         try {
           const { data: newDoc, error } = await supabase
-            .from(collection)
+            .from(tableName)
             .insert([{ ...insertData, created_at: timestamp, updated_at: timestamp }])
             .select()
             .single();
@@ -87,7 +105,7 @@ export const dataManager = {
           if (error && error.code === 'PGRST204') {
             // Columns don't exist, try without timestamps
             const { data: newDoc2, error: error2 } = await supabase
-              .from(collection)
+              .from(tableName)
               .insert([insertData])
               .select()
               .single();
@@ -121,8 +139,9 @@ export const dataManager = {
       const supabase = getSupabase();
       if (!supabase) throw new Error('Supabase client not available');
       
+      const tableName = getTableName(collection);
       const { error } = await supabase
-        .from(collection)
+        .from(tableName)
         .delete()
         .eq('id', id);
       
@@ -139,8 +158,9 @@ export const dataManager = {
       const supabase = getSupabase();
       if (!supabase) throw new Error('Supabase client not available');
       
+      const tableName = getTableName(collection);
       const { data, error } = await supabase
-        .from(collection)
+        .from(tableName)
         .select('*')
         .eq('id', id)
         .single();
@@ -159,7 +179,8 @@ export const dataManager = {
       const supabase = getSupabase();
       if (!supabase) throw new Error('Supabase client not available');
       
-      let query = supabase.from(collection).select('*');
+      const tableName = getTableName(collection);
+      let query = supabase.from(tableName).select('*');
       
       if (filters) {
         Object.entries(filters).forEach(([key, value]) => {
