@@ -38,42 +38,24 @@ export async function placeOrder(orderData: OrderData) {
       throw new Error('Quantity must be 10-2000');
     }
 
-    // Create Supabase client
-    const supabase = createBrowserClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-    );
-
     const totalAmount = orderData.quantity * parseFloat(orderData.bookPrice);
 
-    const { data, error } = await supabase
-      .from('orders')
-      .insert({
-        book_id: parseInt(orderData.bookId.toString()),
-        book_title: orderData.bookTitle,
-        book_price: parseFloat(orderData.bookPrice),
-        quantity: orderData.quantity,
-        full_name: orderData.customerName,
-        mobile_number: orderData.mobile,
-        address: orderData.address,
-        pin_code: orderData.pinCode,
-        total_amount: totalAmount,
-        status: 'pending'
-      })
-      .select()
-      .single();
+    // Use API route instead of direct Supabase call
+    const response = await fetch('/api/orders', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(orderData),
+    });
 
-    if (error) {
-      console.error('Supabase error:', error);
-      throw new Error(`Database error: ${error.message}`);
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.error || 'Failed to place order');
     }
 
-    return {
-      success: true,
-      orderId: data.id,
-      totalAmount: totalAmount,
-      message: 'Order placed successfully!'
-    };
+    return result;
 
   } catch (error) {
     console.error('Order error:', error);
