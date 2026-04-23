@@ -4,7 +4,7 @@ import { useState, useMemo } from 'react';
 import Image from 'next/image';
 import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Youtube, Loader2, AlertCircle, Search } from 'lucide-react';
+import { Youtube, Loader2, AlertCircle, Search, Sparkles, Music } from 'lucide-react';
 import type { SatguruBhajan } from '@/lib/types';
 import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
 import { Input } from '@/components/ui/input';
@@ -37,20 +37,48 @@ export default function SatguruBhajanPage() {
   }, [videos, searchQuery]);
 
   return (
-    <div>
-      <h1 className="text-4xl font-bold mb-8 font-headline">{t('nav_satguru_bhajan') || "Satguru Bhajan"}</h1>
-      
-      <div className="space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-orange-950/30 to-gold-900/20 animate-pan-background py-12 px-4 relative overflow-hidden">
+      {/* Divine Rays Background */}
+      <div className="absolute inset-0 opacity-30">
+        <div className="absolute top-20 left-20 w-72 h-72 bg-orange-500/20 rounded-full blur-3xl divine-rays"></div>
+        <div className="absolute bottom-20 right-20 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl divine-rays animation-delay-2000"></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-orange-400 to-amber-400 rounded-full blur-2xl divine-rays"></div>
+      </div>
+
+      <div className="max-w-7xl mx-auto space-y-20 relative z-10">
+        {/* Bookstore Style Header - Orange & Black Pattern */}
+        <div className="text-center space-y-12 pt-12 animate-fade-in-up">
+          <div className="flex items-center justify-center gap-6 mb-12">
+            <div className="p-6 bg-gradient-to-br from-orange-500 to-amber-500 rounded-3xl shadow-3xl shadow-orange-500/50">
+              <Music className="h-16 w-16 text-white drop-shadow-lg" />
+            </div>
+            <div>
+              <h1 className="text-7xl md:text-8xl lg:text-9xl font-black bg-gradient-to-r from-orange-400 via-amber-400 to-orange-600 bg-clip-text text-transparent drop-shadow-4xl mb-4">
+                SATGURU BHAJAN
+              </h1>
+              <div className="flex items-center justify-center gap-3">
+                <Sparkles className="h-8 w-8 text-orange-400 animate-pulse" />
+                <p className="text-amber-300 font-medium text-lg">Divine Melodies</p>
+                <Sparkles className="h-8 w-8 text-amber-500 animate-pulse" />
+              </div>
+            </div>
+          </div>
+          <p className="text-2xl md:text-3xl lg:text-4xl text-slate-200/90 max-w-5xl mx-auto leading-relaxed drop-shadow-lg font-light">
+            Experience divine bliss through sacred bhajans and spiritual melodies from Sadguru Nitin Sahib
+          </p>
+        </div>
+
+        <div className="space-y-8">
           <div className="mb-8 flex justify-center">
-              <div className="relative w-32 h-32 p-1 rounded-full bg-gradient-to-tr from-yellow-400 via-amber-500 to-yellow-600 shadow-lg shadow-yellow-500/30">
-                  <div className="w-full h-full bg-background rounded-full p-1 relative overflow-hidden border-2 border-yellow-300/50">
+              <div className="relative w-32 h-32 p-1 rounded-full bg-gradient-to-tr from-orange-400 via-amber-500 to-orange-600 shadow-lg shadow-orange-500/30">
+                  <div className="w-full h-full bg-background rounded-full p-1 relative overflow-hidden border-2 border-orange-300/50">
                       <Image 
                           src="https://lqymwrhfirszrakuevqm.supabase.co/storage/v1/object/public/moolgyan-media/App_logo_QR/images.jpg"
                           alt="Satguru Bhajan Logo" 
                           fill
                           className="object-cover rounded-full"
                       />
-                      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-yellow-200/20 to-transparent"></div>
+                      <div className="absolute inset-0 rounded-full bg-gradient-to-br from-orange-200/20 to-transparent"></div>
                   </div>
               </div>
           </div>
@@ -81,6 +109,7 @@ export default function SatguruBhajanPage() {
               </div>
             )}
           </div>
+      </div>
       </div>
     </div>
   );

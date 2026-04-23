@@ -186,12 +186,22 @@ export function getEmbedUrl(
   const defaultParams = {
     rel: 0,
     modestbranding: 1,
+    autoplay: 0,
+    showinfo: 0,
+    controls: 1,
+    disablekb: 0,
+    fs: 1,
+    iv_load_policy: 3,
+    cc_load_policy: 0,
+    hl: 'en',
+    enablejsapi: 1,
+    origin: typeof window !== 'undefined' ? window.location.origin : '',
   };
 
   const allParams = { ...defaultParams, ...params };
   const query = new URLSearchParams(
     Object.entries(allParams)
-      .filter(([_, v]) => v !== undefined && v !== null)
+      .filter(([_, v]) => v !== undefined && v !== null && v !== '')
       .map(([k, v]) => [k, String(v)]) as [string, string][]
   ).toString();
 

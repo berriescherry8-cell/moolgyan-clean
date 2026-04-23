@@ -213,7 +213,8 @@ export function useCollection<T>(collection: string, filters?: Record<string, an
         return;
       }
 
-      let query = supabase.from(collection).select('*');
+      const tableName = getTableName(collection);
+      let query = supabase.from(tableName).select('*');
       
       if (filters) {
         Object.entries(filters).forEach(([key, value]) => {
@@ -246,30 +247,48 @@ export function useCollection<T>(collection: string, filters?: Record<string, an
     if (!supabase) return;
 
     // Subscribe to real-time changes
-    const channel = supabase
-      .channel(`${collection}_changes`)
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: collection },
-        (payload: { eventType: string; new: any; old: any }) => {
-          console.log(`[Realtime] Change in ${collection}:`, payload);
-          
-          if (payload.eventType === 'INSERT') {
-            setData(prev => [...prev, payload.new as T]);
-          } else if (payload.eventType === 'UPDATE') {
-            setData(prev => prev.map(item => 
-              (item as any).id === payload.new.id ? { ...item, ...payload.new } : item
-            ));
-          } else if (payload.eventType === 'DELETE') {
-            setData(prev => prev.filter(item => (item as any).id !== payload.old.id));
+    const tableName = getTableName(collection);
+    const channelName = `${collection}_changes_${Date.now()}`; // Unique channel name
+    
+    try {
+      const channel = supabase
+        .channel(channelName)
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: tableName },
+          (payload: { eventType: string; new: any; old: any }) => {
+            console.log(`[Realtime] Change in ${collection}:`, payload);
+            
+            if (payload.eventType === 'INSERT') {
+              setData(prev => [...prev, payload.new as T]);
+            } else if (payload.eventType === 'UPDATE') {
+              setData(prev => prev.map(item => 
+                (item as any).id === payload.new.id ? { ...item, ...payload.new } : item
+              ));
+            } else if (payload.eventType === 'DELETE') {
+              setData(prev => prev.filter(item => (item as any).id !== payload.old.id));
+            }
           }
-        }
-      )
-      .subscribe();
+        )
+        .subscribe((status) => {
+          if (status === 'SUBSCRIBED') {
+            console.log(`[Realtime] Subscribed to ${collection}`);
+          } else if (status === 'TIMED_OUT' || status === 'CLOSED') {
+            console.warn(`[Realtime] Subscription failed for ${collection}:`, status);
+          }
+        });
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
+      return () => {
+        try {
+          supabase.removeChannel(channel);
+        } catch (error) {
+          console.warn(`[Realtime] Error removing channel for ${collection}:`, error);
+        }
+      };
+    } catch (error) {
+      console.error(`[Realtime] Error setting up subscription for ${collection}:`, error);
+      return () => {}; // Return empty cleanup function
+    }
   }, [collection, fetchData]);
 
   return data;
@@ -296,8 +315,9 @@ export function useDocument<T>(collection: string, id: string): T | null {
           return;
         }
 
+        const tableName = getTableName(collection);
         const { data: fetchedData, error } = await supabase
-          .from(collection)
+          .from(tableName)
           .select('*')
           .eq('id', id)
           .single();
@@ -318,24 +338,42 @@ export function useDocument<T>(collection: string, id: string): T | null {
     if (!supabase) return;
 
     // Subscribe to changes for this specific document
-    const channel = supabase
-      .channel(`${collection}_${id}_changes`)
-      .on(
-        'postgres_changes',
-        { event: '*', schema: 'public', table: collection },
-        (payload: { eventType: string; new: any; old: any }) => {
-          if (payload.eventType === 'UPDATE' && payload.new.id === id) {
-            setData(payload.new as T);
-          } else if (payload.eventType === 'DELETE' && payload.old.id === id) {
-            setData(null);
+    const tableName = getTableName(collection);
+    const channelName = `${collection}_${id}_changes_${Date.now()}`; // Unique channel name
+    
+    try {
+      const channel = supabase
+        .channel(channelName)
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: tableName },
+          (payload: { eventType: string; new: any; old: any }) => {
+            if (payload.eventType === 'UPDATE' && payload.new.id === id) {
+              setData(payload.new as T);
+            } else if (payload.eventType === 'DELETE' && payload.old.id === id) {
+              setData(null);
+            }
           }
-        }
-      )
-      .subscribe();
+        )
+        .subscribe((status) => {
+          if (status === 'SUBSCRIBED') {
+            console.log(`[Realtime] Subscribed to ${collection}/${id}`);
+          } else if (status === 'TIMED_OUT' || status === 'CLOSED') {
+            console.warn(`[Realtime] Subscription failed for ${collection}/${id}:`, status);
+          }
+        });
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
+      return () => {
+        try {
+          supabase.removeChannel(channel);
+        } catch (error) {
+          console.warn(`[Realtime] Error removing channel for ${collection}/${id}:`, error);
+        }
+      };
+    } catch (error) {
+      console.error(`[Realtime] Error setting up subscription for ${collection}/${id}:`, error);
+      return () => {}; // Return empty cleanup function
+    }
   }, [collection, id]);
 
   return data;

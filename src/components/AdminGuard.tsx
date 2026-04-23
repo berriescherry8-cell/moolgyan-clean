@@ -3,11 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { createClient } from '@/lib/supabase';
-<<<<<<< HEAD
-import { Loader2 } from 'lucide-react';
-=======
 import { Loader2, Shield, AlertTriangle } from 'lucide-react';
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
 
 const ADMIN_EMAILS = [
   'sharmadevendra715@gmail.com',
@@ -21,28 +17,6 @@ interface AdminGuardProps {
 
 export default function AdminGuard({ children }: AdminGuardProps) {
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
-<<<<<<< HEAD
-  const router = useRouter();
-  const pathname = usePathname();
-
-  useEffect(() => {
-    const checkAdmin = async () => {
-      const supabase = createClient();
-      const { data: { session } } = await supabase.auth.getSession();
-
-      if (!session?.user?.email || !ADMIN_EMAILS.includes(session.user.email)) {
-        router.push('/login');
-        router.refresh();
-        return;
-      }
-
-      setIsAdmin(true);
-    };
-
-    checkAdmin();
-  }, [router]);
-
-=======
   const [isChecking, setIsChecking] = useState(true);
   const [error, setError] = useState<string>('');
   const router = useRouter();
@@ -240,12 +214,10 @@ export default function AdminGuard({ children }: AdminGuardProps) {
     );
   }
 
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
   if (isAdmin === false) {
     return null;
   }
 
-<<<<<<< HEAD
   if (isAdmin === null) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-black">
@@ -254,7 +226,5 @@ export default function AdminGuard({ children }: AdminGuardProps) {
     );
   }
 
-=======
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
   return <>{children}</>;
 }

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 export interface NewsArticle {
   id: string;
   title: string;
@@ -40,7 +39,6 @@ export interface SatguruBhajan {
   lyrics?: string;
 }
 
-
 export interface SpiritualPhoto {
   id: string;
   title?: string;
@@ -49,211 +47,181 @@ export interface SpiritualPhoto {
   uploadDate: string;
   folder?: string;
   storagePath?: string;
-}
-
-export interface FaqItem {
-  question: string;
-  answer: string;
+  tags?: string[];
+  isFeatured?: boolean;
 }
 
 export interface Book {
   id: string;
   title: string;
   author: string;
-  price: number;
   description: string;
-  coverUrl: string;          // GitHub raw link (permanent)
-  pdfUrl?: string;           // optional
-  category?: string;
-  stockStatus: 'in-stock' | 'out-of-stock' | 'read-only';
-  sequence: number;
-  altText?: string;
+  coverImage: string;
+  price: number;
+  category: string;
+  language: string;
+  publicationDate?: string;
+  isbn?: string;
+  pages?: number;
+  storagePath?: string;
+  isAvailable: boolean;
+  isFeatured?: boolean;
+  rating?: number;
+  tags?: string[];
 }
 
 export interface Order {
   id: string;
+  userId: string;
+  items: OrderItem[];
+  totalAmount: number;
+  status: 'pending' | 'confirmed' | 'shipped' | 'delivered' | 'cancelled';
+  shippingAddress: Address;
+  paymentMethod: string;
+  paymentStatus: 'pending' | 'completed' | 'failed';
   orderDate: string;
-  status: string;
-  name: string;
-  mobile: string;
-  address: string;
-  pincode: string;
-  bookTitle: string;
+  deliveryDate?: string;
+  trackingNumber?: string;
+  notes?: string;
+}
+
+export interface OrderItem {
+  id: string;
+  bookId: string;
+  book: Book;
   quantity: number;
+  price: number;
 }
 
-export interface FaqSubmission {
-    id: string;
-    name: string;
-    email: string;
-    question: string;
-    submittedAt: string;
+export interface Address {
+  street: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  country: string;
+  phone?: string;
 }
 
-export interface DeekshaSubmission {
+export interface User {
   id: string;
-  name: string;
-  mobile: string;
-  email?: string;
-  pincode: string;
-  deekshaType: 'pratham' | 'dvitiya';
-  submittedAt: string;
+  email: string;
+  name?: string;
+  role: 'user' | 'admin';
+  isActive: boolean;
+  createdAt: string;
+  lastLogin?: string;
+  profile?: UserProfile;
 }
 
-export interface Feedback {
-    id: string;
-    name: string;
-    email: string;
-    message: string;
-    submittedAt: string;
+export interface UserProfile {
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  address?: Address;
+  preferences?: UserPreferences;
 }
 
-export interface KGFMember {
-    id: string;
-    name: string;
-    fathersName: string;
-    mobile: string;
-    email: string;
-    joinedAt: string;
+export interface UserPreferences {
+  language: string;
+  notifications: boolean;
+  newsletter: boolean;
 }
 
-export interface SaarSangrahPhoto {
-  id: string;
-  imageUrl: string;
-  uploadDate: string;
-  storagePath: string;
-}
-
-export interface ReferenceDocument {
+export interface LiveSatsang {
   id: string;
   title: string;
-  fileUrl: string;
-  uploadDate: string;
-  storagePath: string;
-}
-
-export interface ReferenceItem {
-  id: string;
-  title?: string;
-=======
-export interface ReferenceItem {
-  id: string;
-  title: string;
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
-  description?: string;
-  imageUrl?: string;
-  pdfUrl?: string;
-  uploadDate: string;
-<<<<<<< HEAD
+  description: string;
+  scheduledDate: string;
+  duration?: number;
+  streamUrl?: string;
+  isLive: boolean;
+  hasEnded: boolean;
+  viewerCount?: number;
+  thumbnailUrl?: string;
   storagePath?: string;
-}
-
-export interface FcmToken {
-    id: string;
-    subscribedAt: string;
-}
-
-export interface DailyWisdom {
-  id: string;
-  textEn: string;
-  textHi: string;
-  authorEn?: string;
-  authorHi?: string;
+  createdAt: string;
   updatedAt: string;
 }
 
-// Supabase-specific types
-export interface SupabaseNewsArticle {
+export interface WisdomQuote {
   id: string;
-  title: string;
-  content: string;
-  author: string;
-  publication_date?: string;
-  image_url: string;
-  storage_path?: string;
-  show_in_ticker?: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface SupabaseBook {
-  id: string;
-  title: string;
-  author: string;
-  price: number;
-  description: string;
-  cover_url: string;
-  pdf_url?: string;
+  text: string;
+  author?: string;
+  source?: string;
   category?: string;
-  stock_status: 'in-stock' | 'out-of-stock' | 'read-only';
-  alt_text?: string;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface SupabaseOrder {
-  id: string;
-  order_date: string;
-  status: string;
-  name: string;
-  mobile: string;
-  address: string;
-  pincode: string;
-  book_title: string;
-  quantity: number;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface SupabaseFeedback {
-  id: string;
-  name: string;
-  email: string;
-  message: string;
-  created_at: string;
-}
-
-export interface SupabaseKGFMember {
-  id: string;
-  name: string;
-  fathers_name: string;
-  mobile: string;
-  email: string;
-  joined_at: string;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface SupabaseDailyWisdom {
-  id: string;
-  text_en: string;
-  text_hi: string;
-  author_en?: string;
-  author_hi?: string;
-  updated_at: string;
-=======
-  created_at?: string;
-  updated_at?: string;
-}
-
-export interface FaqQuestion {
-  id: string;
-  name: string;
-  email: string;
-  question: string;
-  answer?: string;
-  status: 'pending' | 'answered' | 'deleted';
-  submittedAt: string;
-  answered_at?: string;
-}
-
-export interface NewsArticle {
-  id: string;
-  title: string;
-  content: string;
-  imageUrl?: string;
-  showInTicker: boolean;
+  isFeatured?: boolean;
+  displayDate?: string;
   createdAt: string;
-  updatedAt?: string;
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
+}
+
+export interface DailyWisdom {
+  quote: WisdomQuote;
+  date: string;
+  isDisplayed: boolean;
+}
+
+export interface Feedback {
+  id: string;
+  userId: string;
+  type: 'general' | 'bug' | 'feature' | 'content';
+  subject: string;
+  message: string;
+  rating?: number;
+  status: 'new' | 'reviewed' | 'resolved';
+  createdAt: string;
+  resolvedAt?: string;
+  resolvedBy?: string;
+}
+
+export interface AdminActivityLog {
+  id: string;
+  userId: string;
+  action: string;
+  details: any;
+  ipAddress?: string;
+  userAgent?: string;
+  createdAt: string;
+}
+
+export interface SystemHealth {
+  database: 'healthy' | 'warning' | 'error';
+  storage: 'healthy' | 'warning' | 'error';
+  auth: 'healthy' | 'warning' | 'error';
+  lastChecked: string;
+}
+
+export interface ApiResponse<T> {
+  data: T;
+  success: boolean;
+  message?: string;
+  error?: string;
+}
+
+export interface PaginatedResponse<T> {
+  data: T[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface FilterOptions {
+  search?: string;
+  category?: string;
+  status?: string;
+  dateFrom?: string;
+  dateTo?: string;
+  sortBy?: string;
+  sortOrder?: 'asc' | 'desc';
+}
+
+export interface DashboardStats {
+  totalUsers: number;
+  totalOrders: number;
+  totalBooks: number;
+  totalPhotos: number;
+  totalVideos: number;
+  totalNews: number;
+  recentActivity: AdminActivityLog[];
+  systemHealth: SystemHealth;
 }

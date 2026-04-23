@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-import { useState } from 'react';
-=======
 import { useState, useEffect } from 'react';
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -20,12 +16,6 @@ import {
   Wifi, 
   Zap, 
   Eye, 
-<<<<<<< HEAD
-  EyeOff 
-} from 'lucide-react';
-import { useSupabaseAdminAuth } from '@/lib/supabase-admin-auth';
-
-=======
   EyeOff,
   Activity,
   TrendingUp,
@@ -37,7 +27,6 @@ import { useSupabaseAdminAuth } from '@/lib/supabase-admin-auth';
   Youtube
 } from 'lucide-react';
 import { createClient } from '@/lib/supabase';
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
 
 const adminSections = [
   {
@@ -75,29 +64,11 @@ const adminSections = [
       { name: 'Google Forms', href: '/admin/google-forms', icon: Globe },
       { name: 'Worksheet', href: '/admin/worksheet', icon: Settings },
       { name: 'Live Satsang', href: '/admin/live-satsang', icon: Wifi },
-<<<<<<< HEAD
-=======
       { name: 'YouTube Automation', href: '/admin/youtube-automation', icon: Youtube },
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
     ]
   }
 ];
 
-<<<<<<< HEAD
-export default function AdminDashboard() {
-  const router = useRouter();
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
-const { logout } = useSupabaseAdminAuth();
-
-
-  const handleLogout = async () => {
-    setIsLoggingOut(true);
-    try {
-      logout();
-      router.push('/admin/login');
-    } catch (error) {
-      console.error('Logout error:', error);
-=======
 interface DashboardStats {
   totalUsers: number;
   totalOrders: number;
@@ -135,12 +106,6 @@ export default function AdminDashboard() {
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
   const [currentUser, setCurrentUser] = useState<any>(null);
-  const [notifications, setNotifications] = useState<Array<{
-    id: string;
-    message: string;
-    type: 'info' | 'warning' | 'error' | 'success';
-    timestamp: string;
-  }>>([]);
 
   // Load dashboard data
   const loadDashboardData = async () => {
@@ -264,18 +229,11 @@ export default function AdminDashboard() {
       localStorage.removeItem('moolgyan_admin');
       localStorage.removeItem('moolgyan_admin_session');
       router.push('/admin/login');
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
     } finally {
       setIsLoggingOut(false);
     }
   };
 
-<<<<<<< HEAD
-  const handleSectionClick = (href: string) => {
-    router.push(href);
-  };
-
-=======
   // Handle section click with activity logging
   const handleSectionClick = async (href: string, sectionName: string) => {
     try {
@@ -369,7 +327,6 @@ export default function AdminDashboard() {
     );
   }
 
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black">
       {/* Header */}
@@ -391,8 +348,6 @@ export default function AdminDashboard() {
                 <Eye className="w-4 h-4" />
                 <span>Secure Admin Area</span>
               </div>
-<<<<<<< HEAD
-=======
               
               <Button
                 variant="outline"
@@ -404,29 +359,18 @@ export default function AdminDashboard() {
                 Refresh
               </Button>
               
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
               <Button
                 variant="outline"
                 onClick={handleLogout}
                 disabled={isLoggingOut}
                 className="border-gray-300 text-gray-700 hover:bg-gray-50 font-semibold"
               >
-<<<<<<< HEAD
-                <div>
-=======
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
                 {isLoggingOut ? (
                   <><LogOut className="w-4 h-4 mr-2 animate-spin" /> Logging out...</>
                 ) : (
                   <><LogOut className="w-4 h-4 mr-2" /> Logout</>
                 )}
-<<<<<<< HEAD
-                </div>
               </Button>
-
-=======
-              </Button>
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
             </div>
           </div>
         </div>
@@ -438,11 +382,6 @@ export default function AdminDashboard() {
         <div className="mb-8">
           <h2 className="text-3xl font-bold text-white mb-2">Welcome to Admin Panel</h2>
           <p className="text-gray-400">Manage your app content, users, and system settings from here.</p>
-<<<<<<< HEAD
-        </div>
-
-        {/* Quick Actions */}
-=======
           {currentUser && (
             <p className="text-gray-500 text-sm mt-2">
               Logged in as: {currentUser.email} | Session active
@@ -502,7 +441,6 @@ export default function AdminDashboard() {
         </div>
 
         {/* Admin Sections */}
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           {adminSections.map((section) => {
             const Icon = section.icon;
@@ -531,11 +469,7 @@ export default function AdminDashboard() {
                         <Button
                           key={item.name}
                           variant="outline"
-<<<<<<< HEAD
-                          onClick={() => handleSectionClick(item.href)}
-=======
                           onClick={() => handleSectionClick(item.href, item.name)}
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
                           className="justify-start font-medium text-gray-700 hover:bg-gray-50"
                         >
                           <ItemIcon className="w-4 h-4 mr-2" />
@@ -550,8 +484,6 @@ export default function AdminDashboard() {
           })}
         </div>
 
-<<<<<<< HEAD
-=======
         {/* System Status and Recent Activity */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* System Status */}
@@ -630,7 +562,6 @@ export default function AdminDashboard() {
           </Card>
         </div>
 
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
         {/* Security Information */}
         <Card className="bg-white">
           <CardHeader>
@@ -669,16 +600,9 @@ export default function AdminDashboard() {
         {/* Footer */}
         <div className="mt-8 text-center text-gray-500 text-sm">
           <p>For security, always log out when finished. Contact support if you need assistance.</p>
-<<<<<<< HEAD
-=======
           <p className="mt-2">Last refresh: {new Date().toLocaleString()}</p>
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470
         </div>
       </main>
     </div>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 3597762b9e5db8060f8269f3940bef17efa0d470

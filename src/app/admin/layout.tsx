@@ -9,39 +9,17 @@ import { User, LogOut, Zap, Loader2, RotateCcw } from 'lucide-react';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
 
-export default function AdminLayout({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname();
-  const { checkSession, isAuthenticated, logout, isLoading, user } = useAdminAuth();
+// Separate component for authenticated admin layout
+function AuthenticatedAdminLayout({ children, user, logout }: { 
+  children: React.ReactNode; 
+  user: any; 
+  logout: () => Promise<void> 
+}) {
   const [notifications, setNotifications] = useState(0); // realtime
-
-  useEffect(() => {
-    checkSession();
-  }, []);
 
   const handleLogout = async () => {
     await logout();
   };
-
-  // Loading - middleware already checked server-side
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-950 flex items-center justify-center">
-        <div className="text-center">
-          <div className="inline-flex items-center rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 p-4 shadow-xl">
-            <Loader2 className="h-12 w-12 animate-spin text-white mr-4" />
-            <div>
-              <h2 className="text-2xl font-bold text-white mb-2">Portal Loading</h2>
-              <p className="text-slate-300">Quantum sync in progress...</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (!isAuthenticated) {
-    return <div>Access Denied (Middleware should block)</div>; // fallback
-  }
 
   return (
     <div className="flex h-screen bg-gradient-to-br from-slate-900 via-slate-900/50 to-slate-950 text-white overflow-hidden">
@@ -86,4 +64,45 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </div>
     </div>
   );
+}
+
+export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const { checkSession, isAuthenticated, logout, isLoading, user } = useAdminAuth();
+
+  useEffect(() => {
+    if (pathname !== '/admin/login') {
+      checkSession();
+    }
+  }, [pathname]);
+
+  // For login page, just render children without any auth logic
+  if (pathname === '/admin/login') {
+    return <>{children}</>;
+  }
+
+  // Loading state for other admin pages
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-950 flex items-center justify-center">
+        <div className="text-center">
+          <div className="inline-flex items-center rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 p-4 shadow-xl">
+            <Loader2 className="h-12 w-12 animate-spin text-white mr-4" />
+            <div>
+              <h2 className="text-2xl font-bold text-white mb-2">Portal Loading</h2>
+              <p className="text-slate-300">Quantum sync in progress...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Fallback access denied for other admin pages
+  if (!isAuthenticated) {
+    return <div>Access Denied (Middleware should block)</div>;
+  }
+
+  // Render authenticated layout for other admin pages
+  return <AuthenticatedAdminLayout children={children} user={user} logout={logout} />;
 }

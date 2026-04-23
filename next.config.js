@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const withPWA = require('next-pwa')({
   dest: 'dist',
-  register: true,
-  skipWaiting: true,
-  disable: process.env.NODE_ENV === 'development',
+  register: false, // Disable registration
+  skipWaiting: false, // Disable skip waiting
+  disable: true, // Completely disable PWA temporarily
   buildExcludes: [/middleware-manifest\.json$/],
 });
 
@@ -14,7 +14,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   productionBrowserSourceMaps: false,
-  output: 'export',
+  // output: 'export', // Commented out to allow CSP headers
 
   images: {
     remotePatterns: [
@@ -53,7 +53,7 @@ const nextConfig = {
         headers: [
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'unsafe-hashes' chrome-extension:; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://lqymwrhfirszrakuevqm.supabase.co https://www.googleapis.com https://i.ytimg.com; frame-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';"
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'unsafe-hashes' chrome-extension:; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://lqymwrhfirszrakuevqm.supabase.co wss://lqymwrhfirszrakuevqm.supabase.co https://www.googleapis.com https://i.ytimg.com; frame-src 'self' https://www.youtube.com https://youtube.com https://youtu.be; object-src 'none'; base-uri 'self'; form-action 'self';"
           }
         ]
       }

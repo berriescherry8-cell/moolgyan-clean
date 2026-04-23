@@ -7,7 +7,7 @@ export interface YouTubeVideo {
   publishedAt: string;
 }
 
-const YOUTUBE_API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY || 'AIzaSyBu3BhPoa28k5WtPPHiHll8wG2YlasivP8';
+const YOUTUBE_API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY || 'AIzaSyAI06x00qzKKtlUeGQmrezUIKKgtOW7284';
 const YOUTUBE_API_URL = 'https://www.googleapis.com/youtube/v3';
 
 export async function getYouTubePlaylist(playlistId: string): Promise<YouTubeVideo[]> {

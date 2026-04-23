@@ -4,7 +4,6 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { SidebarTrigger } from '@/components/ui/sidebar';
 import { Button } from '@/components/ui/button';
-import LanguageSwitcher from '@/components/LanguageSwitcher';
 import { useLocale } from '@/lib/i18n';
 import { Menu } from 'lucide-react';
 import { useAdminAuthStore } from '@/lib/adminAuthStore';
@@ -47,10 +46,7 @@ export default function Header() {
         <Button asChild size="sm" className="bg-amber-500 text-black hover:bg-amber-600 hidden sm:flex">
           <Link href="/deeksha-aavedan">दीक्षा आवेदन</Link>
         </Button>
-
-        <LanguageSwitcher />
       </div>
     </header>
   );
 }
-
