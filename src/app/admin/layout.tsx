@@ -71,13 +71,14 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const { checkSession, isAuthenticated, logout, isLoading, user } = useAdminAuth();
 
   useEffect(() => {
-    if (pathname !== '/admin/login') {
+    if (pathname !== '/admin/login' && pathname !== '/admin/login/') {
       checkSession();
     }
   }, [pathname]);
 
   // For login page, just render children without any auth logic
-  if (pathname === '/admin/login') {
+  // NOTE: trailingSlash: true in next.config makes pathname '/admin/login/'
+  if (pathname === '/admin/login' || pathname === '/admin/login/') {
     return <>{children}</>;
   }
 

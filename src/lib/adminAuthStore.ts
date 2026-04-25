@@ -27,34 +27,57 @@ export const useAdminAuthStore = create<AdminAuthState>((set) => ({
   
   checkAuth: async () => {
     if (typeof window === 'undefined') return;
-    
+
     set({ isLoading: true });
-    
+
     try {
+      // Check for fallback auth first (static export mode)
+      const fallbackAuth = localStorage.getItem('moolgyan_fallback_auth');
+      const fallbackEmail = localStorage.getItem('moolgyan_admin');
+      const fallbackSession = localStorage.getItem('moolgyan_admin_session');
+
+      if (fallbackAuth === 'true' && fallbackEmail && fallbackSession) {
+        // Validate session hasn't expired (24 hours)
+        const sessionAge = Date.now() - parseInt(fallbackSession);
+        if (sessionAge < 24 * 60 * 60 * 1000 && ADMIN_EMAILS.includes(fallbackEmail)) {
+          set({
+            isAuthenticated: true,
+            user: { email: fallbackEmail, id: 'fallback-user' },
+            isLoading: false,
+          });
+          return;
+        } else {
+          // Session expired, clear it
+          localStorage.removeItem('moolgyan_fallback_auth');
+          localStorage.removeItem('moolgyan_admin');
+          localStorage.removeItem('moolgyan_admin_session');
+        }
+      }
+
       const supabase = createClient();
       if (!supabase) {
         set({ isAuthenticated: false, user: null, isLoading: false });
         return;
       }
-      
+
       const { data: { user }, error } = await supabase.auth.getUser();
-      
+
       if (error || !user) {
         set({ isAuthenticated: false, user: null, isLoading: false });
         return;
       }
-      
+
       // Check if user email is in admin list
       if (!ADMIN_EMAILS.includes(user.email || '')) {
         await supabase.auth.signOut();
         set({ isAuthenticated: false, user: null, isLoading: false });
         return;
       }
-      
-      set({ 
-        isAuthenticated: true, 
+
+      set({
+        isAuthenticated: true,
         user: { email: user.email, id: user.id },
-        isLoading: false 
+        isLoading: false,
       });
     } catch (err) {
       set({ isAuthenticated: false, user: null, isLoading: false });
@@ -113,7 +136,12 @@ export const useAdminAuthStore = create<AdminAuthState>((set) => ({
   
   signOut: async () => {
     if (typeof window === 'undefined') return;
-    
+
+    // Clear fallback auth
+    localStorage.removeItem('moolgyan_fallback_auth');
+    localStorage.removeItem('moolgyan_admin');
+    localStorage.removeItem('moolgyan_admin_session');
+
     try {
       const supabase = createClient();
       if (supabase) {
@@ -122,10 +150,10 @@ export const useAdminAuthStore = create<AdminAuthState>((set) => ({
     } catch (err) {
       // Ignore errors during sign out
     }
-    
-    set({ 
-      isAuthenticated: false, 
-      user: null 
+
+    set({
+      isAuthenticated: false,
+      user: null,
     });
   }
 }));

@@ -1,6 +1,6 @@
 {
   "packageId": "com.moolgyan.app",
-  "host": "studio--studio-9813085306-ab851.us-central1.hosted.app",
+"host": "mool-gyan-app.berriescherry8.workers.dev",
   "name": "Mool Gyan",
   "launcherName": "Mool Gyan",
   "display": "standalone",
@@ -10,7 +10,7 @@
   "backgroundColor": "#000000",
   "enableNotifications": true,
   "startUrl": "/",
-  "iconUrl": "https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/app%20logo%20and%20screenshots%2FWhatsApp_Image_2025-12-30_at_11.37.03_PM-removebg-preview.png?alt=media&token=61622b81-ce46-4fc9-a82e-10f35cf44ff4",
+"iconUrl": "https://lqymwrhfirszrakuevqm.supabase.co/storage/v1/object/public/moolgyan-media/App_logo_QR/icon-512.png",
   "splashScreenFadeOutDuration": 300,
   "signingKey": {
     "path": "./android.keystore",
@@ -20,7 +20,7 @@
   "appVersionCode": 6,
   "shortcuts": [],
   "generatorApp": "bubblewrap-cli",
-  "webManifestUrl": "https://studio--studio-9813085306-ab851.us-central1.hosted.app/manifest.json",
+"webManifestUrl": "https://mool-gyan-app.berriescherry8.workers.dev/manifest.json",
   "fallbackType": "customtabs",
   "features": {},
   "alphaDependencies": {
