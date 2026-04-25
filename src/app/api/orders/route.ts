@@ -1,17 +1,24 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
 
-// Use service role key for server-side operations (bypasses RLS)
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+function getSupabase() {
+  const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) {
+    return null;
+  }
+  return createClient(url, key);
+}
 
 export async function POST(request: NextRequest) {
+  const supabase = getSupabase();
+  if (!supabase) {
+    return NextResponse.json({ error: 'Database not configured' }, { status: 500 });
+  }
+
   try {
     const orderData = await request.json();
 
-    // Validation
     const requiredFields = ['bookId', 'bookTitle', 'bookPrice', 'customerName', 'mobile', 'address', 'pinCode', 'quantity'];
     for (const field of requiredFields) {
       if (!orderData[field]) {
@@ -19,17 +26,14 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Mobile validation
     if (!/^[6-9]\d{9}$/.test(orderData.mobile)) {
       return NextResponse.json({ error: 'Invalid mobile number (10 digits starting 6-9)' }, { status: 400 });
     }
 
-    // Pin code validation
     if (!/^\d{6}$/.test(orderData.pinCode)) {
       return NextResponse.json({ error: 'Invalid pin code (6 digits)' }, { status: 400 });
     }
 
-    // Quantity validation
     if (orderData.quantity < 10 || orderData.quantity > 2000) {
       return NextResponse.json({ error: 'Quantity must be 10-2000' }, { status: 400 });
     }
@@ -70,3 +74,4 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
+

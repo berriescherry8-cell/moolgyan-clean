@@ -1,48 +1,23 @@
-import { createBrowserClient, createServerClient } from '@supabase/ssr'
-import { cookies } from 'next/headers'
+import { createServerClient } from '@supabase/ssr'
 
-// 👉 Client (browser)
-export function createClient() {
-  return createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      auth: {
-        persistSession: true,
-      }
-    }
-  )
-}
+const getUrl = () => process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+const getKey = () => process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 
-// 👉 Server (for middleware + server components)
-export function createServerSupabase(req?: any) {
-  if (req) {
-    // middleware usage
-    return createServerClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-      {
-        cookies: {
-          get(name: string) {
-            return req.cookies.get(name)?.value
-          },
-        },
-      }
-    )
+// 👉 Server (for middleware only)
+export function createServerSupabase(req: any) {
+  const url = getUrl()
+  const key = getKey()
+  if (!url || !key) {
+    console.warn('Supabase env vars missing - cannot create server client')
+    return null
   }
 
-  // server components
-  const cookieStore = cookies()
-
-  return createServerClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
-    {
-      cookies: {
-        get(name: string) {
-          return cookieStore.get(name)?.value
-        },
+  return createServerClient(url, key, {
+    cookies: {
+      get(name: string) {
+        return req.cookies.get(name)?.value
       },
-    }
-  )
+    },
+  })
 }
+
