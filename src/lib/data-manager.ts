@@ -3,6 +3,7 @@
 import { createBrowserClient } from '@supabase/ssr';
 import { useEffect, useState, useCallback } from 'react';
 import type { DailyWisdom } from './types';
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from './supabase-config';
 
 // Get Supabase client
 export const getSupabase = () => {
@@ -10,16 +11,8 @@ export const getSupabase = () => {
     console.warn('Supabase client called server-side');
     return null;
   }
-  
-  if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-    console.warn('Supabase env vars missing - cannot create browser client');
-    return null;
-  }
 
-  return createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-  );
+  return createBrowserClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 };
 
 // Map camelCase collection names to snake_case table names
@@ -378,3 +371,4 @@ export function useDocument<T>(collection: string, id: string): T | null {
 
   return data;
 }
+

@@ -3,16 +3,16 @@
 import { useState } from 'react';
 import { createClient } from '@/lib/supabase';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, LogIn } from 'lucide-react';
+import { Loader2, LogIn, Shield, Eye, EyeOff } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const { toast } = useToast();
@@ -35,21 +35,25 @@ export default function LoginPage() {
           description: error.message,
         });
       } else {
-        // Check if admin
+        // Check admin role from profile
         const { data: { session } } = await supabase.auth.getSession();
-        if (session?.user?.email && [
-          'sharmadevendra715@gmail.com',
-          'kpdeora1986@gmail.com',
-          'berriescherry8@gmail.com'
-        ].includes(session.user.email)) {
-          router.push('/admin');
-        } else {
-          toast({
-            variant: 'destructive',
-            title: 'Access Denied',
-            description: 'Admin access only.',
-          });
-          await supabase.auth.signOut();
+        if (session?.user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', session.user.id)
+            .single();
+
+          if (profile?.role === 'admin') {
+            router.push('/admin');
+          } else {
+            toast({
+              variant: 'destructive',
+              title: 'Access Denied',
+              description: 'Admin access only.',
+            });
+            await supabase.auth.signOut();
+          }
         }
       }
     } catch (error) {
@@ -68,7 +72,7 @@ export default function LoginPage() {
       <Card className="w-full max-w-md glass-card">
         <CardHeader className="space-y-1 text-center">
           <div className="w-16 h-16 bg-gradient-to-r from-primary to-yellow-400 rounded-xl flex items-center justify-center mx-auto mb-4">
-            <LogIn className="w-8 h-8 text-black" />
+            <Shield className="w-8 h-8 text-black" />
           </div>
           <CardTitle className="text-2xl">Admin Login</CardTitle>
           <CardDescription>Enter your credentials to access admin panel</CardDescription>
@@ -82,20 +86,30 @@ export default function LoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@example.com"
+                placeholder="Enter your email"
                 required
               />
             </div>
-            <div className="space-y-2">
+            <div className="space-y-2 relative">
               <label htmlFor="password" className="text-sm font-medium">Password</label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-                required
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter your password"
+                  required
+                  className="pr-10"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
               {isLoading ? (
@@ -104,11 +118,9 @@ export default function LoginPage() {
               {isLoading ? 'Signing in...' : 'Sign In'}
             </Button>
           </form>
-          <div className="mt-6 text-center text-sm text-white/50">
-            Use admin credentials only
-          </div>
         </CardContent>
       </Card>
     </div>
   );
 }
+

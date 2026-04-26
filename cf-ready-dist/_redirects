@@ -1,6 +1,0 @@
-# Allow Digital Asset Links to be served properly
-/.well-known/*    /.well-known/:splat         200!
-
-# SPA fallback for Next.js static export
-# Redirect all requests to index.html unless file exists
-/*    /index.html   200
