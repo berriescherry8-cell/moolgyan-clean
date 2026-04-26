@@ -1,330 +1,459 @@
-
 'use client';
 
-import { useState, useEffect } from 'react';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Loader2, Trash2, Printer, CheckCircle, XCircle } from 'lucide-react';
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { 
+  ShoppingCart, 
+  Package, 
+  User, 
+  Mail, 
+  Phone, 
+  MapPin, 
+  Calendar,
+  DollarSign,
+  Truck,
+  CheckCircle,
+  Clock,
+  XCircle,
+  Search,
+  Filter,
+  Eye,
+  Edit,
+  Download
+} from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
-import { cn } from '@/lib/utils';
-import { supabase } from '@/lib/supabase';
+import { useCollection } from '@/lib/data-manager';
+import type { Order } from '@/lib/types';
+import { getSupabase } from '@/lib/data-manager';
 
-type Order = {
-  id: string;
-  order_date: string;
-  status: string;
-  name: string;
-  mobile: string;
-  address: string;
-  pincode: string;
-  book_title: string;
-  quantity: number;
-  created_at: string;
-  updated_at: string;
-};
-
-export default function OrdersPage() {
+export default function OrdersManagementPage() {
   const { toast } = useToast();
-  const [isProcessing, setIsProcessing] = useState<string | null>(null);
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [processingId, setProcessingId] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [filterPayment, setFilterPayment] = useState<string>('all');
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
 
-  useEffect(() => {
-    // Load orders from Supabase
-    fetchOrders();
-  }, []);
+  const orders = useCollection<Order>('orders');
 
-  const fetchOrders = async () => {
+  const statusOptions = [
+    { value: 'pending', label: 'Pending', color: 'bg-yellow-100 text-yellow-800' },
+    { value: 'confirmed', label: 'Confirmed', color: 'bg-blue-100 text-blue-800' },
+    { value: 'shipped', label: 'Shipped', color: 'bg-purple-100 text-purple-800' },
+    { value: 'delivered', label: 'Delivered', color: 'bg-green-100 text-green-800' },
+    { value: 'cancelled', label: 'Cancelled', color: 'bg-red-100 text-red-800' }
+  ];
+
+  const paymentOptions = [
+    { value: 'pending', label: 'Pending', color: 'bg-yellow-100 text-yellow-800' },
+    { value: 'paid', label: 'Paid', color: 'bg-green-100 text-green-800' },
+    { value: 'failed', label: 'Failed', color: 'bg-red-100 text-red-800' },
+    { value: 'refunded', label: 'Refunded', color: 'bg-gray-100 text-gray-800' }
+  ];
+
+  const filteredOrders = orders?.filter(order => {
+    const matchesSearch = order.customer_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         order.customer_email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         order.book_title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         order.customer_phone?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = filterStatus === 'all' || order.status === filterStatus;
+    const matchesPayment = filterPayment === 'all' || order.payment_status === filterPayment;
+    return matchesSearch && matchesStatus && matchesPayment;
+  }) || [];
+
+  const handleUpdateStatus = async (orderId: string, newStatus: string) => {
+    setProcessingId(orderId);
     try {
-      const { data, error } = await supabase
-        .from('orders')
-        .select('*')
-        .order('order_date', { ascending: false });
+      const supabase = getSupabase();
+      if (!supabase) throw new Error('Supabase client not available');
 
-      if (error) {
-        throw error;
-      }
+      await supabase.from('orders').update({
+        status: newStatus,
+        updated_at: new Date().toISOString()
+      }).eq('id', orderId);
 
-      setOrders(data || []);
-    } catch (error) {
-      console.error('Error fetching orders:', error);
-      toast({
-        title: "Error",
-        description: "Failed to fetch orders",
-        variant: "destructive",
+      toast({ 
+        title: 'Success', 
+        description: `Order status updated to ${newStatus}` 
       });
+    } catch (error: any) {
+      console.error('Update status error:', error);
+      toast({ 
+        variant: 'destructive', 
+        title: 'Update Failed', 
+        description: error.message || 'Failed to update order status' 
+      });
+    } finally {
+      setProcessingId(null);
     }
   };
 
-  // Google Sheet link for admin
-  const googleSheetUrl = 'https://docs.google.com/spreadsheets/d/1lA2c6iX0r1x0HGJcnPDeDVNBLnU5UDbhpAv8ub7unU8/edit?usp=sharing';
-
-  const handleToggleOrderStatus = async (order: Order) => {
-    setIsProcessing(order.id);
-    const newStatus = order.status === 'completed' ? 'pending' : 'completed';
-    const newStatusVerb = newStatus === 'completed' ? 'Completed' : 'Marked as Pending';
-    const newStatusPast = newStatus === 'completed' ? 'completed' : 'pending';
-
+  const handleUpdatePaymentStatus = async (orderId: string, newPaymentStatus: string) => {
+    setProcessingId(orderId);
     try {
-      // Update status in Supabase
-      const { error } = await supabase
-        .from('orders')
-        .update({ status: newStatus })
-        .eq('id', order.id);
+      const supabase = getSupabase();
+      if (!supabase) throw new Error('Supabase client not available');
 
-      if (error) {
-        throw error;
-      }
+      await supabase.from('orders').update({
+        payment_status: newPaymentStatus,
+        updated_at: new Date().toISOString()
+      }).eq('id', orderId);
 
-      // Update local state
-      setOrders(prev => prev.map(o =>
-        o.id === order.id ? { ...o, status: newStatus } : o
-      ));
-      
-      toast({
-        title: `Order ${newStatusVerb}`,
-        description: `Order for ${order.name} has been marked as ${newStatusPast}.`,
+      toast({ 
+        title: 'Success', 
+        description: `Payment status updated to ${newPaymentStatus}` 
       });
-      setIsProcessing(null);
-    } catch (e: any) {
-      console.error(`Error changing order status to ${newStatus}:`, e);
-      toast({
-        variant: "destructive",
-        title: "Update Failed",
-        description: e.message || "Could not update the order. Please try again.",
+    } catch (error: any) {
+      console.error('Update payment error:', error);
+      toast({ 
+        variant: 'destructive', 
+        title: 'Update Failed', 
+        description: error.message || 'Failed to update payment status' 
       });
-      setIsProcessing(null);
+    } finally {
+      setProcessingId(null);
     }
   };
 
-  const handleDeleteOrder = async (orderId: string) => {
-    setIsProcessing(orderId);
-    try {
-      // Delete from Supabase
-      const { error } = await supabase
-        .from('orders')
-        .delete()
-        .eq('id', orderId);
-
-      if (error) {
-        throw error;
-      }
-
-      // Update local state
-      setOrders(prev => prev.filter(o => o.id !== orderId));
-      toast({
-        title: 'Order Deleted',
-        description: 'The order has been successfully deleted.',
-      });
-      setIsProcessing(null);
-    } catch (e: any) {
-      console.error("Error deleting order: ", e);
-      toast({
-        variant: "destructive",
-        title: "Deletion Failed",
-        description: e.message || "Could not delete the order. Please try again.",
-      });
-      setIsProcessing(null);
-    }
+  const getStatusBadge = (status: string) => {
+    const option = statusOptions.find(opt => opt.value === status);
+    return (
+      <Badge className={option?.color || 'bg-gray-100 text-gray-800'}>
+        {option?.label || status}
+      </Badge>
+    );
   };
 
-  const handlePrintReceipt = (order: Order) => {
-    const printWindow = window.open('', '', 'height=600,width=800');
-    if (printWindow) {
-      printWindow.document.write('<html><head><title>Order Receipt</title>');
-      printWindow.document.write('<style>body{font-family:sans-serif;padding:2rem}div{border:1px solid #ccc;padding:1rem;border-radius:0.5rem}h2,h3{margin-bottom:0.5rem}p{margin:0.25rem 0}</style>');
-      printWindow.document.write('</head><body>');
-      printWindow.document.write('<div>');
-      printWindow.document.write(`<h2>Order Receipt</h2>`);
-      printWindow.document.write(`<p><strong>Order Date:</strong> ${new Date(order.order_date).toLocaleString()}</p>`);
-      printWindow.document.write(`<p><strong>Status:</strong> ${order.status}</p>`);
-      printWindow.document.write('<h3>Customer Details:</h3>');
-      printWindow.document.write(`<p><strong>Name:</strong> ${order.name}</p>`);
-      printWindow.document.write(`<p><strong>Mobile:</strong> ${order.mobile}</p>`);
-      printWindow.document.write(`<p><strong>Address:</strong> ${order.address}, ${order.pincode}</p>`);
-      printWindow.document.write('<h3>Order Details:</h3>');
-      printWindow.document.write(`<p><strong>Book:</strong> ${order.book_title}</p>`);
-      printWindow.document.write(`<p><strong>Quantity:</strong> ${order.quantity}</p>`);
-      printWindow.document.write('</div>');
-      printWindow.document.write('</body></html>');
-      printWindow.document.close();
-      printWindow.print();
-    }
+  const getPaymentBadge = (paymentStatus: string) => {
+    const option = paymentOptions.find(opt => opt.value === paymentStatus);
+    return (
+      <Badge className={option?.color || 'bg-gray-100 text-gray-800'}>
+        {option?.label || paymentStatus}
+      </Badge>
+    );
   };
 
-  const getStatusVariant = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'completed':
-        return 'default';
+  const getStatusIcon = (status: string) => {
+    switch (status) {
       case 'pending':
-        return 'secondary';
+        return <Clock className="h-4 w-4" />;
+      case 'confirmed':
+        return <CheckCircle className="h-4 w-4" />;
+      case 'shipped':
+        return <Truck className="h-4 w-4" />;
+      case 'delivered':
+        return <Package className="h-4 w-4" />;
       case 'cancelled':
-        return 'destructive';
+        return <XCircle className="h-4 w-4" />;
       default:
-        return 'outline';
+        return <Clock className="h-4 w-4" />;
     }
   };
+
+  const totalRevenue = filteredOrders
+    .filter(order => order.payment_status === 'paid')
+    .reduce((sum, order) => sum + (order.total_price || 0), 0);
+
+  const pendingOrders = filteredOrders.filter(order => order.status === 'pending').length;
+  const paidOrders = filteredOrders.filter(order => order.payment_status === 'paid').length;
 
   return (
     <div className="space-y-6">
-      {/* Google Sheet Link for Admin */}
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">Orders Management</h1>
+          <p className="text-muted-foreground">Manage customer orders and payments</p>
+        </div>
+        <Button variant="outline" onClick={() => window.open('/orders/export', '_blank')}>
+          <Download className="h-4 w-4 mr-2" />
+          Export Orders
+        </Button>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Total Orders</p>
+                <p className="text-2xl font-bold">{filteredOrders.length}</p>
+              </div>
+              <div className="p-3 rounded-full bg-blue-50">
+                <ShoppingCart className="h-6 w-6 text-blue-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Pending Orders</p>
+                <p className="text-2xl font-bold">{pendingOrders}</p>
+              </div>
+              <div className="p-3 rounded-full bg-yellow-50">
+                <Clock className="h-6 w-6 text-yellow-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Paid Orders</p>
+                <p className="text-2xl font-bold">{paidOrders}</p>
+              </div>
+              <div className="p-3 rounded-full bg-green-50">
+                <CheckCircle className="h-6 w-6 text-green-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-muted-foreground">Total Revenue</p>
+                <p className="text-2xl font-bold text-green-600">${totalRevenue.toFixed(2)}</p>
+              </div>
+              <div className="p-3 rounded-full bg-green-50">
+                <DollarSign className="h-6 w-6 text-green-600" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Search and Filter */}
       <Card>
-        <CardHeader>
-          <CardTitle className="text-xl">Order Data Sheet</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground mb-4">
-            All orders are stored in Google Sheet. Click the button below to view and manage orders.
-          </p>
-          <div className="flex gap-3">
-            <Button 
-              onClick={() => window.open(googleSheetUrl, '_blank')}
-              className="bg-green-600 hover:bg-green-700 text-white"
-            >
-              Open Google Sheet
-            </Button>
-            <Button 
-              variant="outline"
-              onClick={() => {
-                navigator.clipboard.writeText(googleSheetUrl);
-                toast({ title: "Link copied to clipboard!" });
-              }}
-            >
-              Copy Sheet Link
-            </Button>
+        <CardContent className="p-4">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Search orders..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+            </div>
+            <Select value={filterStatus} onValueChange={setFilterStatus}>
+              <SelectTrigger className="w-full md:w-48">
+                <Filter className="h-4 w-4 mr-2" />
+                <SelectValue placeholder="Filter by status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Status</SelectItem>
+                {statusOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={filterPayment} onValueChange={setFilterPayment}>
+              <SelectTrigger className="w-full md:w-48">
+                <SelectValue placeholder="Filter by payment" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Payment Status</SelectItem>
+                {paymentOptions.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
-          <p className="text-xs text-muted-foreground mt-3">
-            Note: Orders submitted through Google Form are automatically saved to this sheet.
-          </p>
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="font-headline text-3xl">All Orders</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <TooltipProvider>
-            {orders && orders.length > 0 ? (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Order Date</TableHead>
-                    <TableHead>Customer</TableHead>
-                    <TableHead>Mobile</TableHead>
-                    <TableHead>Address</TableHead>
-                    <TableHead>Book</TableHead>
-                    <TableHead>Qty</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {orders.sort((a,b) => new Date(b.order_date).getTime() - new Date(a.order_date).getTime()).map((order) => (
-                    <TableRow key={order.id} className={cn(order.status === 'completed' && 'bg-primary/5')}>
-                      <TableCell>{new Date(order.order_date).toLocaleString()}</TableCell>
-                      <TableCell>{order.name}</TableCell>
-                      <TableCell>{order.mobile}</TableCell>
-                      <TableCell>{`${order.address}, ${order.pincode}`}</TableCell>
-                      <TableCell>{order.book_title}</TableCell>
-                      <TableCell>{order.quantity}</TableCell>
-                      <TableCell>
-                        <Badge variant={getStatusVariant(order.status)} className="capitalize">{order.status}</Badge>
-                      </TableCell>
-                      <TableCell className="text-right flex justify-end gap-2">
-                         <Tooltip>
-                          <TooltipTrigger asChild>
-                             <Button
-                               variant="ghost"
-                               size="icon"
-                               onClick={() => handleToggleOrderStatus(order)}
-                               disabled={isProcessing === order.id}
-                             >
-                              {isProcessing === order.id ? (
-                                  <Loader2 className="h-4 w-4 animate-spin"/>
-                              ) : order.status === 'completed' ? (
-                                  <XCircle className="h-4 w-4 text-orange-500" />
-                              ) : (
-                                  <CheckCircle className="h-4 w-4 text-green-500" />
-                              )}
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>{order.status === 'completed' ? 'Mark as Pending' : 'Mark as Complete'}</p>
-                          </TooltipContent>
-                        </Tooltip>
-                         <Tooltip>
-                          <TooltipTrigger asChild>
-                             <Button variant="ghost" size="icon" onClick={() => handlePrintReceipt(order)}>
-                              <Printer className="h-4 w-4 text-muted-foreground" />
-                            </Button>
-                          </TooltipTrigger>
-                          <TooltipContent>
-                            <p>Download Receipt</p>
-                          </TooltipContent>
-                        </Tooltip>
-                        <AlertDialog>
-                          <AlertDialogTrigger asChild>
-                            <Button variant="ghost" size="icon" disabled={!!isProcessing}>
-                              <Trash2 className="h-4 w-4 text-destructive" />
-                            </Button>
-                          </AlertDialogTrigger>
-                          <AlertDialogContent>
-                            <AlertDialogHeader>
-                              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                              <AlertDialogDescription>
-                                This will permanently delete the order for {order.name}. This action cannot be undone.
-                              </AlertDialogDescription>
-                            </AlertDialogHeader>
-                            <AlertDialogFooter>
-                              <AlertDialogCancel>Cancel</AlertDialogCancel>
-                              <AlertDialogAction
-                                onClick={() => handleDeleteOrder(order.id)}
-                                className="bg-destructive hover:bg-destructive/90"
-                              >
-                                {isProcessing === order.id ? <Loader2 className="h-4 w-4 animate-spin" /> : "Delete"}
-                              </AlertDialogAction>
-                            </AlertDialogFooter>
-                          </AlertDialogContent>
-                        </AlertDialog>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            ) : (
-              <div className="text-center py-12">
-                <p className="text-muted-foreground">No orders found.</p>
+      {/* Orders List */}
+      <div className="space-y-4">
+        {filteredOrders.length > 0 ? (
+          <div className="grid gap-4">
+            {filteredOrders.map((order) => (
+              <Card key={order.id}>
+                <CardContent className="p-6">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-4 mb-4">
+                        <h3 className="font-semibold text-lg">{order.customer_name}</h3>
+                        {getStatusBadge(order.status)}
+                        {getPaymentBadge(order.payment_status || 'pending')}
+                      </div>
+                      
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                        <div className="flex items-center text-sm">
+                          <Mail className="h-4 w-4 mr-2 text-gray-400" />
+                          {order.customer_email}
+                        </div>
+                        {order.customer_phone && (
+                          <div className="flex items-center text-sm">
+                            <Phone className="h-4 w-4 mr-2 text-gray-400" />
+                            {order.customer_phone}
+                          </div>
+                        )}
+                        {order.customer_address && (
+                          <div className="flex items-center text-sm">
+                            <MapPin className="h-4 w-4 mr-2 text-gray-400" />
+                            {order.customer_address}
+                          </div>
+                        )}
+                        <div className="flex items-center text-sm">
+                          <Package className="h-4 w-4 mr-2 text-gray-400" />
+                          {order.book_title} × {order.quantity}
+                        </div>
+                        <div className="flex items-center text-sm">
+                          <DollarSign className="h-4 w-4 mr-2 text-gray-400" />
+                          ${order.total_price}
+                        </div>
+                        <div className="flex items-center text-sm">
+                          <Calendar className="h-4 w-4 mr-2 text-gray-400" />
+                          {new Date(order.order_date).toLocaleDateString()}
+                        </div>
+                      </div>
+
+                      {order.notes && (
+                        <div className="mb-4">
+                          <p className="text-sm text-gray-600">
+                            <strong>Notes:</strong> {order.notes}
+                          </p>
+                        </div>
+                      )}
+
+                      <div className="flex items-center gap-2">
+                        <Select
+                          value={order.status}
+                          onValueChange={(value) => handleUpdateStatus(order.id, value)}
+                        >
+                          <SelectTrigger className="w-40">
+                            <div className="flex items-center">
+                              {getStatusIcon(order.status)}
+                              <span className="ml-2">{order.status}</span>
+                            </div>
+                          </SelectTrigger>
+                          <SelectContent>
+                            {statusOptions.map((option) => (
+                              <SelectItem key={option.value} value={option.value}>
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+
+                        <Select
+                          value={order.payment_status || 'pending'}
+                          onValueChange={(value) => handleUpdatePaymentStatus(order.id, value)}
+                        >
+                          <SelectTrigger className="w-40">
+                            <span>{order.payment_status || 'pending'}</span>
+                          </SelectTrigger>
+                          <SelectContent>
+                            {paymentOptions.map((option) => (
+                              <SelectItem key={option.value} value={option.value}>
+                                {option.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setSelectedOrder(order)}
+                        >
+                          <Eye className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        ) : (
+          <Card>
+            <CardContent className="text-center py-12">
+              <ShoppingCart className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+              <h3 className="text-lg font-semibold mb-2">No orders found</h3>
+              <p className="text-gray-500 mb-4">
+                {searchTerm || filterStatus !== 'all' || filterPayment !== 'all' 
+                  ? 'Try adjusting your search or filter criteria' 
+                  : 'No orders have been placed yet'
+                }
+              </p>
+            </CardContent>
+          </Card>
+        )}
+      </div>
+
+      {/* Order Details Modal */}
+      {selectedOrder && (
+        <Card className="fixed inset-0 z-50 bg-white p-6 overflow-auto">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle>Order Details</CardTitle>
+              <Button variant="outline" onClick={() => setSelectedOrder(null)}>
+                ×
+              </Button>
+            </div>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <h4 className="font-semibold mb-2">Customer Information</h4>
+                <div className="space-y-2">
+                  <p><strong>Name:</strong> {selectedOrder.customer_name}</p>
+                  <p><strong>Email:</strong> {selectedOrder.customer_email}</p>
+                  {selectedOrder.customer_phone && (
+                    <p><strong>Phone:</strong> {selectedOrder.customer_phone}</p>
+                  )}
+                  {selectedOrder.customer_address && (
+                    <p><strong>Address:</strong> {selectedOrder.customer_address}</p>
+                  )}
+                </div>
+              </div>
+              
+              <div>
+                <h4 className="font-semibold mb-2">Order Information</h4>
+                <div className="space-y-2">
+                  <p><strong>Book:</strong> {selectedOrder.book_title}</p>
+                  <p><strong>Quantity:</strong> {selectedOrder.quantity}</p>
+                  <p><strong>Total Price:</strong> ${selectedOrder.total_price}</p>
+                  <p><strong>Order Date:</strong> {new Date(selectedOrder.order_date).toLocaleDateString()}</p>
+                  {selectedOrder.delivery_date && (
+                    <p><strong>Delivery Date:</strong> {new Date(selectedOrder.delivery_date).toLocaleDateString()}</p>
+                  )}
+                  <p><strong>Status:</strong> {getStatusBadge(selectedOrder.status)}</p>
+                  <p><strong>Payment Status:</strong> {getPaymentBadge(selectedOrder.payment_status || 'pending')}</p>
+                </div>
+              </div>
+            </div>
+            
+            {selectedOrder.notes && (
+              <div>
+                <h4 className="font-semibold mb-2">Notes</h4>
+                <p className="text-gray-600">{selectedOrder.notes}</p>
               </div>
             )}
-          </TooltipProvider>
-        </CardContent>
-      </Card>
+            
+            <div className="flex gap-2 pt-4">
+              <Button onClick={() => setSelectedOrder(null)}>Close</Button>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

@@ -1,33 +1,73 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import Image from 'next/image';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from '@/components/ui/alert-dialog';
-import { Loader2, Music, Trash2, AlertCircle, FilePenLine, PlusCircle } from 'lucide-react';
-import { VideoPlayer } from '@/components/VideoPlayer';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { 
+  Music, 
+  Upload, 
+  Trash2, 
+  Eye, 
+  Edit, 
+  Loader2, 
+  Plus,
+  Search,
+  Filter,
+  Clock,
+  Play,
+  Pause
+} from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useCollection } from '@/lib/data-manager';
 import type { SatguruBhajan } from '@/lib/types';
-import { dataManager } from '@/lib/data-manager';
+import { getSupabase } from '@/lib/data-manager';
 
-// Video extraction logic (same as in videos page)
-const extractVideoDetails = (input: string): { embedUrl: string; videoId: string } | null => {
+interface BhajanFormData {
+  title: string;
+  description: string;
+  lyrics: string;
+  video_id: string;
+  video_url: string;
+  thumbnail_url: string;
+  duration: number;
+  is_active: boolean;
+  sort_order: number;
+}
+
+export default function SatguruBhajanManagementPage() {
+  const { toast } = useToast();
+  const [processingId, setProcessingId] = useState<string | null>(null);
+  const [editingBhajan, setEditingBhajan] = useState<SatguruBhajan | null>(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [formData, setFormData] = useState<BhajanFormData>({
+    title: '',
+    description: '',
+    lyrics: '',
+    video_id: '',
+    video_url: '',
+    thumbnail_url: '',
+    duration: 0,
+    is_active: true,
+    sort_order: 0
+  });
+
+  const bhajans = useCollection<SatguruBhajan>('satguru_bhajan');
+
+  const extractVideoDetails = (input: string): { embedUrl: string; videoId: string } | null => {
     if (!input || typeof input !== 'string') {
-        return null;
+      return null;
     }
     
     const trimmedInput = input.trim();
     if (!trimmedInput) {
-        return null;
+      return null;
     }
     
     // Handle various YouTube URL formats
@@ -35,8 +75,8 @@ const extractVideoDetails = (input: string): { embedUrl: string; videoId: string
     const idMatch = trimmedInput.match(youtubeIdRegex);
 
     if (idMatch && idMatch[1]) {
-        const videoId = idMatch[1];
-        return { embedUrl: `https://www.youtube.com/embed/${videoId}`, videoId: videoId };
+      const videoId = idMatch[1];
+      return { embedUrl: `https://www.youtube.com/embed/${videoId}`, videoId: videoId };
     }
     
     // Handle direct embed URLs
@@ -44,215 +84,427 @@ const extractVideoDetails = (input: string): { embedUrl: string; videoId: string
     const embedMatch = trimmedInput.match(embedRegex);
     
     if (embedMatch && embedMatch[1]) {
-        const videoId = embedMatch[1];
-        return { embedUrl: `https://www.youtube.com/embed/${videoId}`, videoId: videoId };
+      const videoId = embedMatch[1];
+      return { embedUrl: `https://www.youtube.com/embed/${videoId}`, videoId: videoId };
     }
     
     return null;
-};
+  };
 
-const bhajanSchema = z.object({
-  title: z.string().min(3, 'A title is required.'),
-  videoInput: z.string().refine(val => extractVideoDetails(val) !== null, {
-      message: "Please enter a valid YouTube URL or embed code.",
-  }),
-  description: z.string().optional(),
-  lyrics: z.string().optional(),
-});
-
-type BhajanFormValues = z.infer<typeof bhajanSchema>;
-
-export default function ManageSatguruBhajanPage() {
-  const { toast } = useToast();
-  const [processingId, setProcessingId] = useState<string | null>(null);
-  const [editingBhajan, setEditingBhajan] = useState<SatguruBhajan | null>(null);
-
-  const bhajans = useCollection<SatguruBhajan>('satguruBhajans');
-
-  const form = useForm<BhajanFormValues>({
-    resolver: zodResolver(bhajanSchema),
-    defaultValues: { videoInput: '', title: '', description: '', lyrics: '' },
-  });
+  const filteredBhajans = bhajans?.filter(bhajan => {
+    const matchesSearch = bhajan.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         bhajan.description?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         bhajan.lyrics?.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = filterStatus === 'all' || 
+                         (filterStatus === 'active' && bhajan.is_active) ||
+                         (filterStatus === 'inactive' && !bhajan.is_active);
+    return matchesSearch && matchesStatus;
+  }) || [];
 
   const sortedBhajans = useMemo(() => {
-    return bhajans?.sort((a, b) => new Date(b.uploadDate).getTime() - new Date(a.uploadDate).getTime()) || [];
-  }, [bhajans]);
+    return filteredBhajans?.sort((a, b) => (b.sort_order || 0) - (a.sort_order || 0)) || [];
+  }, [filteredBhajans]);
 
-  const handleSubmit = async (values: BhajanFormValues) => {
-    const details = extractVideoDetails(values.videoInput);
-    if (!details) {
-        toast({ variant: 'destructive', title: 'Invalid Input', description: 'Could not extract a video from the provided text.'});
-        return;
-    }
-    
-    const bhajanData = {
-      id: crypto.randomUUID(),
-      title: values.title,
-      description: values.description || '',
-      lyrics: values.lyrics || '',
-      video_id: details.videoId ?? undefined,
-      video_url: details.embedUrl,
-      upload_date: new Date().toISOString(),
-      thumbnail_url: details.videoId ? `https://i.ytimg.com/vi/${details.videoId}/hqdefault.jpg` : undefined,
-    };
-    
-    try {
-        await dataManager.setDoc('satguruBhajans', bhajanData, bhajanData.id);
-        toast({ title: 'Bhajan Added!', description: `"${values.title}" is now in your bhajan collection.` });
-        form.reset();
-    } catch(e: any) {
-        console.error('Error adding bhajan:', e);
-        toast({ variant: 'destructive', title: 'Add Failed', description: e.message || 'Could not add the bhajan. Please try again.' });
+  const handleVideoUrlChange = (url: string) => {
+    const details = extractVideoDetails(url);
+    if (details) {
+      setFormData(prev => ({
+        ...prev,
+        video_url: details.embedUrl,
+        video_id: details.videoId,
+        thumbnail_url: details.videoId ? `https://i.ytimg.com/vi/${details.videoId}/hqdefault.jpg` : ''
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        video_url: url,
+        video_id: '',
+        thumbnail_url: ''
+      }));
     }
   };
 
-  const handleDelete = async (bhajan: SatguruBhajan) => {
+  const handleSaveBhajan = async () => {
+    if (!formData.title || !formData.video_url) {
+      toast({ variant: 'destructive', title: 'Error', description: 'Title and video URL are required' });
+      return;
+    }
+
+    try {
+      const supabase = getSupabase();
+      if (!supabase) throw new Error('Supabase client not available');
+
+      const bhajanData = {
+        title: formData.title,
+        description: formData.description,
+        lyrics: formData.lyrics,
+        video_id: formData.video_id,
+        video_url: formData.video_url,
+        thumbnail_url: formData.thumbnail_url,
+        duration: formData.duration,
+        is_active: formData.is_active,
+        sort_order: formData.sort_order,
+        updated_at: new Date().toISOString()
+      };
+
+      if (editingBhajan) {
+        await supabase.from('satguru_bhajan').update(bhajanData).eq('id', editingBhajan.id);
+        toast({ title: 'Success', description: 'Bhajan updated successfully' });
+      } else {
+        const newBhajan = {
+          ...bhajanData,
+          id: crypto.randomUUID(),
+          created_at: new Date().toISOString()
+        };
+        await supabase.from('satguru_bhajan').insert(newBhajan);
+        toast({ title: 'Success', description: 'Bhajan added successfully' });
+      }
+
+      setFormData({
+        title: '',
+        description: '',
+        lyrics: '',
+        video_id: '',
+        video_url: '',
+        thumbnail_url: '',
+        duration: 0,
+        is_active: true,
+        sort_order: 0
+      });
+      setEditingBhajan(null);
+    } catch (error: any) {
+      console.error('Save error:', error);
+      toast({ 
+        variant: 'destructive', 
+        title: 'Save Failed', 
+        description: error.message || 'Failed to save bhajan' 
+      });
+    }
+  };
+
+  const handleDeleteBhajan = async (bhajan: SatguruBhajan) => {
     setProcessingId(bhajan.id);
     try {
-      dataManager.deleteDoc('satguruBhajans', bhajan.id);
-      toast({ title: 'Bhajan Deleted', description: 'The bhajan has been permanently removed.' });
-    } catch (e: any) {
-      console.error("Delete error:", e);
-      toast({ variant: 'destructive', title: 'Deletion Failed', description: e.message });
+      const supabase = getSupabase();
+      if (!supabase) throw new Error('Supabase client not available');
+
+      await supabase.from('satguru_bhajan').delete().eq('id', bhajan.id);
+      toast({ title: 'Success', description: 'Bhajan deleted successfully' });
+    } catch (error: any) {
+      console.error('Delete error:', error);
+      toast({ 
+        variant: 'destructive', 
+        title: 'Delete Failed', 
+        description: error.message || 'Failed to delete bhajan' 
+      });
     } finally {
       setProcessingId(null);
     }
   };
 
+  const handleToggleActive = async (bhajan: SatguruBhajan) => {
+    try {
+      const supabase = getSupabase();
+      if (!supabase) throw new Error('Supabase client not available');
+
+      await supabase.from('satguru_bhajan').update({
+        is_active: !bhajan.is_active,
+        updated_at: new Date().toISOString()
+      }).eq('id', bhajan.id);
+
+      toast({ 
+        title: 'Success', 
+        description: `Bhajan ${bhajan.is_active ? 'deactivated' : 'activated'}` 
+      });
+    } catch (error: any) {
+      console.error('Toggle active error:', error);
+      toast({ 
+        variant: 'destructive', 
+        title: 'Error', 
+        description: error.message || 'Failed to toggle active status' 
+      });
+    }
+  };
+
   const openEditDialog = (bhajan: SatguruBhajan) => {
     setEditingBhajan(bhajan);
+    setFormData({
+      title: bhajan.title,
+      description: bhajan.description || '',
+      lyrics: bhajan.lyrics || '',
+      video_id: bhajan.video_id || '',
+      video_url: bhajan.video_url || '',
+      thumbnail_url: bhajan.thumbnail_url || '',
+      duration: bhajan.duration || 0,
+      is_active: bhajan.is_active !== false,
+      sort_order: bhajan.sort_order || 0
+    });
+  };
+
+  const formatDuration = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${minutes}:${secs.toString().padStart(2, '0')}`;
   };
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold">Satguru Bhajan Management</h1>
+          <p className="text-muted-foreground">Manage satguru bhajans and video content</p>
+        </div>
+        <Button onClick={() => setEditingBhajan(null)}>
+          <Plus className="h-4 w-4 mr-2" />
+          Add Bhajan
+        </Button>
+      </div>
+
+      {/* Bhajan Form */}
       <Card>
         <CardHeader>
-          <CardTitle className="font-headline text-3xl flex items-center gap-2">
-            <Music /> Add Satguru Bhajan
-          </CardTitle>
+          <CardTitle>{editingBhajan ? 'Edit Bhajan' : 'Add New Bhajan'}</CardTitle>
           <CardDescription>
-            Add a bhajan by pasting its YouTube URL and adding other details.
+            Add bhajan details and YouTube video information
           </CardDescription>
-          <div className="flex justify-center">
-            <Image
-              src="https://lqymwrhfirszrakuevqm.supabase.co/storage/v1/object/public/moolgyan-media/App_logo_QR/images.jpg"
-              alt="Satguru Bhajan Logo"
-              width={100}
-              height={100}
-              className="rounded-full"
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="title">Title *</Label>
+                <Input
+                  id="title"
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  placeholder="Bhajan title"
+                />
+              </div>
+              <div>
+                <Label htmlFor="video_url">YouTube URL *</Label>
+                <Input
+                  id="video_url"
+                  value={formData.video_url}
+                  onChange={(e) => handleVideoUrlChange(e.target.value)}
+                  placeholder="https://www.youtube.com/watch?v=..."
+                />
+                {formData.video_id && (
+                  <p className="text-sm text-green-600 mt-1">
+                    ✓ Video detected: {formData.video_id}
+                  </p>
+                )}
+              </div>
+              <div>
+                <Label htmlFor="duration">Duration (seconds)</Label>
+                <Input
+                  id="duration"
+                  type="number"
+                  value={formData.duration}
+                  onChange={(e) => setFormData({ ...formData, duration: parseInt(e.target.value) || 0 })}
+                  placeholder="300"
+                />
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <div>
+                <Label htmlFor="sort_order">Sort Order</Label>
+                <Input
+                  id="sort_order"
+                  type="number"
+                  value={formData.sort_order}
+                  onChange={(e) => setFormData({ ...formData, sort_order: parseInt(e.target.value) || 0 })}
+                  placeholder="0"
+                />
+              </div>
+              <div className="flex items-center space-x-4">
+                <Switch
+                  id="is_active"
+                  checked={formData.is_active}
+                  onCheckedChange={(checked) => setFormData({ ...formData, is_active: checked })}
+                />
+                <Label htmlFor="is_active">Active</Label>
+              </div>
+              {formData.thumbnail_url && (
+                <div>
+                  <Label>Thumbnail Preview</Label>
+                  <img
+                    src={formData.thumbnail_url}
+                    alt="Thumbnail preview"
+                    className="w-32 h-24 object-cover rounded mt-2"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="description">Description</Label>
+            <Textarea
+              id="description"
+              value={formData.description}
+              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+              placeholder="Bhajan description"
+              rows={3}
             />
           </div>
-        </CardHeader>
-        <CardContent>
-          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
-            <div>
-              <label className="text-sm font-medium">Bhajan Title</label>
-              <Input 
-                placeholder="Title" 
-                {...form.register('title')}
-                className="mt-1"
-              />
-              {form.formState.errors.title && (
-                <p className="text-red-500 text-sm mt-1">{form.formState.errors.title.message}</p>
-              )}
-            </div>
-            <div>
-              <label className="text-sm font-medium">YouTube URL</label>
-              <Input 
-                placeholder="https://www.youtube.com/watch?v=..." 
-                {...form.register('videoInput')}
-                className="mt-1"
-              />
-              {form.formState.errors.videoInput && (
-                <p className="text-red-500 text-sm mt-1">{form.formState.errors.videoInput.message}</p>
-              )}
-            </div>
-            <div>
-              <label className="text-sm font-medium">Description (Optional)</label>
-              <Textarea 
-                placeholder="A brief description of the bhajan..." 
-                rows={3}
-                {...form.register('description')}
-                className="mt-1"
-              />
-            </div>
-            <div>
-              <label className="text-sm font-medium">Lyrics (Optional)</label>
-              <Textarea 
-                placeholder="Enter the bhajan lyrics here..." 
-                rows={10}
-                {...form.register('lyrics')}
-                className="mt-1"
-              />
-            </div>
 
-            <div className="flex gap-2">
-              <Button type="submit" className="w-full">
-                Add Bhajan
-              </Button>
-            </div>
-          </form>
+          <div>
+            <Label htmlFor="lyrics">Lyrics</Label>
+            <Textarea
+              id="lyrics"
+              value={formData.lyrics}
+              onChange={(e) => setFormData({ ...formData, lyrics: e.target.value })}
+              placeholder="Bhajan lyrics..."
+              rows={8}
+            />
+          </div>
+
+          <div className="flex gap-2">
+            <Button onClick={handleSaveBhajan}>
+              {editingBhajan ? 'Update' : 'Save'} Bhajan
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setEditingBhajan(null);
+                setFormData({
+                  title: '',
+                  description: '',
+                  lyrics: '',
+                  video_id: '',
+                  video_url: '',
+                  thumbnail_url: '',
+                  duration: 0,
+                  is_active: true,
+                  sort_order: 0
+                });
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
         </CardContent>
       </Card>
 
+      {/* Search and Filter */}
       <Card>
-        <CardHeader>
-          <CardTitle className="font-headline">Bhajan Gallery</CardTitle>
-          <CardDescription>Manage existing bhajans.</CardDescription>
-        </CardHeader>
-        <CardContent>
-          {sortedBhajans && sortedBhajans.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {sortedBhajans.map(bhajan => (
-                <Card key={bhajan.id}>
-                  <VideoPlayer video={bhajan} />
-                  <CardContent className="p-4 space-y-3">
-                    <h3 className="font-bold">{bhajan.title}</h3>
-                    {bhajan.description && <p className="text-sm text-muted-foreground">{bhajan.description}</p>}
-                    {bhajan.lyrics && (
-                      <Collapsible>
-                        <CollapsibleTrigger asChild>
-                          <Button variant="secondary" size="sm" className="mt-2 w-full">
-                            <Music size={16} className="mr-2" />
-                            View Lyrics
-                          </Button>
-                        </CollapsibleTrigger>
-                        <CollapsibleContent>
-                          <div className="mt-4 p-3 bg-muted rounded-md max-h-48 overflow-y-auto">
-                            <p className="whitespace-pre-line leading-relaxed text-sm text-muted-foreground">
-                              {bhajan.lyrics}
-                            </p>
-                          </div>
-                        </CollapsibleContent>
-                      </Collapsible>
-                    )}
-                    <div className="flex justify-end gap-2 pt-2">
-                      <Button variant="outline" size="sm" onClick={() => openEditDialog(bhajan)}><FilePenLine className="h-4 w-4 mr-2" />Edit</Button>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button variant="destructive" size="sm" disabled={processingId === bhajan.id}>
-                            {processingId === bhajan.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader><AlertDialogTitle>Delete "{bhajan.title}"?</AlertDialogTitle><AlertDialogDescription>This action cannot be undone.</AlertDialogDescription></AlertDialogHeader>
-                          <AlertDialogFooter><AlertDialogCancel>Cancel</AlertDialogCancel><AlertDialogAction onClick={() => handleDelete(bhajan)} className="bg-destructive hover:bg-destructive/90">Delete</AlertDialogAction></AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </div>
-                  </CardContent>
-                </Card>
-              ))}
+        <CardContent className="p-4">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Search bhajans..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
             </div>
-          ) : (
-            <div className="text-center py-12">
-              <Music className="mx-auto h-12 w-12 text-muted-foreground" />
-              <h3 className="mt-2 text-lg font-semibold">No Bhajans Found</h3>
-              <p className="mt-1 text-sm text-muted-foreground">Add a bhajan using the form above to get started.</p>
-            </div>
-          )}
+            <Select value={filterStatus} onValueChange={setFilterStatus}>
+              <SelectTrigger className="w-full md:w-48">
+                <Filter className="h-4 w-4 mr-2" />
+                <SelectValue placeholder="Filter by status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Status</SelectItem>
+                <SelectItem value="active">Active</SelectItem>
+                <SelectItem value="inactive">Inactive</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
         </CardContent>
       </Card>
+
+      {/* Bhajans Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {sortedBhajans.map((bhajan) => (
+          <Card key={bhajan.id} className="overflow-hidden">
+            <div className="aspect-video relative bg-gray-100">
+              {bhajan.thumbnail_url ? (
+                <img
+                  src={bhajan.thumbnail_url}
+                  alt={bhajan.title}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="flex items-center justify-center h-full">
+                  <Music className="h-12 w-12 text-gray-400" />
+                </div>
+              )}
+              <div className="absolute top-2 right-2">
+                <Badge variant={bhajan.is_active !== false ? 'default' : 'secondary'}>
+                  {bhajan.is_active !== false ? 'Active' : 'Inactive'}
+                </Badge>
+              </div>
+              {bhajan.duration && (
+                <div className="absolute bottom-2 left-2">
+                  <Badge variant="outline" className="bg-black/50 text-white">
+                    <Clock className="h-3 w-3 mr-1" />
+                    {formatDuration(bhajan.duration)}
+                  </Badge>
+                </div>
+              )}
+            </div>
+            <CardContent className="p-4">
+              <h3 className="font-semibold mb-2">{bhajan.title}</h3>
+              {bhajan.description && (
+                <p className="text-sm text-gray-600 mb-3 line-clamp-2">{bhajan.description}</p>
+              )}
+              <div className="flex gap-2">
+                <Button variant="outline" size="sm" onClick={() => openEditDialog(bhajan)}>
+                  <Edit className="h-4 w-4" />
+                </Button>
+                {bhajan.video_url && (
+                  <Button variant="outline" size="sm" onClick={() => window.open(bhajan.video_url, '_blank')}>
+                    <Play className="h-4 w-4" />
+                  </Button>
+                )}
+                <Button 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => handleToggleActive(bhajan)}
+                >
+                  {bhajan.is_active !== false ? 'Deactivate' : 'Activate'}
+                </Button>
+                <Button 
+                  variant="destructive" 
+                  size="sm"
+                  onClick={() => handleDeleteBhajan(bhajan)}
+                  disabled={processingId === bhajan.id}
+                >
+                  {processingId === bhajan.id ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <Trash2 className="h-4 w-4" />
+                  )}
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
+      {sortedBhajans.length === 0 && (
+        <Card>
+          <CardContent className="text-center py-12">
+            <Music className="h-12 w-12 mx-auto text-gray-400 mb-4" />
+            <h3 className="text-lg font-semibold mb-2">No bhajans found</h3>
+            <p className="text-gray-500 mb-4">
+              {searchTerm || filterStatus !== 'all' 
+                ? 'Try adjusting your search or filter criteria' 
+                : 'Add your first bhajan to get started'
+              }
+            </p>
+            <Button onClick={() => setEditingBhajan(null)}>
+              <Plus className="h-4 w-4 mr-2" />
+              Add Bhajan
+            </Button>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

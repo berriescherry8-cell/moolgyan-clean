@@ -23,11 +23,20 @@ const getTableName = (collection: string): string => {
     'satguruBhajans': 'satguru_bhajan',
     'wisdomQuotes': 'wisdom_quotes',
     'liveSatsangs': 'live_satsangs',
-    'bookOrders': 'book_orders',
+    'bookOrders': 'orders',
     'newsItems': 'news_items',
-    'photoItems': 'photo_items',
+    'photoItems': 'photos',
     'videoItems': 'video_items',
-    'memberData': 'member_data'
+    'memberData': 'member_data',
+    'books': 'books',
+    'orders': 'orders',
+    'photos': 'photos',
+    'news_items': 'news_items',
+    'satguru_bhajan': 'satguru_bhajan',
+    'wisdom_quotes': 'wisdom_quotes',
+    'live_satsangs': 'live_satsangs',
+    'satsang_recordings': 'satsang_recordings',
+    'google_forms': 'google_forms'
   };
   return tableMap[collection] || collection;
 };
