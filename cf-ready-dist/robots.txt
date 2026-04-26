@@ -1,9 +1,0 @@
-User-agent: *
-Disallow: /admin/
-Disallow: /api/admin*
-
-# Noindex admin
-User-agent: *
-Crawl-delay: 10
-
-Sitemap: https://yourdomain.com/sitemap.xml

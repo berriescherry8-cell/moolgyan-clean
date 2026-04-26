@@ -1,29 +1,11 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-import { createServerSupabase } from './lib/supabase'
 
 export async function middleware(req: NextRequest) {
-  const res = NextResponse.next()
-  const supabase = createServerSupabase(req)
-
-  const { data: { session } } = await supabase.auth.getSession()
-  const { pathname } = req.nextUrl
-
-  // ✅ Allow login
-  if (pathname.startsWith('/admin/login')) {
-    return res
-  }
-
-  // 🔒 Protect admin
-  if (pathname.startsWith('/admin')) {
-    if (!session) {
-      const url = req.nextUrl.clone()
-      url.pathname = '/admin/login'
-      return NextResponse.redirect(url)
-    }
-  }
-
-  return res
+  // ⚠️ Static export does not support server-side middleware with cookies.
+  // Admin protection is handled client-side via AdminGuard components.
+  // This middleware is kept for SPA routing support only.
+  return NextResponse.next()
 }
 
 export const config = {

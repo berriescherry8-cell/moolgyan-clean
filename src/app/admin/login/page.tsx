@@ -3,56 +3,32 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase";
+import { Shield, Eye, EyeOff, Loader2 } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
-  const ADMIN_EMAILS = [
-    "sharmadevendra715@gmail.com",
-    "kpdeora1986@gmail.com",
-    "berriescherry8@gmail.com",
-  ];
-
-  // Simple hash function for fallback mode
-  const simpleHash = (str: string) => {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      const char = str.charCodeAt(i);
-      hash = ((hash << 5) - hash) + char;
-      hash = hash & hash;
-    }
-    return hash.toString(16);
-  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    // Validate email is in admin list
-    if (!ADMIN_EMAILS.includes(email)) {
-      setError("Invalid admin email");
-      setLoading(false);
-      return;
-    }
-
-    // Try Supabase auth first
     const supabase = createClient();
 
     if (supabase) {
-      // Supabase is available - use real auth
       const { data, error: authError } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
 
       if (authError) {
-        setError(authError.message);
+        setError("Invalid credentials");
         setLoading(false);
         return;
       }
@@ -63,83 +39,79 @@ export default function LoginPage() {
         return;
       }
 
-      // Store admin session in localStorage for the layout guard
-      localStorage.setItem("moolgyan_admin", email);
+      localStorage.setItem("moolgyan_admin", "authenticated");
       localStorage.setItem("moolgyan_admin_session", Date.now().toString());
-
       router.push("/admin/dashboard");
     } else {
-      // Supabase NOT available (static export without env vars)
-      // Use fallback local auth with hardcoded credentials
-      const hashedInput = simpleHash(password);
-      const expectedHash = simpleHash("admin123"); // Default fallback password
-
-      // In fallback mode, accept "admin123" as password
-      if (password !== "admin123") {
-        setError("Invalid password (fallback mode: use 'admin123')");
-        setLoading(false);
-        return;
-      }
-
-      // Store fallback auth in localStorage
-      localStorage.setItem("moolgyan_admin", email);
-      localStorage.setItem("moolgyan_admin_session", Date.now().toString());
-      localStorage.setItem("moolgyan_fallback_auth", "true");
-
-      router.push("/admin/dashboard");
+      setError("Service unavailable. Please try again later.");
     }
 
     setLoading(false);
   };
 
   return (
-    <div style={{ padding: 40, maxWidth: 400, margin: "0 auto" }}>
-      <h2 style={{ color: "white", marginBottom: 20 }}>Admin Login</h2>
+    <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950 flex items-center justify-center p-4">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-500/20 mb-4">
+            <Shield className="w-8 h-8 text-indigo-400" />
+          </div>
+          <h1 className="text-2xl font-bold text-white">Admin Login</h1>
+          <p className="text-slate-400 mt-2">Secure access only</p>
+        </div>
 
-      <form onSubmit={handleLogin} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-        <input
-          type="email"
-          placeholder="Admin email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={{ padding: 12, borderRadius: 6, border: "1px solid #444", background: "#1a1a1a", color: "white" }}
-        />
+        <form onSubmit={handleLogin} className="space-y-4">
+          <div>
+            <input
+              type="email"
+              placeholder="Email address"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              className="w-full px-4 py-3 rounded-xl bg-slate-800/50 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+            />
+          </div>
 
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          style={{ padding: 12, borderRadius: 6, border: "1px solid #444", background: "#1a1a1a", color: "white" }}
-        />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              className="w-full px-4 py-3 pr-12 rounded-xl bg-slate-800/50 border border-slate-700 text-white placeholder-slate-500 focus:outline-none focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500 transition-all"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+            >
+              {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+            </button>
+          </div>
 
-        <button
-          disabled={loading}
-          style={{
-            padding: 12,
-            borderRadius: 6,
-            border: "none",
-            background: "#4f46e5",
-            color: "white",
-            cursor: loading ? "not-allowed" : "pointer",
-            opacity: loading ? 0.7 : 1,
-          }}
-        >
-          {loading ? "Loading..." : "Login"}
-        </button>
-      </form>
+          {error && (
+            <p className="text-red-400 text-sm bg-red-500/10 p-3 rounded-lg">
+              {error}
+            </p>
+          )}
 
-      {error && (
-        <p style={{ color: "#ef4444", marginTop: 12, fontSize: 14 }}>
-          {error}
-        </p>
-      )}
-
-      <p style={{ color: "#888", marginTop: 20, fontSize: 12 }}>
-        Fallback mode password: <code style={{ color: "#ccc" }}>admin123</code>
-      </p>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full py-3 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                Signing in...
+              </>
+            ) : (
+              "Sign In"
+            )}
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

@@ -2,65 +2,175 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mool Gyan - Offline</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#0f172a">
+    <title>Mool Gyan - No Connection</title>
     <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             margin: 0;
             padding: 0;
-            background-color: #000000;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
             color: #ffffff;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             text-align: center;
+            overflow: hidden;
         }
         .container {
-            padding: 20px;
-            max-width: 400px;
+            padding: 32px;
+            max-width: 420px;
+            position: relative;
+            z-index: 2;
         }
-        .logo {
-            width: 120px;
-            height: 120px;
-            margin-bottom: 30px;
-            filter: drop-shadow(0 0 10px rgba(234, 179, 8, 0.3));
+        .pulse-ring {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: rgba(99, 102, 241, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 32px;
+            position: relative;
+            animation: pulse 2s ease-in-out infinite;
+        }
+        .pulse-ring::before {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: rgba(99, 102, 241, 0.15);
+            animation: pulse 2s ease-in-out infinite 0.3s;
+        }
+        .icon-wrap {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.4);
+        }
+        .icon-wrap svg {
+            width: 28px;
+            height: 28px;
+            color: white;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.1); opacity: 0.7; }
         }
         h1 {
-            font-size: 24px;
-            margin-bottom: 10px;
-            background: linear-gradient(to right, #fbbf24, #f59e0b);
+            font-size: 26px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            background: linear-gradient(to right, #e0e7ff, #c7d2fe);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         p {
-            color: #a1a1aa;
-            line-height: 1.6;
-            margin-bottom: 30px;
+            color: #94a3b8;
+            line-height: 1.7;
+            font-size: 16px;
+            margin-bottom: 32px;
         }
-        .retry-button {
-            background-color: #eab308;
-            color: #000000;
+        .retry-btn {
+            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            color: #ffffff;
             border: none;
-            padding: 12px 30px;
-            border-radius: 25px;
-            font-weight: bold;
+            padding: 14px 40px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 15px;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
         }
-        .retry-button:active {
-            transform: scale(0.95);
+        .retry-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 30px rgba(99, 102, 241, 0.5);
+        }
+        .retry-btn:active {
+            transform: translateY(0);
+        }
+        .dots {
+            display: flex;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 40px;
+        }
+        .dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(148, 163, 184, 0.3);
+            animation: dotPulse 1.4s ease-in-out infinite;
+        }
+        .dot:nth-child(2) { animation-delay: 0.2s; }
+        .dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes dotPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        .bg-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            z-index: 1;
+        }
+        .bg-orb-1 {
+            width: 300px;
+            height: 300px;
+            background: #6366f1;
+            top: -100px;
+            right: -100px;
+        }
+        .bg-orb-2 {
+            width: 250px;
+            height: 250px;
+            background: #8b5cf6;
+            bottom: -80px;
+            left: -80px;
         }
     </style>
 </head>
 <body>
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    
     <div class="container">
-        <img src="https://firebasestorage.googleapis.com/v0/b/studio-9813085306-ab851.firebasestorage.app/o/app%20logo%20and%20screenshots%2FWhatsApp_Image_2025-12-30_at_11.37.03_PM-removebg-preview.png?alt=media&token=61622b81-ce46-4fc9-a82e-10f35cf44ff4" alt="Mool Gyan" class="logo">
-        <h1>You are Offline</h1>
-        <p>Please check your internet connection to access the latest Satsangs and spiritual content.</p>
-        <button class="retry-button" onclick="window.location.reload()">Retry Connection</button>
+        <div class="pulse-ring">
+            <div class="icon-wrap">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                </svg>
+            </div>
+        </div>
+        
+        <h1>No Internet Connection</h1>
+        <p>Please connect to the internet to access the latest Satsangs and spiritual content.</p>
+        
+        <button class="retry-btn" onclick="window.location.reload()">
+            Try Again
+        </button>
+        
+        <div class="dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
     </div>
 </body>
 </html>
+

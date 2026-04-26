@@ -1,69 +1,40 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { useSupabaseClient } from '@/hooks/useSupabase';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
+import { useAdminAuthStore } from '@/lib/adminAuthStore';
 import { 
-  LayoutDashboard, 
-  Newspaper, 
-  Video, 
-  Camera, 
-  BookOpen, 
-  UserPlus, 
-  HelpCircle, 
-  ShoppingCart, 
-  Music, 
-  MessageSquareQuote, 
-  FileText, 
-  Sparkles, 
-  ExternalLink, 
-  LogOut, 
-  Bell, 
-  Users, 
-  Settings, 
-  Database, 
-  Library 
+  Newspaper, Video, Camera, BookOpen, ShoppingCart, 
+  Music, MessageSquareQuote, FileText, ExternalLink, LogOut, Users 
 } from "lucide-react";
 
 const adminNavItems = [
-  { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/books", label: "Manage Bookstore", icon: BookOpen },
-  { href: "/admin/live-satsang", label: "Manage Live Satsang", icon: Video },
-  { href: "/admin/satsang-playlist", label: "Manage Satsang Playlists", icon: Music },
+  { href: "/admin/live-satsang", label: "Live Satsang", icon: Video },
+  { href: "/admin/satsang-playlist", label: "Playlists", icon: Music },
   { href: "/admin/wisdom-quotes", label: "Wisdom Quotes", icon: MessageSquareQuote },
-  { href: "/admin/news", label: "Manage News", icon: Newspaper },
+  { href: "/admin/news", label: "News", icon: Newspaper },
   { href: "/admin/google-forms", label: "Google Forms", icon: ExternalLink },
-  { href: "/admin/worksheets", label: "Admin Worksheets", icon: FileText },
+  { href: "/admin/worksheets", label: "Worksheets", icon: FileText },
   { href: "/admin/satguru-bhajan", label: "Satguru Bhajan", icon: Music },
-  { href: "/admin/photos", label: "Photos Manage", icon: Camera },
+  { href: "/admin/photos", label: "Photos", icon: Camera },
+  { href: "/admin/orders", label: "Orders", icon: ShoppingCart },
+  { href: "/admin/members", label: "Members", icon: Users },
 ];
 
 export default function AdminSidebar() {
   const pathname = usePathname();
-  const supabase = useSupabaseClient();
-  const [adminName, setAdminName] = useState('Admin');
+  const { signOut } = useAdminAuthStore();
 
-  useEffect(() => {
-    const fetchAdminData = async () => {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (session?.user) {
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('full_name')
-          .eq('id', session.user.id)
-          .single();
-        setAdminName(profile?.full_name || session.user.email || 'Admin');
-      }
-    };
-    fetchAdminData();
-  }, [supabase]);
+  const handleLogout = async () => {
+    await signOut();
+    window.location.href = "/admin/login";
+  };
 
   return (
     <div className="w-64 bg-slate-900/80 backdrop-blur border-r border-slate-800 p-4 flex flex-col">
       <div className="mb-8">
-        <p className="text-indigo-300 font-medium mb-1">Welcome, {adminName}</p>
         <h2 className="text-xl font-bold text-white mb-2">Admin Panel</h2>
         <p className="text-slate-400 text-sm">Secure Management</p>
       </div>
@@ -87,12 +58,13 @@ export default function AdminSidebar() {
       </nav>
 
       <div className="mt-auto pt-4 border-t border-slate-800">
-        <form action="/admin/logout/action">
-          <button type="submit" className="flex items-center gap-2 p-3 rounded-lg text-sm text-red-400 hover:bg-red-500/10 transition-all w-full text-left">
-            <LogOut className="h-4 w-4" />
-            Logout
-          </button>
-        </form>
+        <button 
+          onClick={handleLogout}
+          className="flex items-center gap-2 p-3 rounded-lg text-sm text-red-400 hover:bg-red-500/10 transition-all w-full text-left cursor-pointer"
+        >
+          <LogOut className="h-4 w-4" />
+          Logout
+        </button>
       </div>
     </div>
   );

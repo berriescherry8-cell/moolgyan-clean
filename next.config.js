@@ -14,7 +14,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   productionBrowserSourceMaps: false,
-  // output: 'export', // Commented out to allow CSP headers
+  output: 'export',
 
   images: {
     remotePatterns: [

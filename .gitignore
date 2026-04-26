@@ -54,6 +54,10 @@ android/app/release/
 *.keystore
 *.jks
 
+# Cloudflare build outputs
+cf-ready-dist/
+cf-dist/
+
 # Java
 *.class
 *.jar

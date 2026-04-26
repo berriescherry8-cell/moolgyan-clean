@@ -3,12 +3,6 @@
 import { create } from 'zustand';
 import { createClient } from './supabase';
 
-const ADMIN_EMAILS = [
-  'sharmadevendra715@gmail.com',
-  'kpdeora1986@gmail.com',
-  'berriescherry8@gmail.com'
-];
-
 interface AdminAuthState {
   isAuthenticated: boolean;
   user: any | null;
@@ -24,36 +18,13 @@ export const useAdminAuthStore = create<AdminAuthState>((set) => ({
   user: null,
   isLoading: false,
   error: null,
-  
+
   checkAuth: async () => {
     if (typeof window === 'undefined') return;
 
     set({ isLoading: true });
 
     try {
-      // Check for fallback auth first (static export mode)
-      const fallbackAuth = localStorage.getItem('moolgyan_fallback_auth');
-      const fallbackEmail = localStorage.getItem('moolgyan_admin');
-      const fallbackSession = localStorage.getItem('moolgyan_admin_session');
-
-      if (fallbackAuth === 'true' && fallbackEmail && fallbackSession) {
-        // Validate session hasn't expired (24 hours)
-        const sessionAge = Date.now() - parseInt(fallbackSession);
-        if (sessionAge < 24 * 60 * 60 * 1000 && ADMIN_EMAILS.includes(fallbackEmail)) {
-          set({
-            isAuthenticated: true,
-            user: { email: fallbackEmail, id: 'fallback-user' },
-            isLoading: false,
-          });
-          return;
-        } else {
-          // Session expired, clear it
-          localStorage.removeItem('moolgyan_fallback_auth');
-          localStorage.removeItem('moolgyan_admin');
-          localStorage.removeItem('moolgyan_admin_session');
-        }
-      }
-
       const supabase = createClient();
       if (!supabase) {
         set({ isAuthenticated: false, user: null, isLoading: false });
@@ -67,8 +38,14 @@ export const useAdminAuthStore = create<AdminAuthState>((set) => ({
         return;
       }
 
-      // Check if user email is in admin list
-      if (!ADMIN_EMAILS.includes(user.email || '')) {
+      // Check profile role from database (secure, not hardcoded)
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', user.id)
+        .single();
+
+      if (profile?.role !== 'admin') {
         await supabase.auth.signOut();
         set({ isAuthenticated: false, user: null, isLoading: false });
         return;
@@ -83,64 +60,59 @@ export const useAdminAuthStore = create<AdminAuthState>((set) => ({
       set({ isAuthenticated: false, user: null, isLoading: false });
     }
   },
-  
+
   signIn: async (email: string, password: string) => {
     if (typeof window === 'undefined') {
       return { success: false, error: 'Invalid environment' };
     }
-    
+
     set({ isLoading: true, error: null });
-    
+
     try {
       const supabase = createClient();
       if (!supabase) {
         set({ isLoading: false, error: 'Supabase client not available' });
         return { success: false, error: 'Supabase client not available' };
       }
-      
-      // Validate admin email
-      if (!ADMIN_EMAILS.includes(email)) {
-        set({ isLoading: false, error: 'Invalid admin email' });
-        return { success: false, error: 'Invalid admin email' };
-      }
-      
+
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       });
-      
+
       if (error) {
         set({ isLoading: false, error: error.message });
         return { success: false, error: error.message };
       }
-      
-      // Verify user email matches
-      if (!data.user.email || !ADMIN_EMAILS.includes(data.user.email)) {
+
+      // Verify admin role from database
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('role')
+        .eq('id', data.user.id)
+        .single();
+
+      if (profile?.role !== 'admin') {
         await supabase.auth.signOut();
         set({ isLoading: false, error: 'Access denied. Admin privileges required.' });
         return { success: false, error: 'Access denied. Admin privileges required.' };
       }
-      
-      set({ 
-        isAuthenticated: true, 
+
+      set({
+        isAuthenticated: true,
         user: { email: data.user.email, id: data.user.id },
-        isLoading: false 
+        isLoading: false,
       });
-      
+
       return { success: true };
     } catch (err) {
       set({ isLoading: false, error: 'An error occurred. Please try again.' });
       return { success: false, error: 'An error occurred. Please try again.' };
     }
   },
-  
+
   signOut: async () => {
     if (typeof window === 'undefined') return;
-
-    // Clear fallback auth
-    localStorage.removeItem('moolgyan_fallback_auth');
-    localStorage.removeItem('moolgyan_admin');
-    localStorage.removeItem('moolgyan_admin_session');
 
     try {
       const supabase = createClient();
@@ -155,7 +127,7 @@ export const useAdminAuthStore = create<AdminAuthState>((set) => ({
       isAuthenticated: false,
       user: null,
     });
-  }
+  },
 }));
 
 // Listen for auth changes
@@ -166,7 +138,7 @@ if (typeof window !== 'undefined') {
       useAdminAuthStore.getState().checkAuth();
     });
   }
-  
+
   // Initial check
   useAdminAuthStore.getState().checkAuth();
 }
@@ -174,10 +146,11 @@ if (typeof window !== 'undefined') {
 // Export a hook for easier usage
 export const useAdminAuth = () => {
   const store = useAdminAuthStore();
-  
+
   return {
     ...store,
     checkSession: store.checkAuth,
     logout: store.signOut,
   };
 };
+
