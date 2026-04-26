@@ -2,12 +2,4 @@ name = "mool-gyan-app"
 compatibility_date = "2024-04-21"
 
 # Static export deployment to Cloudflare Pages
-# Build output directory configured in next.config.js as "dist"
-main = "_worker.js"
-compatibility_flags = [ "nodejs_compat" ]
-
-[env.production]
-name = "mool-gyan-app"
-
-[env.preview]
-name = "mool-gyan-app-preview"
+pages_build_output_dir = "dist"
