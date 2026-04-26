@@ -90,10 +90,10 @@ export default function ManageSatguruBhajanPage() {
       title: values.title,
       description: values.description || '',
       lyrics: values.lyrics || '',
-      videoId: details.videoId ?? undefined,
-      videoUrl: details.embedUrl,
-      uploadDate: new Date().toISOString(),
-      thumbnailUrl: details.videoId ? `https://i.ytimg.com/vi/${details.videoId}/hqdefault.jpg` : undefined,
+      video_id: details.videoId ?? undefined,
+      video_url: details.embedUrl,
+      upload_date: new Date().toISOString(),
+      thumbnail_url: details.videoId ? `https://i.ytimg.com/vi/${details.videoId}/hqdefault.jpg` : undefined,
     };
     
     try {
