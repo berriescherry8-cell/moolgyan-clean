@@ -20,8 +20,7 @@
     "cap:run:android": "npm run cap:prepare:android && npx cap run android",
     "cap:build:apk": "npm run cap:prepare:android && cd android && gradlew assembleRelease",
     "preview": "npx serve dist",
-    "deploy:static": "npm run build && npm run postbuild",
-    "version": "echo 1.0.0"
+    "deploy:static": "npm run build && npm run postbuild"
   },
   "dependencies": {
     "@capacitor/android": "^6.2.1",

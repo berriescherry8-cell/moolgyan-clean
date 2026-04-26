@@ -15,6 +15,7 @@ const nextConfig = {
   },
   productionBrowserSourceMaps: false,
   output: 'export',
+  trailingSlash: true,
 
   images: {
     remotePatterns: [
