@@ -2,73 +2,277 @@
 
 import React, { useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
-import SidebarNav from '@/components/SidebarNav';
-import { useAdminAuth } from '@/lib/adminAuthStore';
 import { Button } from '@/components/ui/button';
-import { User, LogOut, Zap, Loader2, RotateCcw } from 'lucide-react';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
+import { 
+  LayoutDashboard, 
+  BookOpen, 
+  Image, 
+  ShoppingCart, 
+  FileText, 
+  Music, 
+  Quote,
+  Video,
+  Users,
+  Settings,
+  Menu,
+  X,
+  LogOut,
+  User,
+  ChevronDown,
+  Home,
+  Package,
+  FileText as FileIcon
+} from 'lucide-react';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { useAdminAuth } from '@/lib/adminAuthStore';
 
-// Separate component for authenticated admin layout
-function AuthenticatedAdminLayout({ children, user, logout }: { 
-  children: React.ReactNode; 
-  user: any; 
-  logout: () => Promise<void> 
-}) {
-  const [notifications, setNotifications] = useState(0); // realtime
+interface NavItem {
+  title: string;
+  href: string;
+  icon: React.ReactNode;
+  badge?: string;
+  description?: string;
+}
+
+const navigationItems: NavItem[] = [
+  {
+    title: 'Dashboard',
+    href: '/admin/dashboard',
+    icon: <LayoutDashboard className="h-5 w-5" />,
+    description: 'Overview and statistics'
+  },
+  {
+    title: 'Photos',
+    href: '/admin/photos',
+    icon: <Image className="h-5 w-5" />,
+    description: 'Photo galleries management',
+    badge: 'New'
+  },
+  {
+    title: 'Books',
+    href: '/admin/books',
+    icon: <BookOpen className="h-5 w-5" />,
+    description: 'Book inventory and sales'
+  },
+  {
+    title: 'Orders',
+    href: '/admin/orders',
+    icon: <ShoppingCart className="h-5 w-5" />,
+    description: 'Customer orders management'
+  },
+  {
+    title: 'News',
+    href: '/admin/news',
+    icon: <FileText className="h-5 w-5" />,
+    description: 'News articles management'
+  },
+  {
+    title: 'Satguru Bhajan',
+    href: '/admin/satguru-bhajan',
+    icon: <Music className="h-5 w-5" />,
+    description: 'Bhajans and video content'
+  },
+  {
+    title: 'Wisdom Quotes',
+    href: '/admin/wisdom-quotes',
+    icon: <Quote className="h-5 w-5" />,
+    description: 'Inspirational quotes'
+  },
+  {
+    title: 'Live Satsang',
+    href: '/admin/live-satsang',
+    icon: <Video className="h-5 w-5" />,
+    description: 'Live streaming management'
+  },
+  {
+    title: 'Google Forms',
+    href: '/admin/google-forms',
+    icon: <FileIcon className="h-5 w-5" />,
+    description: 'Form links management'
+  }
+];
+
+function AdminSidebar({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
+  const pathname = usePathname();
+  const { user, logout } = useAdminAuth();
 
   const handleLogout = async () => {
-    await logout();
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-slate-900 via-slate-900/50 to-slate-950 text-white overflow-hidden">
-      {/* Enhanced Sidebar */}
-      <SidebarNav />
+    <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-slate-900 transform transition-transform duration-300 ease-in-out ${
+      isOpen ? 'translate-x-0' : '-translate-x-full'
+    } lg:translate-x-0 lg:static lg:inset-0`}>
+      {/* Sidebar Header */}
+      <div className="flex items-center justify-between h-16 px-6 border-b border-slate-800">
+        <div className="flex items-center">
+          <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+            <span className="text-white font-bold text-sm">M</span>
+          </div>
+          <span className="ml-3 text-white font-semibold">Admin Panel</span>
+        </div>
+        <Button
+          variant="ghost"
+          size="sm"
+          className="lg:hidden text-white hover:bg-slate-800"
+          onClick={onClose}
+        >
+          <X className="h-5 w-5" />
+        </Button>
+      </div>
 
-      {/* Main content */}
-      <div className="flex flex-col flex-1 overflow-hidden">
-        {/* Top bar with profile */}
-        <div className="h-16 bg-black/30 backdrop-blur-md border-b border-white/10 flex items-center px-6 shadow-lg">
-          <div className="flex-1" />
-          <Badge variant="secondary" className="mr-4 bg-gradient-to-r from-green-500 to-emerald-600">
-            <Zap className="h-3 w-3 mr-1" />
-            Online
-          </Badge>
+      {/* Navigation */}
+      <nav className="flex-1 px-4 py-6 space-y-2">
+        <div className="mb-6">
+          <a
+            href="/admin/dashboard"
+            className="flex items-center px-3 py-2.5 text-sm font-medium rounded-lg text-white hover:bg-slate-800 transition-colors"
+          >
+            <Home className="h-5 w-5 mr-3" />
+            <span>Dashboard</span>
+          </a>
+        </div>
+
+        <div className="space-y-1">
+          {navigationItems.map((item) => {
+            const isActive = pathname === item.href;
+            return (
+              <a
+                key={item.href}
+                href={item.href}
+                className={`group flex items-center px-3 py-2.5 text-sm font-medium rounded-lg transition-colors ${
+                  isActive
+                    ? 'bg-slate-800 text-white'
+                    : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                }`}
+              >
+                <item.icon className="h-5 w-5 mr-3 flex-shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between">
+                    <span>{item.title}</span>
+                    {item.badge && (
+                      <Badge variant="destructive" className="ml-2 text-xs">
+                        {item.badge}
+                      </Badge>
+                    )}
+                  </div>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+
+        {/* User Section */}
+        <div className="border-t border-slate-800 pt-4 mt-6">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" className="flex items-center gap-3 hover:bg-white/10">
-                <User className="h-5 w-5" />
-                <span>{user?.email?.split('@')[0]}</span>
+              <Button variant="ghost" className="w-full justify-start text-white hover:bg-slate-800">
+                <User className="h-5 w-5 mr-3" />
+                <div className="flex-1 text-left">
+                  <div className="text-sm font-medium truncate">
+                    {user?.email?.split('@')[0] || 'Admin'}
+                  </div>
+                  <div className="text-xs text-slate-400">
+                    {user?.email || 'admin@moolgyan.com'}
+                  </div>
+                </div>
+                <ChevronDown className="h-4 w-4 ml-2" />
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="bg-slate-800 border-white/20 w-56 mr-4">
-              <DropdownMenuItem onClick={handleLogout} className="cursor-pointer hover:bg-white/10">
+            <DropdownMenuContent className="w-56 bg-slate-800 border-slate-700">
+              <DropdownMenuItem 
+                onClick={handleLogout}
+                className="text-slate-300 hover:bg-slate-700 hover:text-white cursor-pointer"
+              >
                 <LogOut className="h-4 w-4 mr-2" />
-                Secure Logout
-              </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer hover:bg-white/10">
-                <RotateCcw className="h-4 w-4 mr-2" />
-                Refresh Session
+                <span>Logout</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
+      </nav>
 
-        {/* Content */}
-        <main className="flex-1 overflow-auto p-8">
-          <div className="max-w-7xl mx-auto">
-            {children}
+      {/* Sidebar Footer */}
+      <div className="border-t border-slate-800 p-4">
+        <div className="text-xs text-slate-400">
+          <div className="flex items-center mb-2">
+            <Package className="h-3 w-3 mr-1" />
+            <span>Mool Gyan Admin v2.0</span>
           </div>
-        </main>
+          <div>© 2026 All rights reserved</div>
+        </div>
       </div>
     </div>
   );
 }
 
+function AdminTopBar({ onMenuToggle }: { onMenuToggle: () => void }) {
+  const { user } = useAdminAuth();
+
+  return (
+    <header className="h-16 bg-white border-b border-slate-200 shadow-sm">
+      <div className="flex items-center justify-between h-full px-4 sm:px-6 lg:px-8">
+        {/* Mobile Menu Button */}
+        <Button
+          variant="ghost"
+          size="sm"
+          className="lg:hidden text-slate-600 hover:bg-slate-100"
+          onClick={onMenuToggle}
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
+
+        {/* Breadcrumb/Title */}
+        <div className="flex-1 flex items-center">
+          <div className="hidden sm:block">
+            <h1 className="text-lg font-semibold text-slate-900">Mool Gyan Administration</h1>
+          </div>
+        </div>
+
+        {/* User Actions */}
+        <div className="flex items-center space-x-4">
+          <div className="hidden sm:flex items-center space-x-2">
+            <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+            <span className="text-sm text-slate-600">
+              {user?.email?.split('@')[0] || 'Admin'}
+            </span>
+          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="flex items-center space-x-2 text-slate-600 hover:bg-slate-100">
+                <div className="w-8 h-8 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold text-sm">M</span>
+                </div>
+                <ChevronDown className="h-4 w-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="end">
+              <DropdownMenuItem className="cursor-pointer">
+                <User className="h-4 w-4 mr-2" />
+                <span>Profile</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem className="cursor-pointer">
+                <Settings className="h-4 w-4 mr-2" />
+                <span>Settings</span>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+    </header>
+  );
+}
+
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const pathname = usePathname();
-  const { checkSession, isAuthenticated, logout, isLoading, user } = useAdminAuth();
+  const { checkSession, isAuthenticated, isLoading, user } = useAdminAuth();
 
   useEffect(() => {
     if (pathname !== '/admin/login' && pathname !== '/admin/login/') {
@@ -77,21 +281,20 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   }, [pathname]);
 
   // For login page, just render children without any auth logic
-  // NOTE: trailingSlash: true in next.config makes pathname '/admin/login/'
   if (pathname === '/admin/login' || pathname === '/admin/login/') {
     return <>{children}</>;
   }
 
-  // Loading state for other admin pages
+  // Loading state
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-900 to-slate-950 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-flex items-center rounded-2xl bg-gradient-to-r from-indigo-500 to-purple-600 p-4 shadow-xl">
-            <Loader2 className="h-12 w-12 animate-spin text-white mr-4" />
-            <div>
-              <h2 className="text-2xl font-bold text-white mb-2">Portal Loading</h2>
-              <p className="text-slate-300">Quantum sync in progress...</p>
+          <div className="inline-flex items-center rounded-2xl bg-gradient-to-r from-blue-500 to-purple-600 p-8 shadow-xl">
+            <div className="w-16 h-16 border-4 border-white border-t-transparent animate-spin rounded-full"></div>
+            <div className="ml-6">
+              <h2 className="text-2xl font-bold text-white mb-2">Loading Admin Panel</h2>
+              <p className="text-blue-100">Initializing secure session...</p>
             </div>
           </div>
         </div>
@@ -99,11 +302,54 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     );
   }
 
-  // Fallback access denied for other admin pages
+  // Fallback access denied
   if (!isAuthenticated) {
-    return <div>Access Denied (Middleware should block)</div>;
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-16 h-16 bg-red-500 rounded-full flex items-center justify-center mb-4">
+            <X className="h-8 w-8 text-white" />
+          </div>
+          <h1 className="text-2xl font-bold text-slate-900 mb-2">Access Denied</h1>
+          <p className="text-slate-600 mb-6">Please authenticate to access the admin panel</p>
+          <a
+            href="/admin/login"
+            className="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Go to Login
+          </a>
+        </div>
+      </div>
+    );
   }
 
-  // Render authenticated layout for other admin pages
-  return <AuthenticatedAdminLayout children={children} user={user} logout={logout} />;
+  // Main authenticated layout
+  return (
+    <div className="min-h-screen bg-slate-50">
+      {/* Top Bar */}
+      <AdminTopBar onMenuToggle={() => setSidebarOpen(!sidebarOpen)} />
+
+      {/* Sidebar Overlay for Mobile */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black bg-opacity-50 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
+      {/* Sidebar */}
+      <AdminSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+
+      {/* Main Content */}
+      <div className="lg:pl-64">
+        <main className="min-h-screen">
+          <div className="py-6">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+              {children}
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+  );
 }
