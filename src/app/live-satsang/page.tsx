@@ -114,23 +114,23 @@ export default function LiveSatsangPage() {
 
       <div className="relative z-10 container mx-auto px-4 py-8 max-w-7xl">
         {/* Bookstore Style Header - Orange & Black Pattern */}
-        <div className="text-center space-y-12 pt-12 animate-fade-in-up">
-          <div className="flex items-center justify-center gap-6 mb-12">
-            <div className="p-6 bg-gradient-to-br from-orange-500 to-amber-500 rounded-3xl shadow-3xl shadow-orange-500/50">
-              <Radio className="h-16 w-16 text-white drop-shadow-lg" />
+        <div className="text-center space-y-8 pt-8 animate-fade-in-up">
+          <div className="flex items-center justify-center gap-4 mb-8">
+            <div className="p-3 bg-gradient-to-br from-orange-500 to-amber-500 rounded-2xl shadow-2xl shadow-orange-500/50">
+              <Radio className="h-8 w-8 text-white drop-shadow-lg" />
             </div>
             <div>
-              <h1 className="text-7xl md:text-8xl lg:text-9xl font-black bg-gradient-to-r from-orange-400 via-amber-400 to-orange-600 bg-clip-text text-transparent drop-shadow-4xl mb-4">
+              <h1 className="text-3xl md:text-4xl lg:text-5xl font-black bg-gradient-to-r from-orange-400 via-amber-400 to-orange-600 bg-clip-text text-transparent drop-shadow-2xl mb-2">
                 LIVE SATSANG
               </h1>
-              <div className="flex items-center justify-center gap-3">
-                <Sparkles className="h-8 w-8 text-orange-400 animate-pulse" />
-                <p className="text-amber-300 font-medium text-lg">Spiritual Broadcasts</p>
-                <Sparkles className="h-8 w-8 text-amber-500 animate-pulse" />
+              <div className="flex items-center justify-center gap-2">
+                <Sparkles className="h-4 w-4 text-orange-400 animate-pulse" />
+                <p className="text-amber-300 font-medium text-sm">Spiritual Broadcasts</p>
+                <Sparkles className="h-4 w-4 text-amber-500 animate-pulse" />
               </div>
             </div>
           </div>
-          <p className="text-2xl md:text-3xl lg:text-4xl text-slate-200/90 max-w-5xl mx-auto leading-relaxed drop-shadow-lg font-light">
+          <p className="text-lg md:text-xl lg:text-2xl text-slate-200/90 max-w-5xl mx-auto leading-relaxed drop-shadow-lg font-light">
             Experience divine presence through live spiritual discourses and explore complete archive of sacred teachings from Sadguru Nitin Sahib
           </p>
         </div>

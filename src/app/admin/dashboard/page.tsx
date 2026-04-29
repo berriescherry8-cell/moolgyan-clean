@@ -8,7 +8,7 @@ import { Progress } from '@/components/ui/progress';
 import { 
   LayoutDashboard, 
   BookOpen, 
-  Image, 
+  Image as ImageIcon, 
   ShoppingCart, 
   FileText, 
   Music, 
@@ -24,7 +24,8 @@ import {
   Eye,
   Plus,
   Settings,
-  BarChart3
+  BarChart3,
+  FileText as FileIcon
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { getSupabase } from '@/lib/data-manager';
@@ -37,6 +38,7 @@ interface DashboardStats {
   totalBhajans: number;
   totalQuotes: number;
   totalLiveSatsangs: number;
+  totalGoogleForms: number;
   recentOrders: any[];
   pendingOrders: number;
   totalRevenue: number;
@@ -48,7 +50,7 @@ interface DashboardStats {
 interface QuickAction {
   title: string;
   description: string;
-  icon: React.ReactNode;
+  icon: React.ComponentType<{ className?: string }>;
   href: string;
   color: string;
   badge?: string;
@@ -78,6 +80,7 @@ export default function AdminDashboard() {
         bhajansCount,
         quotesCount,
         liveSatsangsCount,
+        googleFormsCount,
         todayOrdersData,
         weekOrdersData,
         monthOrdersData
@@ -89,6 +92,7 @@ export default function AdminDashboard() {
         supabase.from('satguru_bhajan').select('id', { count: 'exact' }),
         supabase.from('wisdom_quotes').select('id', { count: 'exact' }),
         supabase.from('live_satsangs').select('id', { count: 'exact' }),
+        supabase.from('google_forms').select('id', { count: 'exact' }),
         // Time-based order counts
         supabase.from('orders').select('*', { count: 'exact' }).gte('created_at', new Date(new Date().setHours(0, 0, 0, 0)).toISOString()),
         supabase.from('orders').select('*', { count: 'exact' }).gte('created_at', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()),
@@ -113,6 +117,7 @@ export default function AdminDashboard() {
         totalBhajans: bhajansCount.count || 0,
         totalQuotes: quotesCount.count || 0,
         totalLiveSatsangs: liveSatsangsCount.count || 0,
+        totalGoogleForms: googleFormsCount.count || 0,
         recentOrders: recentOrdersData || [],
         pendingOrders: 0, // You can add this logic later if needed
         totalRevenue,
@@ -136,7 +141,7 @@ export default function AdminDashboard() {
     {
       title: 'Add Photo',
       description: 'Upload new images to gallery',
-      icon: <Image className="h-5 w-5" />,
+      icon: ImageIcon,
       href: '/admin/photos',
       color: 'bg-blue-500',
       badge: 'New'
@@ -144,37 +149,44 @@ export default function AdminDashboard() {
     {
       title: 'Create News',
       description: 'Publish new article',
-      icon: <FileText className="h-5 w-5" />,
+      icon: FileText,
       href: '/admin/news',
       color: 'bg-green-500'
     },
     {
       title: 'Add Book',
       description: 'Add new book to inventory',
-      icon: <BookOpen className="h-5 w-5" />,
+      icon: BookOpen,
       href: '/admin/books',
       color: 'bg-purple-500'
     },
     {
       title: 'Manage Orders',
       description: 'View and process orders',
-      icon: <ShoppingCart className="h-5 w-5" />,
+      icon: ShoppingCart,
       href: '/admin/orders',
       color: 'bg-orange-500'
     },
     {
       title: 'Add Bhajan',
       description: 'Upload new satguru bhajan',
-      icon: <Music className="h-5 w-5" />,
+      icon: Music,
       href: '/admin/satguru-bhajan',
       color: 'bg-pink-500'
     },
     {
       title: 'Live Satsang',
       description: 'Schedule live session',
-      icon: <Video className="h-5 w-5" />,
+      icon: Video,
       href: '/admin/live-satsang',
       color: 'bg-red-500'
+    },
+    {
+      title: 'Google Forms',
+      description: 'Manage form links',
+      icon: FileIcon,
+      href: '/admin/google-forms',
+      color: 'bg-teal-500'
     }
   ];
 
@@ -307,7 +319,7 @@ export default function AdminDashboard() {
                 <p className="text-sm font-medium text-green-600">Total Photos</p>
                 <p className="text-3xl font-bold">{stats?.totalPhotos || 0}</p>
               </div>
-              <Image className="h-8 w-8 text-green-500" />
+              <ImageIcon className="h-8 w-8 text-green-500" />
             </div>
           </CardContent>
         </Card>
@@ -332,6 +344,18 @@ export default function AdminDashboard() {
                 <p className="text-3xl font-bold">{stats?.totalNews || 0}</p>
               </div>
               <FileText className="h-8 w-8 text-orange-500" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="border-l-4 border-teal-500">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm font-medium text-teal-600">Google Forms</p>
+                <p className="text-3xl font-bold">{stats?.totalGoogleForms || 0}</p>
+              </div>
+              <FileIcon className="h-8 w-8 text-teal-500" />
             </div>
           </CardContent>
         </Card>

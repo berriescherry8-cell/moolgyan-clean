@@ -6,7 +6,8 @@ import { Quote as QuoteIcon } from 'lucide-react';
 
 interface WisdomQuote {
   id: string;
-  text: string;
+  text?: string;
+  quote_text?: string;
   author: string;
   category?: string;
 }
@@ -48,7 +49,7 @@ export function WisdomQuotes() {
                 </div>
                 <div>
                   <p className="text-2xl leading-relaxed font-medium text-zinc-800 mb-4 italic group-hover:text-amber-800 transition-colors line-clamp-4">
-                    "{quote.text}"
+                    {quote.quote_text || quote.text || ''}
                   </p>
                   <p className="text-lg font-semibold text-zinc-700 group-hover:text-amber-700 transition-colors">
                     — {quote.author}

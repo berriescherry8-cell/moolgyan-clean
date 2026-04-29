@@ -23,7 +23,11 @@
     "buildOptions": {
       "releaseType": "APK"
     },
-    "allowMixedContent": true
+    "allowMixedContent": true,
+    "webContentsDebuggingEnabled": false,
+    "captureInput": true,
+    "hideStatusBarOnLaunch": true,
+    "allowFullscreen": true
   },
   "server": {
     "androidScheme": "https"

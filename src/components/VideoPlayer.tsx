@@ -8,20 +8,31 @@ interface VideoPlayerProps {
   video: {
     videoId?: string;
     videoUrl?: string;
+    youtube_url?: string;
     title: string;
     thumbnailUrl?: string;
+    thumbnail_url?: string;
   };
 }
 
 export const VideoPlayer: React.FC<VideoPlayerProps> = ({ video }) => {
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const videoId = video.videoId;
-  const embedUrl = videoId
-    ? `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0`
-    : video.videoUrl;
+  const youtubeUrl = video.videoUrl || video.youtube_url || '';
 
-  if (!videoId && !video.videoUrl) {
+  const extractVideoId = (url: string): string | null => {
+    if (!url) return null;
+    const match = url.match(/(?:youtu\.be\/|youtube\.com\/(?:watch\?.*v=|live\/|shorts\/|embed\/))([a-zA-Z0-9_-]{11})/);
+    return match ? match[1] : null;
+  };
+
+  const videoId = video.videoId || extractVideoId(youtubeUrl);
+  const origin = typeof window !== "undefined" ? encodeURIComponent(window.location.origin) : "";
+  const embedUrl = videoId 
+    ? `https://www.youtube.com/embed/${videoId}?autoplay=1&rel=0&modestbranding=1&playsinline=1&enablejsapi=1&origin=${origin}`
+    : youtubeUrl;
+
+  if (!videoId && !youtubeUrl) {
     return (
       <div className="aspect-video w-full bg-black rounded-t-2xl flex items-center justify-center border-b border-white/5">
         <p className="text-white/40 text-xs font-medium tracking-widest uppercase">Video Unavailable</p>
@@ -51,7 +62,7 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ video }) => {
               src={embedUrl}
               controls
               autoPlay
-              poster={video.thumbnailUrl}
+              poster={video.thumbnailUrl || video.thumbnail_url}
               className="w-full h-full"
             >
               Your browser does not support the video tag.
@@ -60,9 +71,9 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ video }) => {
         </div>
       ) : (
         <>
-          {video.thumbnailUrl ? (
+          {(video.thumbnailUrl || video.thumbnail_url) ? (
             <Image
-              src={video.thumbnailUrl}
+              src={video.thumbnailUrl || video.thumbnail_url}
               alt={video.title}
               fill
               className="object-cover transition-transform duration-[2000ms] group-hover:scale-110 opacity-70"
@@ -108,3 +119,4 @@ export const VideoPlayer: React.FC<VideoPlayerProps> = ({ video }) => {
     </div>
   );
 };
+

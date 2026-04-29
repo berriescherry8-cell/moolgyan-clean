@@ -2,12 +2,21 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export async function middleware(req: NextRequest) {
-  // ⚠️ Static export does not support server-side middleware with cookies.
-  // Admin protection is handled client-side via AdminGuard components.
-  // This middleware is kept for SPA routing support only.
+  // Allow all requests to pass through
+  // Admin protection is handled client-side via AdminGuard components
   return NextResponse.next()
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - public (public files)
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico|public).*)',
+  ],
 }

@@ -39,13 +39,30 @@ export const useAdminAuthStore = create<AdminAuthState>((set) => ({
       }
 
       // Check profile role from database (secure, not hardcoded)
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', user.id)
-        .single();
+      let isAdmin = false;
+      try {
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', user.id)
+          .single();
 
-      if (profile?.role !== 'admin') {
+        if (!profileError && profile?.role === 'admin') {
+          isAdmin = true;
+        }
+      } catch (profileErr) {
+        console.warn('[AdminAuth] profiles table query failed, falling back to metadata:', profileErr);
+      }
+
+      // Fallback: check app_metadata or user_metadata for admin role
+      if (!isAdmin) {
+        const metaRole = user.app_metadata?.role || user.user_metadata?.role;
+        if (metaRole === 'admin') {
+          isAdmin = true;
+        }
+      }
+
+      if (!isAdmin) {
         await supabase.auth.signOut();
         set({ isAuthenticated: false, user: null, isLoading: false });
         return;
@@ -86,13 +103,30 @@ export const useAdminAuthStore = create<AdminAuthState>((set) => ({
       }
 
       // Verify admin role from database
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('role')
-        .eq('id', data.user.id)
-        .single();
+      let isAdmin = false;
+      try {
+        const { data: profile, error: profileError } = await supabase
+          .from('profiles')
+          .select('role')
+          .eq('id', data.user.id)
+          .single();
 
-      if (profile?.role !== 'admin') {
+        if (!profileError && profile?.role === 'admin') {
+          isAdmin = true;
+        }
+      } catch (profileErr) {
+        console.warn('[AdminAuth] profiles table query failed during signIn, falling back to metadata:', profileErr);
+      }
+
+      // Fallback: check metadata for admin role
+      if (!isAdmin) {
+        const metaRole = data.user.app_metadata?.role || data.user.user_metadata?.role;
+        if (metaRole === 'admin') {
+          isAdmin = true;
+        }
+      }
+
+      if (!isAdmin) {
         await supabase.auth.signOut();
         set({ isLoading: false, error: 'Access denied. Admin privileges required.' });
         return { success: false, error: 'Access denied. Admin privileges required.' };

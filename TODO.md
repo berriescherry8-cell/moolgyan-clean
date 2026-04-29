@@ -1,16 +1,11 @@
-# Admin Middleware Fix - ✅ COMPLETE
+# Fix Satguru Bhajan Videos Not Showing
 
-## Final Steps:
-- [x] 1. User confirmed plan
-- [x] 2. Created TODO.md  
-- [x] 3. Rewrote middleware.ts with admin role check + proper matcher
-- [x] 4. `/admin/login` now publicly accessible
-- [x] 5. All other `/admin/*` routes properly protected
-- [x] 6. No redirect loops, production-ready
-- [x] 7. Task completed
+## Root Cause
+`NEXT_PUBLIC_SUPABASE_URL` in `.env.local` contains `/rest/v1`, causing duplicate `/rest/v1` in API calls (`/rest/v1/rest/v1/satguru_bhajan`).
 
-**middleware.ts fixed!** Test with `npm run dev` → `/admin/login` now loads directly.
-
-See full explanation below.
-
+## Steps
+- [x] Analyze codebase and identify root cause
+- [x] Fix `src/lib/supabase-config.ts` — normalize URL to strip `/rest/v1` and trailing slashes
+- [x] Fix `src/components/Header.tsx` — add `style={{ width: 'auto', height: 'auto' }}` to Image to suppress Next.js warning
+- [ ] Instruct user to update `.env.local` and restart dev server
 

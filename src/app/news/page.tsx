@@ -69,10 +69,10 @@ export default function NewsPage() {
         {/* News List */}
         <div className="space-y-12 animate-fade-in-up" style={{animationDelay: '0.4s'}}>
           <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
-            <h2 className="text-5xl lg:text-6xl font-black bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-600 bg-clip-text text-transparent flex items-center gap-6">
-              <Newspaper className="h-20 w-20 text-blue-500 drop-shadow-2xl glow-pulse" />
+            <h2 className="text-2xl lg:text-3xl font-black bg-gradient-to-r from-blue-400 via-cyan-400 to-blue-600 bg-clip-text text-transparent flex items-center gap-4">
+              <Newspaper className="h-8 w-8 text-blue-500 drop-shadow-2xl glow-pulse" />
               Latest Announcements
-              <Badge className="text-3xl bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-6 py-3 font-bold shadow-lg shadow-blue-500/50">
+              <Badge className="text-sm bg-gradient-to-r from-blue-500 to-cyan-500 text-white px-3 py-1 font-bold shadow-lg shadow-blue-500/50">
                 {newsItems.length} Updates
               </Badge>
             </h2>

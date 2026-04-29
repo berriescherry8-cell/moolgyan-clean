@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function PrivacyPolicyPage() {
-  const hostUrl = "https://studio--studio-9813085306-ab851.us-central1.hosted.app";
+  const hostUrl = typeof window !== 'undefined' ? window.location.origin : "https://mool-gyan-app.pages.dev";
   
   return (
     <div className="max-w-4xl mx-auto py-8 px-4">

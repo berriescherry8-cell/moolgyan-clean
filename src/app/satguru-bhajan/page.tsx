@@ -47,30 +47,30 @@ export default function SatguruBhajanPage() {
 
       <div className="max-w-7xl mx-auto space-y-20 relative z-10">
         {/* Bookstore Style Header - Orange & Black Pattern */}
-        <div className="text-center space-y-12 pt-12 animate-fade-in-up">
-          <div className="flex items-center justify-center gap-6 mb-12">
-            <div className="p-6 bg-gradient-to-br from-orange-500 to-amber-500 rounded-3xl shadow-3xl shadow-orange-500/50">
-              <Music className="h-16 w-16 text-white drop-shadow-lg" />
+        <div className="text-center space-y-8 pt-8 animate-fade-in-up">
+          <div className="flex items-center justify-center gap-4 mb-8">
+            <div className="p-3 bg-gradient-to-br from-orange-500 to-amber-500 rounded-2xl shadow-2xl shadow-orange-500/50">
+              <Music className="h-8 w-8 text-white drop-shadow-lg" />
             </div>
             <div>
-              <h1 className="text-7xl md:text-8xl lg:text-9xl font-black bg-gradient-to-r from-orange-400 via-amber-400 to-orange-600 bg-clip-text text-transparent drop-shadow-4xl mb-4">
-                SATGURU BHAJAN
-              </h1>
-              <div className="flex items-center justify-center gap-3">
-                <Sparkles className="h-8 w-8 text-orange-400 animate-pulse" />
-                <p className="text-amber-300 font-medium text-lg">Divine Melodies</p>
-                <Sparkles className="h-8 w-8 text-amber-500 animate-pulse" />
+  <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black bg-gradient-to-r from-orange-400 via-amber-400 to-orange-600 bg-clip-text text-transparent drop-shadow-2xl mb-2">
+    SATGURU BHAJAN
+  </h1>
+              <div className="flex items-center justify-center gap-2">
+                <Sparkles className="h-4 w-4 text-orange-400 animate-pulse" />
+                <p className="text-amber-300 font-medium text-sm">Divine Melodies</p>
+                <Sparkles className="h-4 w-4 text-amber-500 animate-pulse" />
               </div>
             </div>
           </div>
-          <p className="text-2xl md:text-3xl lg:text-4xl text-slate-200/90 max-w-5xl mx-auto leading-relaxed drop-shadow-lg font-light">
+          <p className="text-lg md:text-xl lg:text-2xl text-slate-200/90 max-w-5xl mx-auto leading-relaxed drop-shadow-lg font-light">
             Experience divine bliss through sacred bhajans and spiritual melodies from Sadguru Nitin Sahib
           </p>
         </div>
 
         <div className="space-y-8">
-          <div className="mb-8 flex justify-center">
-              <div className="relative w-32 h-32 p-1 rounded-full bg-gradient-to-tr from-orange-400 via-amber-500 to-orange-600 shadow-lg shadow-orange-500/30">
+          <div className="mb-6 flex justify-center">
+              <div className="relative w-20 h-20 p-1 rounded-full bg-gradient-to-tr from-orange-400 via-amber-500 to-orange-600 shadow-lg shadow-orange-500/30">
                   <div className="w-full h-full bg-background rounded-full p-1 relative overflow-hidden border-2 border-orange-300/50">
                       <Image 
                           src="https://lqymwrhfirszrakuevqm.supabase.co/storage/v1/object/public/moolgyan-media/App_logo_QR/images.jpg"

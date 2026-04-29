@@ -1,6 +1,5 @@
+# Well-known files
 /.well-known/*    /.well-known/:splat         200!
-/privacy-policy    /privacy-policy              301
-/privacy-policy/*  /privacy-policy/:splat        301
 
-# Handle SPA routing - redirect all non-file requests to index.html
+# Static files and directories
 /*    /index.html   200

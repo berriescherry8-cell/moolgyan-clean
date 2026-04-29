@@ -67,10 +67,14 @@ export default function WisdomQuotesManagementPage() {
     { value: 'peace', label: 'Peace' }
   ];
 
-  const filteredQuotes = quotes?.filter(quote => {
-    const matchesSearch = quote.quote.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         quote.author?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         quote.source?.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredQuotes = quotes?.filter((quote): boolean => {
+    if (!quote) return false;
+    const quoteText = quote.quote || '';
+    const authorText = quote.author || '';
+    const sourceText = quote.source || '';
+    const matchesSearch = quoteText.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         authorText.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         sourceText.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesCategory = filterCategory === 'all' || quote.category === filterCategory;
     const matchesStatus = filterStatus === 'all' || 
                          (filterStatus === 'active' && quote.is_active) ||

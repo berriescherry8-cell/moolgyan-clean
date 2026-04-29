@@ -151,7 +151,7 @@ export default function BookOrderDialog({ book, isOpen, onClose }: BookOrderDial
 
     try {
       const result = await placeOrder({
-        bookId: parseInt(book.id),
+        bookId: book.id,
         bookTitle: book.title,
         bookPrice: typeof book.price === 'string' ? book.price : book.price.toString(),
         customerName: formData.fullName,

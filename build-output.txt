@@ -1,0 +1,106 @@
+
+> mool-gyan-app@5.0.0 build
+> next build
+
+ ΓÜá Specified "headers" will not automatically work with "output: export". See more info here: https://nextjs.org/docs/messages/export-no-custom-routes
+   Γû▓ Next.js 15.5.15
+   - Environments: .env.local
+
+   Creating an optimized production build ...
+> [PWA] PWA support is disabled
+> [PWA] PWA support is disabled
+ Γ£ô Compiled successfully in 15.9s
+   Skipping validation of types
+   Linting ...
+   Collecting page data ...
+VAPID keys are not configured. Please add them to your .env.local file.
+VAPID keys are not configured. Please add them to your .env.local file.
+   Generating static pages (0/61) ...
+VAPID keys are not configured. Please add them to your .env.local file.
+VAPID keys are not configured. Please add them to your .env.local file.
+   Generating static pages (15/61) 
+   Generating static pages (30/61) 
+   Generating static pages (45/61) 
+ Γ£ô Generating static pages (61/61)
+   Finalizing page optimization ...
+   Collecting build traces ...
+ ΓÜá rewrites, redirects, and headers are not applied when exporting your application, detected (headers). See more info here: https://nextjs.org/docs/messages/export-no-custom-routes
+   Exporting (0/2) ...
+ Γ£ô Exporting (2/2)
+
+Route (app)                                 Size  First Load JS
+Γöî Γùï /                                     3.2 kB         117 kB
+Γö£ Γùï /_not-found                            161 B         102 kB
+Γö£ Γùï /.well-known/assetlinks.json           161 B         102 kB
+Γö£ Γùï /admin                                 161 B         102 kB
+Γö£ Γùï /admin/books                          7.7 kB         210 kB
+Γö£ Γùï /admin/dashboard                     5.25 kB         183 kB
+Γö£ Γùï /admin/deeksha                       3.08 kB         112 kB
+Γö£ Γùï /admin/faqs                          4.67 kB         127 kB
+Γö£ Γùï /admin/feedback                      3.09 kB         112 kB
+Γö£ Γùï /admin/google-forms                  6.02 kB         209 kB
+Γö£ Γùï /admin/live-satsang                  7.22 kB         210 kB
+Γö£ Γùï /admin/login                         2.73 kB         167 kB
+Γö£ Γùï /admin/members                        3.1 kB         112 kB
+Γö£ Γùï /admin/news                          9.18 kB         212 kB
+Γö£ Γùï /admin/notifications                 4.29 kB         113 kB
+Γö£ Γùï /admin/orders                        4.04 kB         207 kB
+Γö£ Γùï /admin/photos                        4.89 kB         208 kB
+Γö£ Γùï /admin/saar-sangrah                  3.59 kB         132 kB
+Γö£ Γùï /admin/satguru-bhajan                6.01 kB         209 kB
+Γö£ Γùï /admin/tools/storage-browser          5.4 kB         147 kB
+Γö£ Γùï /admin/wisdom-quotes                 6.75 kB         209 kB
+Γö£ Γùï /admin/worksheet                     4.91 kB         185 kB
+Γö£ ╞Æ /api/auth                              161 B         102 kB
+Γö£ ╞Æ /api/check-video-exists               1.9 kB         166 kB
+Γö£ ╞Æ /api/live-satsangs/[id]               1.9 kB         166 kB
+Γö£ ╞Æ /api/orders                            161 B         102 kB
+Γö£ ╞Æ /api/push                              161 B         102 kB
+Γö£ ╞Æ /api/push/send                         161 B         102 kB
+Γö£ ╞Æ /api/sync-youtube                     1.9 kB         166 kB
+Γö£ Γùï /books                               8.23 kB         249 kB
+Γö£ Γùï /deeksha-aavedan                     2.06 kB         187 kB
+Γö£ Γùï /faq                                 37.4 kB         220 kB
+Γö£ Γùï /feedback                            1.82 kB         186 kB
+Γö£ Γùï /join                                2.33 kB         187 kB
+Γö£ Γùï /live-satsang                        7.96 kB         179 kB
+Γö£ Γùï /live-satsang-old                    2.16 kB         196 kB
+Γö£ Γùï /login                               5.06 kB         176 kB
+Γö£ Γùï /news                                 5.5 kB         185 kB
+Γö£ Γùï /notifications                       14.2 kB         188 kB
+Γö£ Γùï /offline                             3.68 kB         118 kB
+Γö£ ΓùÅ /order/[bookId]                      8.25 kB         180 kB
+Γö£   Γö£ /order/1
+Γö£   Γö£ /order/2
+Γö£   Γö£ /order/3
+Γö£   Γöö [+3 more paths]
+Γö£ Γùï /pdf-viewer                          4.07 kB         113 kB
+Γö£ Γùï /photos                              7.67 kB         224 kB
+Γö£ Γùï /photos/general-gallery              4.21 kB         181 kB
+Γö£ Γùï /photos/general-gallery-old          3.12 kB         191 kB
+Γö£ Γùï /photos/prachar-aur-prasar           4.21 kB         181 kB
+Γö£ Γùï /photos/prachar-aur-prasar-old       2.92 kB         191 kB
+Γö£ Γùï /photos/videsh-bhraman               4.19 kB         181 kB
+Γö£ Γùï /privacy policy                      1.94 kB         111 kB
+Γö£ Γùï /privacy-policy                      1.92 kB         111 kB
+Γö£ Γùï /reference                           2.01 kB         111 kB
+Γö£ Γùï /saar-sangrah                        2.94 kB         191 kB
+Γö£ Γùï /satguru-bhajan                      2.56 kB         192 kB
+Γö£ Γùï /satsang                             3.91 kB         127 kB
+Γö£ Γùï /selfie-zone                           161 B         102 kB
+Γö£ Γùï /test-data                           4.77 kB         176 kB
+Γöö Γùï /videos                              1.12 kB         103 kB
++ First Load JS shared by all             102 kB
+  Γö£ chunks/1255-7af2368fb2545735.js      45.8 kB
+  Γö£ chunks/4bd1b696-100b9d70ed4e49c1.js  54.2 kB
+  Γöö other shared chunks (total)          2.02 kB
+
+
+Γùï  (Static)   prerendered as static content
+ΓùÅ  (SSG)      prerendered as static HTML (uses generateStaticParams)
+╞Æ  (Dynamic)  server-rendered on demand
+
+
+> mool-gyan-app@5.0.0 postbuild
+> rimraf "dist/cache" "dist/.next" "dist/server"
+

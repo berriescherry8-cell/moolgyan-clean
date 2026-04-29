@@ -65,7 +65,11 @@
   }
   body {
     @apply bg-background text-foreground;
+    font-size: clamp(14px, 3.5vw, 16px);
+    text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
   }
+
 }
 
 * {

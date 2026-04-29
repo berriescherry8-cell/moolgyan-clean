@@ -1,9 +1,10 @@
 'use client';
 
 import { createBrowserClient } from '@supabase/ssr';
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from '@/lib/supabase-config';
 
 export interface OrderData {
-  bookId: number;
+  bookId: string;
   bookTitle: string;
   bookPrice: string;
   customerName: string;
@@ -38,24 +39,42 @@ export async function placeOrder(orderData: OrderData) {
       throw new Error('Quantity must be 10-2000');
     }
 
-    const totalAmount = orderData.quantity * parseFloat(orderData.bookPrice);
+    // Direct Supabase client insert (static export friendly)
+    const supabase = createBrowserClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Use API route instead of direct Supabase call
-    const response = await fetch('/api/orders', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(orderData),
-    });
+    const orderTotal = orderData.quantity * parseFloat(orderData.bookPrice);
+    const orderNumber = `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
 
-    const result = await response.json();
+    const orderPayload = {
+      book_id: orderData.bookId.toString(),
+      book_title: orderData.bookTitle,
+      book_price: parseFloat(orderData.bookPrice),
+      quantity: orderData.quantity,
+      full_name: orderData.customerName,
+      mobile_number: orderData.mobile,
+      address: orderData.address,
+      pin_code: orderData.pinCode,
+      total_amount: orderTotal,
+      status: 'pending',
+      order_number: orderNumber,
+      created_at: new Date().toISOString()
+    };
 
-    if (!response.ok) {
-      throw new Error(result.error || 'Failed to place order');
-    }
+    const { data, error } = await supabase
+      .from('orders')
+      .insert(orderPayload)
+      .select()
+      .single();
 
-    return result;
+    if (error) throw new Error(error.message);
+
+    return {
+      success: true,
+      orderId: data.id,
+      totalAmount: orderTotal,
+      orderNumber: orderNumber,
+      message: 'Order placed successfully! Send payment screenshot to WhatsApp.'
+    };
 
   } catch (error) {
     console.error('Order error:', error);

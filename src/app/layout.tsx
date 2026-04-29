@@ -52,7 +52,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="notranslate">
+<html suppressHydrationWarning className="notranslate" lang={typeof window !== 'undefined' ? document.documentElement.lang : 'en'}>
       <head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="google" content="notranslate" />

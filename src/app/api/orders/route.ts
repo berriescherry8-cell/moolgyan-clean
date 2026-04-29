@@ -3,7 +3,8 @@ import { createClient } from '@supabase/supabase-js';
 import { SUPABASE_URL } from '@/lib/supabase-config';
 
 function getSupabase() {
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  // Prefer service role key to bypass RLS; fall back to anon key
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
   if (!key) {
     return null;
   }
@@ -40,10 +41,37 @@ export async function POST(request: NextRequest) {
 
     const totalAmount = orderData.quantity * parseFloat(orderData.bookPrice);
 
-    const { data, error } = await supabase
-      .from('orders')
-      .insert({
-        book_id: parseInt(orderData.bookId),
+    // Generate a unique order number
+    const orderNumber = `ORD-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+
+    // Use stored procedure first to bypass PostgREST schema cache issues
+    try {
+      const { data, error } = await supabase.rpc('place_order', {
+        p_book_id: orderData.bookId.toString(),
+        p_book_title: orderData.bookTitle,
+        p_book_price: parseFloat(orderData.bookPrice),
+        p_quantity: orderData.quantity,
+        p_full_name: orderData.customerName,
+        p_mobile: orderData.mobile,
+        p_address: orderData.address,
+        p_pin_code: orderData.pinCode,
+        p_order_number: orderNumber
+      });
+
+      if (error) {
+        console.warn('RPC failed, falling back to direct insert:', error);
+        throw new Error('RPC failed');
+      }
+
+      // RPC returns JSON, parse it
+      const result = typeof data === 'string' ? JSON.parse(data) : data;
+      return NextResponse.json(result);
+    } catch (rpcError) {
+      // Fallback: direct insert (works if schema cache is fresh)
+      console.log('Trying direct insert fallback...');
+
+      const insertPayload: any = {
+        book_id: orderData.bookId.toString(),
         book_title: orderData.bookTitle,
         book_price: parseFloat(orderData.bookPrice),
         quantity: orderData.quantity,
@@ -52,22 +80,28 @@ export async function POST(request: NextRequest) {
         address: orderData.address,
         pin_code: orderData.pinCode,
         total_amount: totalAmount,
-        status: 'pending'
-      })
-      .select()
-      .single();
+        status: 'pending',
+        order_number: orderNumber
+      };
 
-    if (error) {
-      console.error('Supabase error:', error);
-      return NextResponse.json({ error: `Database error: ${error.message}` }, { status: 500 });
+      const { data, error } = await supabase
+        .from('orders')
+        .insert(insertPayload)
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Supabase error:', error);
+        return NextResponse.json({ error: `Database error: ${error.message}` }, { status: 500 });
+      }
+
+      return NextResponse.json({
+        success: true,
+        orderId: data.id,
+        totalAmount: totalAmount,
+        message: 'Order placed successfully!'
+      });
     }
-
-    return NextResponse.json({
-      success: true,
-      orderId: data.id,
-      totalAmount: totalAmount,
-      message: 'Order placed successfully!'
-    });
 
   } catch (error: any) {
     console.error('API error:', error);

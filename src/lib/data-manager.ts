@@ -1,18 +1,17 @@
 'use client';
 
-import { createBrowserClient } from '@supabase/ssr';
 import { useEffect, useState, useCallback } from 'react';
 import type { DailyWisdom } from './types';
-import { SUPABASE_URL, SUPABASE_ANON_KEY } from './supabase-config';
+import { createClient } from './supabase';
 
-// Get Supabase client
+// Get Supabase client (singleton from supabase.ts)
 export const getSupabase = () => {
   if (typeof window === 'undefined') {
     console.warn('Supabase client called server-side');
     return null;
   }
 
-  return createBrowserClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  return createClient();
 };
 
 // Map camelCase collection names to snake_case table names

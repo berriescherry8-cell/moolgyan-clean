@@ -7,13 +7,12 @@ import { Badge } from '@/components/ui/badge';
 import { 
   LayoutDashboard, 
   BookOpen, 
-  Image, 
+  Image as ImageIcon, 
   ShoppingCart, 
   FileText, 
   Music, 
   Quote,
   Video,
-  Users,
   Settings,
   Menu,
   X,
@@ -30,7 +29,7 @@ import { useAdminAuth } from '@/lib/adminAuthStore';
 interface NavItem {
   title: string;
   href: string;
-  icon: React.ReactNode;
+  icon: React.ComponentType<{ className?: string }>;
   badge?: string;
   description?: string;
 }
@@ -39,56 +38,56 @@ const navigationItems: NavItem[] = [
   {
     title: 'Dashboard',
     href: '/admin/dashboard',
-    icon: <LayoutDashboard className="h-5 w-5" />,
+    icon: LayoutDashboard,
     description: 'Overview and statistics'
   },
   {
     title: 'Photos',
     href: '/admin/photos',
-    icon: <Image className="h-5 w-5" />,
+    icon: ImageIcon,
     description: 'Photo galleries management',
     badge: 'New'
   },
   {
     title: 'Books',
     href: '/admin/books',
-    icon: <BookOpen className="h-5 w-5" />,
+    icon: BookOpen,
     description: 'Book inventory and sales'
   },
   {
     title: 'Orders',
     href: '/admin/orders',
-    icon: <ShoppingCart className="h-5 w-5" />,
+    icon: ShoppingCart,
     description: 'Customer orders management'
   },
   {
     title: 'News',
     href: '/admin/news',
-    icon: <FileText className="h-5 w-5" />,
+    icon: FileText,
     description: 'News articles management'
   },
   {
     title: 'Satguru Bhajan',
     href: '/admin/satguru-bhajan',
-    icon: <Music className="h-5 w-5" />,
+    icon: Music,
     description: 'Bhajans and video content'
   },
   {
     title: 'Wisdom Quotes',
     href: '/admin/wisdom-quotes',
-    icon: <Quote className="h-5 w-5" />,
+    icon: Quote,
     description: 'Inspirational quotes'
   },
   {
     title: 'Live Satsang',
     href: '/admin/live-satsang',
-    icon: <Video className="h-5 w-5" />,
+    icon: Video,
     description: 'Live streaming management'
   },
   {
     title: 'Google Forms',
     href: '/admin/google-forms',
-    icon: <FileIcon className="h-5 w-5" />,
+    icon: FileIcon,
     description: 'Form links management'
   }
 ];

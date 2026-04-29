@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { useLocale } from '@/lib/i18n';
 import { Menu } from 'lucide-react';
 import { useAdminAuthStore } from '@/lib/adminAuthStore';
+import LanguageSwitcher from '@/components/LanguageSwitcher';
 
 export default function Header() {
   const { t } = useLocale();
@@ -27,22 +28,25 @@ export default function Header() {
         </SidebarTrigger>
 
         <Link href="/" className="flex items-center gap-2 ml-2">
-          <Image
-            src="https://lqymwrhfirszrakuevqm.supabase.co/storage/v1/object/public/moolgyan-media/App_logo_QR/d110636d-8ff5-4c7d-8964-6934a17c5812-removebg-preview-removebg-preview.png"
-            alt="Mool Gyan Logo"
-            width={40}
-            height={40}
-            className="rounded-full"
-            priority
-            unoptimized
-          />
+          <div className="relative w-10 h-10 flex-shrink-0">
+            <Image
+              src="https://lqymwrhfirszrakuevqm.supabase.co/storage/v1/object/public/moolgyan-media/App_logo_QR/d110636d-8ff5-4c7d-8964-6934a17c5812-removebg-preview-removebg-preview.png"
+              alt="Mool Gyan Logo"
+              fill
+              className="rounded-full object-cover"
+              sizes="40px"
+              priority
+              unoptimized
+            />
+          </div>
           <span className="text-xl font-bold font-headline text-foreground">
             {t('app_name') || "Mool Gyan"}
           </span>
         </Link>
       </div>
 
-      <div className="flex flex-1 items-center justify-end gap-2">
+<div className="flex flex-1 items-center justify-end gap-2">
+        <LanguageSwitcher />
         <Button asChild size="sm" className="bg-amber-500 text-black hover:bg-amber-600 hidden sm:flex">
           <Link href="/deeksha-aavedan">दीक्षा आवेदन</Link>
         </Button>
